@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import axios from 'axios';
 import { useState, useEffect } from "react";
 import { supabase } from '../lib/supabaseClient';
 import { Session } from "@supabase/supabase-js";
@@ -39,18 +40,17 @@ const Nav = () => {
     const discordUserId = session.user.id;
     const guildId = '919622034546372679';
 
-    fetch(`/api/userRoles?userId=${discordUserId}&guildId=${guildId}`)
+    axios.get(`/api/userRoles?userId=${discordUserId}&guildId=${guildId}`)
       .then(response => {
         console.log("userRoles response", response)
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error('Network response was not ok');
         }
-        return response.json();
+        setUserRoles(response.data)
       })
-      .then(data => setUserRoles(data))
       .catch(error => console.error('Error:', error));
 
-  }, [session]); // Add session as a dependency
+  }, [session]);
 
   return (
     <nav className="routes">
