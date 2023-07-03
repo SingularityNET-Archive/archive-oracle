@@ -31,22 +31,22 @@ const Nav = () => {
       const { error } = await supabase.auth.signOut()
     }
    console.log(session)
-   const [userRoles, setUserRoles] = useState(null);
+   const [roleData, setRoleData] = useState(null);
 
    useEffect(() => {
     // Guard clause: return if session is null
     if (!session) return;
 
-    const discordUserId = session.user.id;
+    const discordUserId = session.user.user_metadata.sub;
     const guildId = '919622034546372679';
 
     axios.get(`/api/userRoles?userId=${discordUserId}&guildId=${guildId}`)
       .then(response => {
-        console.log("userRoles response", response)
         if (response.status !== 200) {
           throw new Error('Network response was not ok');
         }
-        setUserRoles(response.data)
+        setRoleData(response.data)
+        console.log(response.data); // will log the received roleData object
       })
       .catch(error => console.error('Error:', error));
 

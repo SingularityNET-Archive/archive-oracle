@@ -1,4 +1,3 @@
-// pages/api/userRoles.js
 import axios from 'axios';
 
 export default async function handler(req, res) {
@@ -7,13 +6,24 @@ export default async function handler(req, res) {
   const guildId = req.query.guildId; // Get the guildId from the query parameters
 
   try {
-    const response = await axios.get(`https://discord.com/api/guilds/${guildId}/members/${discordUserId}`, {
+    const memberResponse = await axios.get(`https://discord.com/api/guilds/${guildId}/members/${discordUserId}`, {
       headers: {
         'Authorization': `Bot ${discordToken}`
       }
     });
 
-    res.status(200).json(response.data.roles); // send the roles back
+    const rolesResponse = await axios.get(`https://discord.com/api/guilds/${guildId}/roles`, {
+      headers: {
+        'Authorization': `Bot ${discordToken}`
+      }
+    });
+
+    const roles = rolesResponse.data.reduce((obj, role) => ({
+      ...obj,
+      [role.id]: role.name,  // maps id to name
+    }), {});
+
+    res.status(200).json({ userRoles: memberResponse.data.roles, roles }); // send the userRoles and roles back
   } catch (error) {
     console.error('Error:', error);
     res.status(error.response.status).json({ message: error.message });
