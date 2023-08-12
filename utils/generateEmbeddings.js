@@ -1,5 +1,6 @@
 import { supabase } from "../lib/supabaseClient";
 import { Configuration, OpenAIApi } from 'openai'
+import { createHash } from 'crypto'
 
   let info = {}
   let content = "Testing creating embeddings"
@@ -7,6 +8,7 @@ import { Configuration, OpenAIApi } from 'openai'
 export async function generateEmbeddings() {
     
     async function generate() {
+      const checksum = createHash('sha256').update(content).digest('base64')
       const input = content.replace(/\n/g, ' ')
 
         try {
@@ -26,10 +28,31 @@ export async function generateEmbeddings() {
 
           const [responseData] = embeddingResponse.data.data
 
+          const { error: upsertPageError, data: page } = await supabase
+            .from('docs_page')
+            .upsert(
+              {
+                checksum: null,
+                path: "test/page",
+                type: "markdown",
+                source: "guide",
+                meta: {},
+                parent_page_id: 1,
+              },
+              { onConflict: 'path' }
+            )
+            .select()
+            .limit(1)
+            .single()
+    
+          if (upsertPageError) {
+            throw upsertPageError
+          }
+
           const { error: insertPageSectionError, data: pageSection } = await supabase
-            .from('embeddings_table')
+            .from('docs_page_section')
             .insert({
-              page_id: 1,
+              page_id: page.id,
               slug: "Testing",
               heading: "Testing",
               content,
@@ -43,6 +66,14 @@ export async function generateEmbeddings() {
             info = pageSection;
           if (insertPageSectionError) {
             throw insertPageSectionError
+          }
+          const { error: updatePageError } = await supabase
+            .from('docs_page')
+            .update({ checksum })
+            .filter('id', 'eq', page.id)
+    
+          if (updatePageError) {
+            throw updatePageError
           }
         } catch (error) {
         if (error) {
