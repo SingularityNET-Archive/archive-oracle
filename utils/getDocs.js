@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { saveArchivesToDatabase } from '../utils/saveArchivesToDatabase'
 
 const REPO_URL = 'https://api.github.com/repos/SingularityNET-Archive/SingularityNET-Archive-GitBook';
 
@@ -14,12 +15,10 @@ async function fetchFiles(path, archives) {
       const { data: commits } = await axios.get(`${REPO_URL}/commits`, { params: { path: file.path } });
       const lastCommitDate = new Date(commits[0].commit.author.date);
       const twoWeeksAgo = new Date();
-      twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 28);
-      console.log("file", file)
+      twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 8);
       if (lastCommitDate >= twoWeeksAgo) {
         // Fetch the content of the file
         const { data: content } = await axios.get(file.download_url);
-        console.log("content", content)
         // Organize the content in the archives object
         const pathKeys = file.path.split('/');
         let current = archives;
@@ -44,6 +43,8 @@ export async function getDocs() {
   } catch (error) {
     console.error('An error occurred:', error);
   }
-
+  saveArchivesToDatabase(archives.timeline)
+  .then(data => console.log('Data inserted successfully:', data))
+  .catch(error => console.error('Error:', error));
   return archives;
 }

@@ -44,8 +44,16 @@ const Home: NextPage = () => {
   }
 
   async function fetchDocs() {
+    let archives = {};
     console.log("Fetching Docs");
-    const archives = await getDocs();
+    await axios.get('/api/fetchDocs')
+    .then((response) => {
+      archives = response.data;
+      // Handle the archives data here
+    })
+    .catch((error) => {
+      console.error('An error occurred while fetching the documents:', error);
+    });
     console.log("info", archives)
   }
 
