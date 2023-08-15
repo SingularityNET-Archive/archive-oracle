@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import { HfInference } from '@huggingface/inference'
 import { generateEmbeddings } from '../utils/generateEmbeddings'
 import { getDocs } from '../utils/getDocs'
+import { getArchives } from '../utils/getArchives'
 
 const hf = new HfInference(process.env.HUGGING_FACE)
 
@@ -43,6 +44,11 @@ const Home: NextPage = () => {
     console.log("Testing", info)
   }
 
+  async function fetchArchives() {
+    const info = await getArchives();
+    console.log("Testing", info)
+  }
+
   async function fetchDocs() {
     let archives = {};
     console.log("Fetching Docs");
@@ -79,6 +85,11 @@ const Home: NextPage = () => {
       <div>
         <button onClick={fetchDocs} disabled={loading}>
           {loading ? "Loading..." : "GetDocs"}
+        </button>
+      </div>
+      <div>
+        <button onClick={fetchArchives} disabled={loading}>
+          {loading ? "Loading..." : "GetArchives"}
         </button>
       </div>
     </div>
