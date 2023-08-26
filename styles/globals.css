@@ -112,7 +112,7 @@
   .component {
     margin-top:4.5em;
   }
-  .nav {
+  nav {
     background-color: black;
     display: flex;
     justify-content: space-between;
@@ -126,6 +126,7 @@
   
   .routes {
     display: flex;
+    justify-content: space-between;
   }
   
   .navitems {
@@ -139,6 +140,9 @@
     background-color: none;
     cursor: pointer;
     transition: border-color 0.25s;
+  }
+  .navLeft{
+    margin-top: 18px;
   }
   .navitems:hover {
     border-color: #646cff;

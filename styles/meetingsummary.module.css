@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  margin-top: 4.5em;  /* Leaving space for the top fixed navbar */
+  height: calc(100vh - 4.5em);
+}
+
+.navbar {
+  width: 150px;
+  height: 100%;
+  background-color: #2b1f1f;
+  display: flex; /* Added */
+  flex-direction: column; /* Added */
+  align-items: center; /* Added */
+}
+
+
+.mainContent {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.navButton {
+  display: block;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.navButton:focus {
+  background-color: #514f81;
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.navButton.active {
+  background-color: #362d50;
+}

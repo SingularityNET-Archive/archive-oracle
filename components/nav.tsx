@@ -30,7 +30,7 @@ const Nav = () => {
     async function signout() {
       const { error } = await supabase.auth.signOut()
     }
-   console.log(session)
+   //console.log(session)
    const [roleData, setRoleData] = useState(null);
 
    useEffect(() => {
@@ -54,22 +54,30 @@ const Nav = () => {
 
   return (
     <nav className="routes">
-          <Link href="/" className="navitems">
-            Home
-          </Link>
-          <Link href='/about' className="navitems">
-            About
-          </Link>
-          <Link href='/contact' className="navitems">
-            Contact
-          </Link>
-          {!session && (<button onClick={signInWithDiscord} className="navitems">
-          Sign In with Discord
-        </button>)}
-          {session && (
-          <button onClick={signout} className="navitems">
-          Sign Out
+      <div className="navLeft">
+        <Link href="/" className="navitems">
+          Home
+        </Link>
+        <Link href='/meeting-summary' className="navitems">
+          Upload Meeting Summary
+        </Link>
+        <Link href='/update-gitbook' className="navitems">
+          Update Gitbook
+        </Link>
+        <Link href='/contact' className="navitems">
+          Contact
+        </Link>
+      </div>
+      <div>
+        {!session && (
+          <button onClick={signInWithDiscord} className="navitems">
+            Sign In with Discord
           </button>)}
+        {session && (
+          <button onClick={signout} className="navitems">
+            Sign Out
+          </button>)}
+      </div>
     </nav>
   );
 };

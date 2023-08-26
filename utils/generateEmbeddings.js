@@ -3,7 +3,7 @@ import { Configuration, OpenAIApi } from 'openai'
 import { createHash } from 'crypto'
 
   let info = {}
-  let content = "Testing creating embeddings"
+  let content = "Live testing of embedding creation"
 
 export async function generateEmbeddings() {
     
@@ -53,8 +53,8 @@ export async function generateEmbeddings() {
             .from('docs_page_section')
             .insert({
               page_id: page.id,
-              slug: "Testing",
-              heading: "Testing",
+              slug: "live-testing",
+              heading: "Live Testing",
               content,
               token_count: embeddingResponse.data.usage.total_tokens,
               embedding: responseData.embedding,
