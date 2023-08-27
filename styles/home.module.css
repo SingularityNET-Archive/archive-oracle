@@ -1,0 +1,6 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 4.5em;  /* Leaving space for the top fixed navbar */
+    height: calc(100vh - 4.5em);
+  }

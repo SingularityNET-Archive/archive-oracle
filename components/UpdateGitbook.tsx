@@ -1,8 +1,7 @@
 import { useState } from "react";
-import type { NextPage } from "next";
-import styles from '../../styles/updategitbook.module.css'; 
+import styles from '../styles/typea.module.css'; 
 
-const UpdateGitbook: NextPage = () => {
+const UpdateGitbook = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     date: "",
@@ -18,9 +17,25 @@ const UpdateGitbook: NextPage = () => {
   async function handleSubmit(e: any) {
     e.preventDefault();
     setLoading(true);
-    console.log("Submitted Form Data:", formData);
+  
+    try {
+      const response = await fetch('/api/commitGitbook', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const data = await response.json();
+      console.log(data.message);
+    } catch (error) {
+      console.error("There was an error committing the form data", error);
+    }
+  
     setLoading(false);
   }
+  
 
   return (
     <div className={styles['form-container']}>

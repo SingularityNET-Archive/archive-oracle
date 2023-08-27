@@ -58,11 +58,8 @@ const Nav = () => {
         <Link href="/" className="navitems">
           Home
         </Link>
-        <Link href='/meeting-summary' className="navitems">
-          Upload Meeting Summary
-        </Link>
-        <Link href='/update-gitbook' className="navitems">
-          Update Gitbook
+        <Link href='/meeting-summaries' className="navitems">
+          Upload Meeting Summaries
         </Link>
         <Link href='/contact' className="navitems">
           Contact

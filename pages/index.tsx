@@ -5,6 +5,7 @@ import { HfInference } from '@huggingface/inference'
 import { generateEmbeddings } from '../utils/generateEmbeddings'
 import { getDocs } from '../utils/getDocs'
 import { getArchives } from '../utils/getArchives'
+import styles from '../styles/home.module.css';
 
 const hf = new HfInference(process.env.HUGGING_FACE)
 
@@ -64,7 +65,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       <div>
         <h1>Home</h1>
         <input
