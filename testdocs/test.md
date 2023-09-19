@@ -1,5 +1,5 @@
 ---
-description: 20th August 2023 to 26th August 2023
+description: 18th September 2023 to 22nd September 2023
 ---
 
 # Week 34
@@ -16,7 +16,7 @@ description: 20th August 2023 to 26th August 2023
  - Other media: 
  - Transcript: https://readai.com/transacript123
 
-#### Agenda item - Gitbook Updates - [carried over]
+#### Agenda item 1 - Gitbook Updates - [carried over]
 
 Actions Items: 
  - [action] Create onboarding page in Gitbook [assignee] Vanessa [due] 2023-09-27
@@ -49,7 +49,7 @@ Keywords/tags:
  - references: Dework's Documentation page, Dework's Youtube channel
  - emotions: collaborative
 
-## Friday 21st September 2023
+## Thursday 21st September 2023
 
 ### Minimalist Workgroup
 
