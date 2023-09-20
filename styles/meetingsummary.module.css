@@ -5,7 +5,7 @@
 }
 
 .navbar {
-  width: 150px;
+  width: 200px;
   height: 100%;
   background-color: #2b1f1f;
   display: flex; /* Added */
@@ -13,6 +13,19 @@
   align-items: center; /* Added */
 }
 
+.select {
+  width: 190px;
+  padding: 0.5em;
+  margin: 0.5em;
+}
+
+.selectGreen {
+  color: aqua;
+}
+
+.selectGreen option {
+  color: initial;  /* This will reset the color to the default for options inside the dropdown */
+}
 
 .mainContent {
   flex-grow: 1;
@@ -20,20 +33,36 @@
 }
 
 .navButton {
+  width: 170px;
   display: block;
   padding: 0.5rem;
   margin: 0.5rem 0;
-  text-align: left;
+  text-align: center;
   background-color: transparent;
   border: none;
   cursor: pointer;
 }
 
 .navButton:focus {
-  background-color: #514f81;
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.navButton:hover {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
 .navButton.active {
   background-color: #362d50;
+}
+
+.register {
+  width: 170px;
+  padding: 0.1em;
+  margin: 0.5em;
+}
+
+.registerbutton {
+  width: 170px;
+  padding: 0.1em;
+  margin: 0.5em;
 }

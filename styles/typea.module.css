@@ -10,9 +10,20 @@
   flex-direction: column;
 }
 
+.peoplediv {
+  display: flex;
+  flex-direction: row;
+}
+
+.people {
+  display: flex;
+  flex-direction: column;
+}
+
 .form-label {
-  display: block; /* Making the label a block element */
-  margin-bottom: 0.5rem;
+  display: block;
+  margin-bottom: 0.1rem;
+  font-size: small;
 }
 
 .form-input,
@@ -20,7 +31,8 @@
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-bottom: 1rem; /* Adding margin for separation */
+  margin-bottom: 1rem; 
+  margin-right: 1em;
 }
 
 .form-textarea {

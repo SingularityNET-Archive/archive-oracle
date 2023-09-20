@@ -1,7 +1,8 @@
 import { useState } from "react";
 import styles from '../styles/typea.module.css'; 
+import { updateGitbook } from '../utils/updateGitbook'
 
-const TypeB = () => {
+const ConfirmSummaries = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     date: "",
@@ -17,13 +18,17 @@ const TypeB = () => {
   async function handleSubmit(e: any) {
     e.preventDefault();
     setLoading(true);
-    console.log("Submitted Form Data:", formData);
+  
+    const data = await updateGitbook(formData);
+    console.log("returned from util function", data)
+  
     setLoading(false);
   }
+  
 
   return (
     <div className={styles['form-container']}>
-      <h2>Summary form Type B</h2>
+      <h2>Confirm uploaded Summaries</h2>
       <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
         <label className={styles['form-label']}>
           Date:
@@ -64,4 +69,4 @@ const TypeB = () => {
   );
 };
 
-export default TypeB;
+export default ConfirmSummaries;

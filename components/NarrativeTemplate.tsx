@@ -1,7 +1,8 @@
 import { useState } from "react";
 import styles from '../styles/typea.module.css'; 
+import { updateGitbook } from '../utils/updateGitbook'
 
-const UpdateGitbook = () => {
+const NarrativeTemplate = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     date: "",
@@ -17,21 +18,7 @@ const UpdateGitbook = () => {
   async function handleSubmit(e: any) {
     e.preventDefault();
     setLoading(true);
-  
-    try {
-      const response = await fetch('/api/commitGitbook', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-  
-      const data = await response.json();
-      console.log(data.message);
-    } catch (error) {
-      console.error("There was an error committing the form data", error);
-    }
+    console.log("Submitted Form Data:", formData)
   
     setLoading(false);
   }
@@ -39,7 +26,7 @@ const UpdateGitbook = () => {
 
   return (
     <div className={styles['form-container']}>
-      <h2>Update GitBook</h2>
+      <h2>Narrative Template</h2>
       <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
         <label className={styles['form-label']}>
           Date:
@@ -80,4 +67,4 @@ const UpdateGitbook = () => {
   );
 };
 
-export default UpdateGitbook;
+export default NarrativeTemplate;

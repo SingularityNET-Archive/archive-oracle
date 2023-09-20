@@ -1,13 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from '../styles/typea.module.css'; 
+import { useMyVariable } from '../context/MyVariableContext';
+import MeetingInfo from '../components/MeetingInfo'
 
-const TypeA = () => {
+const FullArchivalTemplate = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const { myVariable, setMyVariable } = useMyVariable();
+  const today = new Date().toISOString().split('T')[0];
   const [formData, setFormData] = useState({
-    date: "",
+    date: today,
     workgroup: "",
     meetingSummary: "",
   });
+
+  useEffect(() => {
+    if (myVariable.workgroup && myVariable.workgroup.workgroup) {
+      setFormData(prevState => ({ ...prevState, workgroup: myVariable.workgroup.workgroup }));
+    }
+  }, [myVariable.workgroup]);  
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -23,7 +33,8 @@ const TypeA = () => {
 
   return (
     <div className={styles['form-container']}>
-      <h2>Summary form Type A</h2>
+      <h2>Full Archival Template</h2>
+      <h3>{formData.date} - {formData.workgroup}</h3>
       <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
         <label className={styles['form-label']}>
           Date:
@@ -35,27 +46,7 @@ const TypeA = () => {
           onChange={handleChange}
           className={styles['form-input']}
         />
-        <label className={styles['form-label']}>
-          Workgroup:
-        </label>
-        <input
-          type="text"
-          name="workgroup"
-          value={formData.workgroup}
-          onChange={handleChange}
-          className={styles['form-input']}
-          autoComplete="off"
-        />
-        <label className={styles['form-label']}>
-          Meeting Summary Markdown:
-        </label>
-        <textarea
-          name="meetingSummary"
-          value={formData.meetingSummary}
-          onChange={handleChange}
-          className={styles['form-textarea']}
-          autoComplete="off"
-        />
+        <MeetingInfo workgroup={formData.workgroup}/>
         <button type="submit" disabled={loading} className={styles['submit-button']}>
           {loading ? "Loading..." : "Submit"}
         </button>
@@ -64,4 +55,4 @@ const TypeA = () => {
   );
 };
 
-export default TypeA;
+export default FullArchivalTemplate;
