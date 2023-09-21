@@ -11,6 +11,8 @@
   display: flex; /* Added */
   flex-direction: column; /* Added */
   align-items: center; /* Added */
+  position: fixed; 
+  z-index: 1000; 
 }
 
 .select {
@@ -30,6 +32,8 @@
 .mainContent {
   flex-grow: 1;
   padding: 1rem;
+  margin-left: 180px;
+  margin-top: -45px;
 }
 
 .navButton {

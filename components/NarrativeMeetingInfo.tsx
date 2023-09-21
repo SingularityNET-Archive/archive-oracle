@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/typea.module.css'; 
 
-type MeetingInfoProps = {
+type NarrativeMeetingInfoProps = {
   workgroup: string;
   onUpdate: (info: any) => void;
 };
 
-const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
+const NarrativeMeetingInfo: React.FC<NarrativeMeetingInfoProps> = ({ workgroup, onUpdate }) => {
   const [meetingInfo, setMeetingInfo] = useState({
     host:'',
     documenter:'',
     peoplePresent: '',
-    purpose: '',
-    meetingVideoLink: '',
-    miroBoardLink: '',
-    otherMediaLink: '',
-    transcriptLink: '',
+    mediaLink: '',
   });
 
   const handleChange = (e: any) => {
@@ -68,52 +64,12 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
         className={styles['form-input']}
       />
       <label className={styles['form-label']}>
-        Purpose:
+        Media (link):
       </label>
       <input
         type="text"
-        name="purpose"
-        value={meetingInfo.purpose}
-        onChange={handleChange}
-        className={styles['form-input']}
-      />
-      <label className={styles['form-label']}>
-        Meeting video (link):
-      </label>
-      <input
-        type="text"
-        name="meetingVideoLink"
-        value={meetingInfo.meetingVideoLink}
-        onChange={handleChange}
-        className={styles['form-input']}
-      />
-      <label className={styles['form-label']}>
-        Miro board (link):
-      </label>
-      <input
-        type="text"
-        name="miroBoardLink"
-        value={meetingInfo.miroBoardLink}
-        onChange={handleChange}
-        className={styles['form-input']}
-      />
-      <label className={styles['form-label']}>
-        Other media (link):
-      </label>
-      <input
-        type="text"
-        name="otherMediaLink"
-        value={meetingInfo.otherMediaLink}
-        onChange={handleChange}
-        className={styles['form-input']}
-      />
-      <label className={styles['form-label']}>
-        Transcript (link):
-      </label>
-      <input
-        type="text"
-        name="transcriptLink"
-        value={meetingInfo.transcriptLink}
+        name="mediaLink"
+        value={meetingInfo.mediaLink}
         onChange={handleChange}
         className={styles['form-input']}
       />
@@ -121,4 +77,4 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
   );
 };
 
-export default MeetingInfo;
+export default NarrativeMeetingInfo;

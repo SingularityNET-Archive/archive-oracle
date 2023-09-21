@@ -1,13 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from '../styles/typea.module.css'; 
+import { useMyVariable } from '../context/MyVariableContext';
+import MinimalistMeetingInfo from '../components/MinimalistMeetingInfo'
+import MinimalistAgenda from '../components/MinimalistAgenda'
+import Tags from '../components/Tags'
 
 const MinimalistTemplate = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const { myVariable, setMyVariable } = useMyVariable();
+  const today = new Date().toISOString().split('T')[0];
   const [formData, setFormData] = useState({
-    date: "",
+    date: today,
     workgroup: "",
-    meetingSummary: "",
+    meetingInfo: {},  
+    agendaItems: [],
+    tags: { topicsCovered: "", references: "", emotions: "" }  
   });
+  const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "" });
+
+  useEffect(() => {
+    if (myVariable.workgroup && myVariable.workgroup.workgroup) {
+      setFormData(prevState => ({ ...prevState, workgroup: myVariable.workgroup.workgroup }));
+    }
+  }, [myVariable.workgroup]);  
+
+  useEffect(() => {
+    setFormData(prevState => ({ ...prevState, tags })); 
+  }, [tags]);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -20,10 +39,12 @@ const MinimalistTemplate = () => {
     console.log("Submitted Form Data:", formData);
     setLoading(false);
   }
+  
 
   return (
     <div className={styles['form-container']}>
-      <h2>Minimalist Template</h2>
+      <h2>Full Archival Template</h2>
+      <h3>{formData.date} - {formData.workgroup}</h3>
       <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
         <label className={styles['form-label']}>
           Date:
@@ -35,27 +56,9 @@ const MinimalistTemplate = () => {
           onChange={handleChange}
           className={styles['form-input']}
         />
-        <label className={styles['form-label']}>
-          Workgroup:
-        </label>
-        <input
-          type="text"
-          name="workgroup"
-          value={formData.workgroup}
-          onChange={handleChange}
-          className={styles['form-input']}
-          autoComplete="off"
-        />
-        <label className={styles['form-label']}>
-          Meeting Summary Markdown:
-        </label>
-        <textarea
-          name="meetingSummary"
-          value={formData.meetingSummary}
-          onChange={handleChange}
-          className={styles['form-textarea']}
-          autoComplete="off"
-        />
+        <MinimalistMeetingInfo workgroup={formData.workgroup} onUpdate={(info: any) => setFormData({...formData, meetingInfo: info})} />
+        <MinimalistAgenda onUpdate={(items: any) => setFormData({...formData, agendaItems: items})} />
+        <Tags tags={tags} setTags={setTags} />
         <button type="submit" disabled={loading} className={styles['submit-button']}>
           {loading ? "Loading..." : "Submit"}
         </button>
