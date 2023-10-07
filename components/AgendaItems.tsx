@@ -4,8 +4,9 @@ const AgendaItems = ({onUpdate}: any) => {
     const [agendaItems, setAgendaItems] = useState([
         { 
           agenda: "", 
+          status: "carry over", 
           actionItems: [{ text: "", assignee: "", dueDate: "" }],  
-          decisionItems: [{ decision: "", rationale: "", opposing: "" }],
+          decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
           discussionPoints: [""] 
         }
       ]);
@@ -15,7 +16,7 @@ const AgendaItems = ({onUpdate}: any) => {
   }, [agendaItems]);
 
   const addAgendaItem = () => {
-    setAgendaItems([...agendaItems, { agenda: "", actionItems: [{ text: "", assignee: "", dueDate: "" }], decisionItems: [{ decision: "", rationale: "", opposing: "" }], discussionPoints: [""] }]);
+    setAgendaItems([...agendaItems, { agenda: "", status: "carry over",  actionItems: [{ text: "", assignee: "", dueDate: "" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
   };
 
   const removeAgendaItem = (index: number) => {
@@ -29,7 +30,7 @@ const AgendaItems = ({onUpdate}: any) => {
     if (type === 'actionItems') {
       newAgendaItems[agendaIndex][type].push({ text: "", assignee: "", dueDate: "" });
     } else if (type === 'decisionItems') {  // Update here
-      newAgendaItems[agendaIndex][type].push({ decision: "", rationale: "", opposing: "" });
+      newAgendaItems[agendaIndex][type].push({ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" });
     } else {
       newAgendaItems[agendaIndex][type].push("");
     }
@@ -59,7 +60,34 @@ const AgendaItems = ({onUpdate}: any) => {
               setAgendaItems(newAgenda);
             }}
           />
-          
+          <label>
+              <input 
+                  type="radio"
+                  name={`agendaStatus-${agendaIndex}`}
+                  value="carry over"
+                  checked={item.status === "carry over"}
+                  onChange={(e) => {
+                      const newAgendaItems = [...agendaItems];
+                      newAgendaItems[agendaIndex].status = e.target.value;
+                      setAgendaItems(newAgendaItems);
+                  }}
+              />
+              Carry over
+          </label>
+          <label>
+              <input 
+                  type="radio"
+                  name={`agendaStatus-${agendaIndex}`}
+                  value="resolved"
+                  checked={item.status === "resolved"}
+                  onChange={(e) => {
+                      const newAgendaItems = [...agendaItems];
+                      newAgendaItems[agendaIndex].status = e.target.value;
+                      setAgendaItems(newAgendaItems);
+                  }}
+              />
+              Resolved
+          </label>   
           {item.actionItems.map((action, actionIndex) => (
             <div key={actionIndex}>
               <input 
@@ -132,6 +160,34 @@ const AgendaItems = ({onUpdate}: any) => {
                   setAgendaItems(newAgenda);
                 }}
               />
+              <label>
+                  <input 
+                      type="radio"
+                      name={`decisionEffect-${agendaIndex}-${decisionIndex}`}
+                      value="affectsAllWorkgroups"
+                      checked={decision.effect === "affectsAllWorkgroups"}
+                      onChange={(e) => {
+                          const newAgenda = [...agendaItems];
+                          newAgenda[agendaIndex].decisionItems[decisionIndex].effect = e.target.value;
+                          setAgendaItems(newAgenda);
+                      }}
+                  />
+                  Affects all workgroups
+              </label>
+              <label>
+                  <input 
+                      type="radio"
+                      name={`decisionEffect-${agendaIndex}-${decisionIndex}`}
+                      value="affectsOnlyThisWorkgroup"
+                      checked={decision.effect === "affectsOnlyThisWorkgroup"}
+                      onChange={(e) => {
+                          const newAgenda = [...agendaItems];
+                          newAgenda[agendaIndex].decisionItems[decisionIndex].effect = e.target.value;
+                          setAgendaItems(newAgenda);
+                      }}
+                  />
+                  Affects only this workgroup
+              </label>
               <button onClick={() => removeItem('decisionItems', agendaIndex, decisionIndex)}>Remove Decision</button>
             </div>
           ))}

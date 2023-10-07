@@ -4,7 +4,7 @@ const MinimalistAgenda = ({ onUpdate }: any) => {
   const [discussionPoints, setDiscussionPoints] = useState([""]);
 
   useEffect(() => {
-    onUpdate(discussionPoints);
+    onUpdate([{discussionPoints: discussionPoints}]);
   }, [discussionPoints]);
 
   const addDiscussionPoint = () => {

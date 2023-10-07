@@ -4,23 +4,27 @@ import { useMyVariable } from '../context/MyVariableContext';
 import MeetingInfo from '../components/MeetingInfo'
 import AgendaItems from '../components/AgendaItems'
 import Tags from '../components/Tags'
+import { saveAgenda } from '../utils/saveAgenda';
 
 const FullArchivalTemplate = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { myVariable, setMyVariable } = useMyVariable();
   const today = new Date().toISOString().split('T')[0];
   const [formData, setFormData] = useState({
+    name: "Weekly Meeting",
     date: today,
     workgroup: "",
+    workgroup_id: "",
     meetingInfo: {},  
     agendaItems: [],
-    tags: { topicsCovered: "", references: "", emotions: "" }  
+    tags: { topicsCovered: "", references: "", emotions: "" },
+    type: "FullArchival"
   });
   const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "" });
 
   useEffect(() => {
     if (myVariable.workgroup && myVariable.workgroup.workgroup) {
-      setFormData(prevState => ({ ...prevState, workgroup: myVariable.workgroup.workgroup }));
+      setFormData(prevState => ({ ...prevState, workgroup: myVariable.workgroup.workgroup, workgroup_id: myVariable.workgroup.workgroup_id }));
     }
   }, [myVariable.workgroup]);  
 
@@ -36,7 +40,8 @@ const FullArchivalTemplate = () => {
   async function handleSubmit(e: any) {
     e.preventDefault();
     setLoading(true);
-    console.log("Submitted Form Data:", formData);
+    const data: any = await saveAgenda(formData);
+    console.log("Submitted Form Data:", formData, data);
     setLoading(false);
   }
   
@@ -46,6 +51,16 @@ const FullArchivalTemplate = () => {
       <h2>Full Archival Template</h2>
       <h3>{formData.date} - {formData.workgroup}</h3>
       <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
+        <label className={styles['form-label']}>
+          Name:
+        </label>
+        <input
+          type="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          className={styles['form-input']}
+        />
         <label className={styles['form-label']}>
           Date:
         </label>

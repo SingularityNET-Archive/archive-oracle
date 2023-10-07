@@ -97,7 +97,7 @@ const MeetingSummary: NextPage = () => {
                 className={`${styles.select} ${selectedWorkgroupId === '' ? styles.selectGreen : ''}`} 
                 value={selectedWorkgroupId} onChange={handleSelectChange}>
                 <option value="" disabled>Please select Workgroup</option>
-                {workgroups.map(workgroup => (
+                {workgroups.map((workgroup: any) => (
                   <option key={workgroup.workgroup_id} value={workgroup.workgroup_id}>{workgroup.workgroup}</option>
                 ))}
                 <option value="add_new">Add new WG</option>

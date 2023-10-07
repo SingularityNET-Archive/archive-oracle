@@ -5,7 +5,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
   const [narrative, setNarrative] = useState(''); // Text for Narrative
   const [issues, setIssues] = useState(['']); // List of issues
   const [actionItems, setActionItems] = useState([{ text: "", assignee: "", dueDate: "" }]);
-  const [decisionItems, setDecisionItems] = useState([{ decision: "", rationale: "", opposing: "" }]);
+  const [decisionItems, setDecisionItems] = useState([{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }]);
 
   useEffect(() => {
     if (mode === 'Narrative') {
@@ -16,7 +16,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
   }, [mode]);
 
   useEffect(() => {
-    onUpdate({ mode, narrative, issues, actionItems, decisionItems });
+    onUpdate([{ mode, narrative, issues, actionItems, decisionItems }]);
   }, [mode, narrative, issues, actionItems, decisionItems]);
 
   const addIssue = () => {
@@ -40,7 +40,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
   };
 
   const addDecisionItem = () => {
-    setDecisionItems([...decisionItems, { decision: "", rationale: "", opposing: "" }]);
+    setDecisionItems([...decisionItems, { decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }]);
   };
 
   const removeDecisionItem = (index: number) => {
@@ -156,6 +156,34 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
               setDecisionItems(newDecisionItems);
             }}
           />
+          <label>
+            <input 
+                type="radio"
+                name={`decisionEffect-${index}`}
+                value="affectsAllWorkgroups"
+                checked={item.effect === "affectsAllWorkgroups"}
+                onChange={(e) => {
+                    const newDecisionItems = [...decisionItems];
+                    newDecisionItems[index].effect = e.target.value;
+                    setDecisionItems(newDecisionItems);
+                }}
+            />
+            Affects all workgroups
+          </label>
+          <label>
+              <input 
+                  type="radio"
+                  name={`decisionEffect-${index}`}
+                  value="affectsOnlyThisWorkgroup"
+                  checked={item.effect === "affectsOnlyThisWorkgroup"}
+                  onChange={(e) => {
+                      const newDecisionItems = [...decisionItems];
+                      newDecisionItems[index].effect = e.target.value;
+                      setDecisionItems(newDecisionItems);
+                  }}
+              />
+              Affects only this workgroup
+          </label>
           <button onClick={() => removeDecisionItem(index)}>Remove Decision</button>
         </div>
       ))}
