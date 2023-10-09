@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useMyVariable } from '../context/MyVariableContext';
 
 const MinimalistAgenda = ({ onUpdate }: any) => {
-  const [discussionPoints, setDiscussionPoints] = useState([""]);
+  const { myVariable, setMyVariable } = useMyVariable();
+  const [discussionPoints, setDiscussionPoints] = useState(myVariable?.summary?.agendaItems?.[0]?.discussionPoints || [""]);
 
   useEffect(() => {
     onUpdate([{discussionPoints: discussionPoints}]);
@@ -20,7 +22,7 @@ const MinimalistAgenda = ({ onUpdate }: any) => {
   return (
     <div>
       <h3>Discussion Points</h3>
-      {discussionPoints.map((point, pointIndex) => (
+      {discussionPoints.map((point: any, pointIndex: any) => (
         <div key={pointIndex}>
           <input
             type="text"

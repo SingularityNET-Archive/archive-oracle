@@ -1,4 +1,5 @@
 import React from 'react';
+import { useMyVariable } from '../context/MyVariableContext';
 
 type TagsProps = {
   tags: { topicsCovered: string, references: string, emotions: string },
@@ -6,26 +7,40 @@ type TagsProps = {
 }
 
 const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
+  const { myVariable } = useMyVariable();
+
+  // Set the initial state using myVariable.summary.tags
+  const initialState = myVariable.summary && myVariable.summary.tags ? myVariable.summary.tags : {
+    topicsCovered: "",
+    references: "",
+    emotions: ""
+  };
+  const [localTags, setLocalTags] = React.useState(initialState);
+
+  React.useEffect(() => {
+    setTags(localTags);
+  }, [localTags, setTags]);
+
   return (
     <div>
       <h3>Tags</h3>
       <input 
         type="text"
         placeholder="Topics Covered"
-        value={tags.topicsCovered}
-        onChange={(e) => setTags({ ...tags, topicsCovered: e.target.value })}
+        value={localTags.topicsCovered}
+        onChange={(e) => setLocalTags({ ...localTags, topicsCovered: e.target.value })}
       />
       <input 
         type="text"
         placeholder="References"
-        value={tags.references}
-        onChange={(e) => setTags({ ...tags, references: e.target.value })}
+        value={localTags.references}
+        onChange={(e) => setLocalTags({ ...localTags, references: e.target.value })}
       />
       <input 
         type="text"
         placeholder="Emotions"
-        value={tags.emotions}
-        onChange={(e) => setTags({ ...tags, emotions: e.target.value })}
+        value={localTags.emotions}
+        onChange={(e) => setLocalTags({ ...localTags, emotions: e.target.value })}
       />
     </div>
   );

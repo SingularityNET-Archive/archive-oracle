@@ -1,15 +1,28 @@
 import { useState, useEffect } from 'react';
+import { useMyVariable } from '../context/MyVariableContext';
 
 const AgendaItems = ({onUpdate}: any) => {
-    const [agendaItems, setAgendaItems] = useState([
-        { 
-          agenda: "", 
-          status: "carry over", 
-          actionItems: [{ text: "", assignee: "", dueDate: "" }],  
-          decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
-          discussionPoints: [""] 
-        }
-      ]);
+    const { myVariable, setMyVariable } = useMyVariable();
+    const initialAgendaItems = myVariable && myVariable.summary && myVariable.summary.agendaItems 
+                           ? myVariable.summary.agendaItems.map((item: any) => ({
+                               ...{
+                                   agenda: "",
+                                   status: "carry over",
+                                   actionItems: [{ text: "", assignee: "", dueDate: "" }],
+                                   decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
+                                   discussionPoints: [""]
+                               },
+                               ...item
+                             }))
+                           : [{
+                               agenda: "",
+                               status: "carry over",
+                               actionItems: [{ text: "", assignee: "", dueDate: "" }],
+                               decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
+                               discussionPoints: [""]
+                             }];
+
+  const [agendaItems, setAgendaItems] = useState(initialAgendaItems);
       
   useEffect(() => {
     onUpdate(agendaItems);
@@ -47,7 +60,7 @@ const AgendaItems = ({onUpdate}: any) => {
   return (
     <div>
       <h3>Agenda Items</h3>
-      {agendaItems.map((item, agendaIndex) => (
+      {agendaItems.map((item: any, agendaIndex: any) => (
         <div key={agendaIndex}>
           <h4>Agenda item {agendaIndex + 1}</h4>
           <input 
@@ -88,7 +101,7 @@ const AgendaItems = ({onUpdate}: any) => {
               />
               Resolved
           </label>   
-          {item.actionItems.map((action, actionIndex) => (
+          {item?.actionItems?.map((action: any, actionIndex: any) => (
             <div key={actionIndex}>
               <input 
                 type="text"
@@ -128,7 +141,7 @@ const AgendaItems = ({onUpdate}: any) => {
           ))}
 
           <button onClick={() => addItem('actionItems', agendaIndex)}>Add Action</button>
-          {item.decisionItems.map((decision, decisionIndex) => (
+          {item?.decisionItems?.map((decision: any, decisionIndex: any) => (
             <div key={decisionIndex}>
               <input 
                 type="text"
@@ -193,7 +206,7 @@ const AgendaItems = ({onUpdate}: any) => {
           ))}
           <button onClick={() => addItem('decisionItems', agendaIndex)}>Add Decision</button>
 
-          {item.discussionPoints.map((point, pointIndex) => (
+          {item.discussionPoints.map((point: any, pointIndex: any) => (
             <div key={pointIndex}>
               <input 
                 type="text"

@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
+import { useMyVariable } from '../context/MyVariableContext';
 
 const NarrativeAgenda = ({ onUpdate }: any) => {
-  const [mode, setMode] = useState('Narrative'); // 'Narrative' or 'List of Issues'
-  const [narrative, setNarrative] = useState(''); // Text for Narrative
-  const [issues, setIssues] = useState(['']); // List of issues
-  const [actionItems, setActionItems] = useState([{ text: "", assignee: "", dueDate: "" }]);
-  const [decisionItems, setDecisionItems] = useState([{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }]);
+  const { myVariable, setMyVariable } = useMyVariable();
+  const firstAgendaItem = myVariable?.summary?.agendaItems?.[0] || {};
+
+  const [mode, setMode] = useState(firstAgendaItem.mode || 'Narrative');
+  const [narrative, setNarrative] = useState(firstAgendaItem.narrative || '');
+  const [issues, setIssues] = useState(firstAgendaItem.issues || ['']);
+  const [actionItems, setActionItems] = useState(firstAgendaItem.actionItems || [{ text: "", assignee: "", dueDate: "" }]);
+  const [decisionItems, setDecisionItems] = useState(firstAgendaItem.decisionItems || [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }]);
 
   useEffect(() => {
     if (mode === 'Narrative') {
@@ -66,7 +70,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
       ) : (
         <div>
           <h3>Issues</h3>
-          {issues.map((issue, index) => (
+          {issues.map((issue: any, index: any) => (
             <div key={index}>
               <input
                 type="text"
@@ -86,7 +90,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
       )}
 
 <h3>Action Items</h3>
-      {actionItems.map((item, index) => (
+      {actionItems.map((item: any, index: any) => (
         <div key={index}>
           <input
             type="text"
@@ -124,7 +128,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
       <button onClick={addActionItem}>Add Action</button>
 
       <h3>Decision Items</h3>
-      {decisionItems.map((item, index) => (
+      {decisionItems.map((item: any, index: any) => (
         <div key={index}>
           <input
             type="text"

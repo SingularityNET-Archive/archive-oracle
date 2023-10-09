@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/typea.module.css'; 
+import { useMyVariable } from '../context/MyVariableContext';
 
 type MeetingInfoProps = {
   workgroup: string;
@@ -7,16 +8,21 @@ type MeetingInfoProps = {
 };
 
 const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
-  const [meetingInfo, setMeetingInfo] = useState({
-    host:'',
-    documenter:'',
-    peoplePresent: '',
-    purpose: '',
-    meetingVideoLink: '',
-    miroBoardLink: '',
-    otherMediaLink: '',
-    transcriptLink: '',
-  });
+  const { myVariable, setMyVariable } = useMyVariable();
+  const initialMeetingInfo = myVariable && myVariable.summary && myVariable.summary.meetingInfo 
+                           ? myVariable.summary.meetingInfo
+                           : {
+                               host:'',
+                               documenter:'',
+                               peoplePresent: '',
+                               purpose: '',
+                               meetingVideoLink: '',
+                               miroBoardLink: '',
+                               otherMediaLink: '',
+                               transcriptLink: '',
+                             };
+
+  const [meetingInfo, setMeetingInfo] = useState(initialMeetingInfo);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -39,7 +45,7 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
           <input
             type="text"
             name="host"
-            value={meetingInfo.host}
+            value={meetingInfo.host || ""}
             onChange={handleChange}
             className={styles['form-input']}
           />
@@ -51,7 +57,7 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
           <input
             type="text"
             name="documenter"
-            value={meetingInfo.documenter}
+            value={meetingInfo.documenter || ""}
             onChange={handleChange}
             className={styles['form-input']}
           />
@@ -63,7 +69,7 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
       <input
         type="text"
         name="peoplePresent"
-        value={meetingInfo.peoplePresent}
+        value={meetingInfo.peoplePresent || ""}
         onChange={handleChange}
         className={styles['form-input']}
       />
@@ -73,7 +79,7 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
       <input
         type="text"
         name="purpose"
-        value={meetingInfo.purpose}
+        value={meetingInfo.purpose || ""}
         onChange={handleChange}
         className={styles['form-input']}
       />
@@ -83,7 +89,7 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
       <input
         type="text"
         name="meetingVideoLink"
-        value={meetingInfo.meetingVideoLink}
+        value={meetingInfo.meetingVideoLink || ""}
         onChange={handleChange}
         className={styles['form-input']}
       />
@@ -93,7 +99,7 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
       <input
         type="text"
         name="miroBoardLink"
-        value={meetingInfo.miroBoardLink}
+        value={meetingInfo.miroBoardLink || ""}
         onChange={handleChange}
         className={styles['form-input']}
       />
@@ -103,7 +109,7 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
       <input
         type="text"
         name="otherMediaLink"
-        value={meetingInfo.otherMediaLink}
+        value={meetingInfo.otherMediaLink || ""}
         onChange={handleChange}
         className={styles['form-input']}
       />
@@ -113,7 +119,7 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
       <input
         type="text"
         name="transcriptLink"
-        value={meetingInfo.transcriptLink}
+        value={meetingInfo.transcriptLink || ""}
         onChange={handleChange}
         className={styles['form-input']}
       />

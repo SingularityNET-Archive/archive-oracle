@@ -6,30 +6,64 @@ import NarrativeAgenda from '../components/NarrativeAgenda'
 import Tags from '../components/Tags'
 import { saveAgenda } from '../utils/saveAgenda';
 
+const filterKeys = (source: any, template: any) => {
+  const result: any = {};
+  Object.keys(template).forEach(key => {
+    if (key === "type") {
+      result[key] = "Narrative"; // Always set type to "Narrative"
+    } else if (source.hasOwnProperty(key)) {
+      // If the key is an object, recursively filter its keys
+      if (typeof source[key] === 'object' && !Array.isArray(source[key])) {
+        result[key] = filterKeys(source[key], template[key]);
+      } else {
+        result[key] = source[key];
+      }
+    } else {
+      result[key] = template[key];
+    }
+  });
+  return result;
+};
+
 const NarrativeTemplate = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { myVariable, setMyVariable } = useMyVariable();
   const today = new Date().toISOString().split('T')[0];
-  const [formData, setFormData] = useState({
-    name: "Weekly Meeting",
+    
+  const defaultFormData = {
+    name: 'Weekly Meeting',
     date: today,
-    workgroup: "",
-    workgroup_id: "",
-    meetingInfo: {},  
-    agendaItems: [],
-    tags: { topicsCovered: "", references: "", emotions: "" },
-    type: "Narrative"
-  });
+    workgroup: '',
+    workgroup_id: '',
+    meetingInfo: {
+      host:'',
+      documenter:'',
+      peoplePresent: '',
+      mediaLink: '',
+    },  
+    agendaItems: [
+      {
+        mode: 'Narrative',
+        narrative: '',
+        issues: [],
+        actionItems: [],
+        decisionItems: []
+      }
+    ],
+    tags: { topicsCovered: '', references: '', emotions: '' },
+    type: 'Narrative'
+  };
+  const [formData, setFormData] = useState(filterKeys(myVariable.summary || {}, defaultFormData));
   const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "" });
 
   useEffect(() => {
     if (myVariable.workgroup && myVariable.workgroup.workgroup) {
-      setFormData(prevState => ({ ...prevState, workgroup: myVariable.workgroup.workgroup, workgroup_id: myVariable.workgroup.workgroup_id }));
+      setFormData((prevState: any) => ({ ...prevState, workgroup: myVariable.workgroup.workgroup, workgroup_id: myVariable.workgroup.workgroup_id }));
     }
   }, [myVariable.workgroup]);  
 
   useEffect(() => {
-    setFormData(prevState => ({ ...prevState, tags })); 
+    setFormData((prevState: any) => ({ ...prevState, tags })); 
   }, [tags]);
 
   const handleChange = (e: any) => {
@@ -45,7 +79,7 @@ const NarrativeTemplate = () => {
     setLoading(false);
   }
   
-
+  console.log("Meeting Info state/props: ", formData.meetingInfo);
   return (
     <div className={styles['form-container']}>
       <h2>Narrative Template</h2>

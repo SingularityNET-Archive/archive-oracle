@@ -8,6 +8,7 @@ import ConfirmSummaries from '../../components/ConfirmSummaries'
 import { useMyVariable } from '../../context/MyVariableContext';
 import { getWorkgroups } from '../../utils/getWorkgroups'
 import { updateWorkgroups } from '../../utils/updateWorkgroups'
+import { getSummaries } from '../../utils/getsummaries';
 
 type Workgroup = {
   workgroup_id: string;
@@ -34,9 +35,28 @@ const MeetingSummary: NextPage = () => {
     getWorkgroupList();
   }, []);
 
-  const handleSelectChange = (e: any) => {
+  async function handleSelectChange(e: any) {
     const selectedWorkgroupId = e.target.value;
-  
+    const summary: any = await getSummaries(selectedWorkgroupId);
+
+  // Adjust the active component based on summary.type
+    if (summary && summary.type) {
+      switch (summary.type) {
+        case 'Minimalist':
+          setActiveComponent('two');
+          break;
+        case 'Narrative':
+          setActiveComponent('three');
+          break;
+        case 'FullArchival':
+        default: // default to FullArchival if type is undefined or unexpected
+          setActiveComponent('one');
+          break;
+      }
+    } else {
+      setActiveComponent('one'); // default to FullArchival if summary or summary.type is undefined
+    }
+
     if (selectedWorkgroupId === 'add_new') {
       setNewWorkgroup('');
       setShowNewWorkgroupInput(true);
@@ -45,7 +65,7 @@ const MeetingSummary: NextPage = () => {
       setSelectedWorkgroupId(selectedWorkgroupId); 
       const selectedWorkgroup = workgroups.find(workgroup => workgroup.workgroup_id === selectedWorkgroupId);
       if (selectedWorkgroup) {
-        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup });
+        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summary });
       }
     }
   }  
@@ -76,13 +96,13 @@ const MeetingSummary: NextPage = () => {
 
   const getComponent = () => {
     switch (activeComponent) {
-      case 'one': return <FullArchivalTemplate />;
-      case 'two': return <MinimalistTemplate />;
-      case 'three': return <NarrativeTemplate />;
-      case 'four': return <ConfirmSummaries />;
+      case 'one': return <FullArchivalTemplate key={selectedWorkgroupId} />;
+      case 'two': return <MinimalistTemplate key={selectedWorkgroupId} />;
+      case 'three': return <NarrativeTemplate key={selectedWorkgroupId} />;
+      case 'four': return <ConfirmSummaries key={selectedWorkgroupId} />;
       default: return <div>Select a component</div>;
     }
-  }
+  }  
 
   return (
     <div className={styles.container}>
@@ -111,14 +131,17 @@ const MeetingSummary: NextPage = () => {
             )}
           </>
         )}
+        {selectedWorkgroupId  && (<div>
         <button className={styles.navButton} onClick={() => setActiveComponent('one')}>Full Archival Template</button>
         <button className={styles.navButton} onClick={() => setActiveComponent('two')}>Minimalist Template</button>
         <button className={styles.navButton} onClick={() => setActiveComponent('three')}>Narrative Template</button>
         <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Confirm Summaries</button>
+        </div>)}
+        
       </div>
-      <div className={styles.mainContent}>
+      {selectedWorkgroupId  && (<div className={styles.mainContent}>
         {getComponent()}
-      </div>
+      </div>)}
     </div>
   );
 };

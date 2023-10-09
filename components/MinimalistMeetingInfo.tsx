@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/typea.module.css'; 
+import { useMyVariable } from '../context/MyVariableContext';
 
 type MinimalistMeetingInfoProps = {
   workgroup: string;
@@ -7,11 +8,12 @@ type MinimalistMeetingInfoProps = {
 };
 
 const MinimalistMeetingInfo: React.FC<MinimalistMeetingInfoProps> = ({ workgroup, onUpdate }) => {
-  const [meetingInfo, setMeetingInfo] = useState({
-    host:'',
-    documenter:'',
+  const { myVariable, setMyVariable } = useMyVariable();
+  const [meetingInfo, setMeetingInfo] = useState(myVariable?.summary?.meetingInfo || {
+    host: '',
+    documenter: '',
     peoplePresent: '',
-  });
+  });  
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;

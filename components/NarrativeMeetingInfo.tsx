@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/typea.module.css'; 
+import { useMyVariable } from '../context/MyVariableContext';
 
 type NarrativeMeetingInfoProps = {
   workgroup: string;
@@ -7,12 +8,15 @@ type NarrativeMeetingInfoProps = {
 };
 
 const NarrativeMeetingInfo: React.FC<NarrativeMeetingInfoProps> = ({ workgroup, onUpdate }) => {
-  const [meetingInfo, setMeetingInfo] = useState({
+  const { myVariable, setMyVariable } = useMyVariable();
+  const initialMeetingInfo = myVariable?.summary?.meetingInfo || {
     host:'',
     documenter:'',
     peoplePresent: '',
     mediaLink: '',
-  });
+  };
+
+  const [meetingInfo, setMeetingInfo] = useState(initialMeetingInfo);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -35,7 +39,7 @@ const NarrativeMeetingInfo: React.FC<NarrativeMeetingInfoProps> = ({ workgroup, 
           <input
             type="text"
             name="host"
-            value={meetingInfo.host}
+            value={meetingInfo.host || ""}
             onChange={handleChange}
             className={styles['form-input']}
           />
@@ -47,7 +51,7 @@ const NarrativeMeetingInfo: React.FC<NarrativeMeetingInfoProps> = ({ workgroup, 
           <input
             type="text"
             name="documenter"
-            value={meetingInfo.documenter}
+            value={meetingInfo.documenter || ""}
             onChange={handleChange}
             className={styles['form-input']}
           />
@@ -59,7 +63,7 @@ const NarrativeMeetingInfo: React.FC<NarrativeMeetingInfoProps> = ({ workgroup, 
       <input
         type="text"
         name="peoplePresent"
-        value={meetingInfo.peoplePresent}
+        value={meetingInfo.peoplePresent || ""}
         onChange={handleChange}
         className={styles['form-input']}
       />
@@ -69,7 +73,7 @@ const NarrativeMeetingInfo: React.FC<NarrativeMeetingInfoProps> = ({ workgroup, 
       <input
         type="text"
         name="mediaLink"
-        value={meetingInfo.mediaLink}
+        value={meetingInfo.mediaLink || ""}
         onChange={handleChange}
         className={styles['form-input']}
       />

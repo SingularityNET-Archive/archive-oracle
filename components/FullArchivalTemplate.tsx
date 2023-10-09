@@ -6,30 +6,69 @@ import AgendaItems from '../components/AgendaItems'
 import Tags from '../components/Tags'
 import { saveAgenda } from '../utils/saveAgenda';
 
+const filterKeys = (source: any, template: any) => {
+  const result: any = {};
+  Object.keys(template).forEach(key => {
+    if (key === "type") {
+      result[key] = "FullArchival"; // Always set type to "Narrative"
+    } else if (source.hasOwnProperty(key)) {
+      // If the key is an object, recursively filter its keys
+      if (typeof source[key] === 'object' && !Array.isArray(source[key])) {
+        result[key] = filterKeys(source[key], template[key]);
+      } else {
+        result[key] = source[key];
+      }
+    } else {
+      result[key] = template[key];
+    }
+  });
+  return result;
+};
+
 const FullArchivalTemplate = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { myVariable, setMyVariable } = useMyVariable();
   const today = new Date().toISOString().split('T')[0];
-  const [formData, setFormData] = useState({
+    
+  const defaultFormData = {
     name: "Weekly Meeting",
     date: today,
     workgroup: "",
     workgroup_id: "",
-    meetingInfo: {},  
-    agendaItems: [],
+    meetingInfo: {
+      host:'',
+      documenter:'',
+      peoplePresent: '',
+      purpose: '',
+      meetingVideoLink: '',
+      miroBoardLink: '',
+      otherMediaLink: '',
+      transcriptLink: '',
+    },  
+    agendaItems: [
+      { 
+        agenda: "", 
+        status: "carry over", 
+        actionItems: [{ text: "", assignee: "", dueDate: "" }],  
+        decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
+        discussionPoints: [""] 
+      }
+    ],
     tags: { topicsCovered: "", references: "", emotions: "" },
     type: "FullArchival"
-  });
+  };
+
+  const [formData, setFormData] = useState(filterKeys(myVariable.summary || {}, defaultFormData));
   const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "" });
 
   useEffect(() => {
     if (myVariable.workgroup && myVariable.workgroup.workgroup) {
-      setFormData(prevState => ({ ...prevState, workgroup: myVariable.workgroup.workgroup, workgroup_id: myVariable.workgroup.workgroup_id }));
+      setFormData((prevState: any)=> ({ ...prevState, workgroup: myVariable.workgroup.workgroup, workgroup_id: myVariable.workgroup.workgroup_id }));
     }
   }, [myVariable.workgroup]);  
 
   useEffect(() => {
-    setFormData(prevState => ({ ...prevState, tags })); 
+    setFormData((prevState: any) => ({ ...prevState, tags })); 
   }, [tags]);
 
   const handleChange = (e: any) => {
