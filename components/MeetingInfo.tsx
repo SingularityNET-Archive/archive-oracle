@@ -9,20 +9,28 @@ type MeetingInfoProps = {
 
 const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
   const { myVariable, setMyVariable } = useMyVariable();
-  const initialMeetingInfo = myVariable && myVariable.summary && myVariable.summary.meetingInfo 
-                           ? myVariable.summary.meetingInfo
-                           : {
-                               host:'',
-                               documenter:'',
-                               peoplePresent: '',
-                               purpose: '',
-                               meetingVideoLink: '',
-                               miroBoardLink: '',
-                               otherMediaLink: '',
-                               transcriptLink: '',
-                             };
 
-  const [meetingInfo, setMeetingInfo] = useState(initialMeetingInfo);
+  const {
+    host = '',
+    documenter = '',
+    peoplePresent = '',
+    purpose = '',
+    meetingVideoLink = '',
+    miroBoardLink = '',
+    otherMediaLink = '',
+    transcriptLink = ''
+  } = myVariable?.summary?.meetingInfo || {};
+
+  const [meetingInfo, setMeetingInfo] = useState({
+    host,
+    documenter,
+    peoplePresent,
+    purpose,
+    meetingVideoLink,
+    miroBoardLink,
+    otherMediaLink,
+    transcriptLink
+  });
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;

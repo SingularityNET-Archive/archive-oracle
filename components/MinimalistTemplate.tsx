@@ -43,13 +43,13 @@ const MinimalistTemplate = () => {
       {
         "discussionPoints":[]
       }],
-    tags: { topicsCovered: "", references: "", emotions: "" },
+    tags: { topicsCovered: "", references: "", emotions: "", other: "" },
     type: "Minimalist"  
   };
   
   const [formData, setFormData] = useState(filterKeys(myVariable.summary || {}, defaultFormData));
   
-  const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "" });
+  const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "", other: "" });
 
   useEffect(() => {
     if (myVariable.workgroup && myVariable.workgroup.workgroup) {
@@ -73,7 +73,6 @@ const MinimalistTemplate = () => {
     console.log("Submitted Form Data:", formData, data);
     setLoading(false);
   }
-  
 
   return (
     <div className={styles['form-container']}>
@@ -91,7 +90,7 @@ const MinimalistTemplate = () => {
           className={styles['form-input']}
         />
         <label className={styles['form-label']}>
-          Date: (It loads the previous meeting date, please update the meeting date for new meetings)
+          Date: (It loads the previous meeting date, please update the meeting date for new meeting)
         </label>
         <input
           type="date"

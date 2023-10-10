@@ -9,14 +9,19 @@ type NarrativeMeetingInfoProps = {
 
 const NarrativeMeetingInfo: React.FC<NarrativeMeetingInfoProps> = ({ workgroup, onUpdate }) => {
   const { myVariable, setMyVariable } = useMyVariable();
-  const initialMeetingInfo = myVariable?.summary?.meetingInfo || {
-    host:'',
-    documenter:'',
-    peoplePresent: '',
-    mediaLink: '',
-  };
+  const {
+    host = '',
+    documenter = '',
+    peoplePresent = '',
+    mediaLink = ''
+  } = myVariable?.summary?.meetingInfo || {};
 
-  const [meetingInfo, setMeetingInfo] = useState(initialMeetingInfo);
+  const [meetingInfo, setMeetingInfo] = useState({
+    host,
+    documenter,
+    peoplePresent,
+    mediaLink
+  });
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;

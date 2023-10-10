@@ -9,11 +9,17 @@ type MinimalistMeetingInfoProps = {
 
 const MinimalistMeetingInfo: React.FC<MinimalistMeetingInfoProps> = ({ workgroup, onUpdate }) => {
   const { myVariable, setMyVariable } = useMyVariable();
-  const [meetingInfo, setMeetingInfo] = useState(myVariable?.summary?.meetingInfo || {
-    host: '',
-    documenter: '',
-    peoplePresent: '',
-  });  
+  const {
+    host = '',
+    documenter = '',
+    peoplePresent = ''
+  } = myVariable?.summary?.meetingInfo || {};
+
+  const [meetingInfo, setMeetingInfo] = useState({
+    host,
+    documenter,
+    peoplePresent
+  });
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;

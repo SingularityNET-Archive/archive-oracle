@@ -50,11 +50,11 @@ const NarrativeTemplate = () => {
         decisionItems: []
       }
     ],
-    tags: { topicsCovered: '', references: '', emotions: '' },
+    tags: { topicsCovered: '', references: '', emotions: '', other: '' },
     type: 'Narrative'
   };
   const [formData, setFormData] = useState(filterKeys(myVariable.summary || {}, defaultFormData));
-  const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "" });
+  const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "", other: "" });
 
   useEffect(() => {
     if (myVariable.workgroup && myVariable.workgroup.workgroup) {
@@ -79,7 +79,6 @@ const NarrativeTemplate = () => {
     setLoading(false);
   }
   
-  console.log("Meeting Info state/props: ", formData.meetingInfo);
   return (
     <div className={styles['form-container']}>
       <h2>Narrative Template</h2>
@@ -96,7 +95,7 @@ const NarrativeTemplate = () => {
           className={styles['form-input']}
         />
         <label className={styles['form-label']}>
-          Date:
+          Date: (It loads the previous meeting date, please update the meeting date for new meeting)
         </label>
         <input
           type="date"

@@ -2,8 +2,8 @@ import React from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
 
 type TagsProps = {
-  tags: { topicsCovered: string, references: string, emotions: string },
-  setTags: React.Dispatch<React.SetStateAction<{ topicsCovered: string, references: string, emotions: string }>>
+  tags: { topicsCovered: string, references: string, emotions: string, other: string },
+  setTags: React.Dispatch<React.SetStateAction<{ topicsCovered: string, references: string, emotions: string, other: string }>>
 }
 
 const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
@@ -13,7 +13,8 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
   const initialState = myVariable.summary && myVariable.summary.tags ? myVariable.summary.tags : {
     topicsCovered: "",
     references: "",
-    emotions: ""
+    emotions: "",
+    other: ""
   };
   const [localTags, setLocalTags] = React.useState(initialState);
 
@@ -41,6 +42,12 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
         placeholder="Emotions"
         value={localTags.emotions}
         onChange={(e) => setLocalTags({ ...localTags, emotions: e.target.value })}
+      />
+      <input 
+        type="text"
+        placeholder="Other / General"
+        value={localTags.other}
+        onChange={(e) => setLocalTags({ ...localTags, other: e.target.value })}
       />
     </div>
   );
