@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
+import styles from '../styles/typea.module.css';
 
 const AgendaItems = ({onUpdate}: any) => {
     const { myVariable, setMyVariable } = useMyVariable();
@@ -64,6 +65,7 @@ const AgendaItems = ({onUpdate}: any) => {
         <div key={agendaIndex}>
           <h4>Agenda item {agendaIndex + 1}</h4>
           <input 
+            className={styles['form-input']}
             type="text"
             placeholder="Agenda Item"
             value={item.agenda}
@@ -104,6 +106,7 @@ const AgendaItems = ({onUpdate}: any) => {
           {item?.actionItems?.map((action: any, actionIndex: any) => (
             <div key={actionIndex}>
               <input 
+                className={styles['form-input']}
                 type="text"
                 placeholder="Action Item"
                 value={action.text} 
@@ -115,6 +118,7 @@ const AgendaItems = ({onUpdate}: any) => {
               />
           
               <input 
+                className={styles['form-input']}
                 type="text"
                 placeholder="Assignee"
                 value={action.assignee}  
@@ -126,6 +130,7 @@ const AgendaItems = ({onUpdate}: any) => {
               />
           
               <input 
+                className={styles['form-input']}
                 type="date"
                 placeholder="Due Date"
                 value={action.dueDate}  
@@ -144,6 +149,7 @@ const AgendaItems = ({onUpdate}: any) => {
           {item?.decisionItems?.map((decision: any, decisionIndex: any) => (
             <div key={decisionIndex}>
               <input 
+                className={styles['form-input']}
                 type="text"
                 placeholder="Decision Item"
                 value={decision.decision} 
@@ -154,6 +160,7 @@ const AgendaItems = ({onUpdate}: any) => {
                 }}
               />
               <input 
+                className={styles['form-input']}
                 type="text"
                 placeholder="Rationale"
                 value={decision.rationale} 
@@ -164,6 +171,7 @@ const AgendaItems = ({onUpdate}: any) => {
                 }}
               />
               <input 
+                className={styles['form-input']}
                 type="text"
                 placeholder="Opposing"
                 value={decision.opposing} 
@@ -209,6 +217,7 @@ const AgendaItems = ({onUpdate}: any) => {
           {item.discussionPoints.map((point: any, pointIndex: any) => (
             <div key={pointIndex}>
               <input 
+                className={styles['form-input']}
                 type="text"
                 placeholder="Discussion Point"
                 value={point}

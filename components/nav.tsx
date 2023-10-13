@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState, useEffect } from "react";
 import { supabase } from '../lib/supabaseClient';
 import { Session } from "@supabase/supabase-js";
+import { useMyVariable } from '../context/MyVariableContext';
 
 type RoleData = {
   roles: {
@@ -16,6 +17,7 @@ type RoleData = {
 const Nav = () => {
   const [session, setSession] = useState<Session | null>(null)
   const [roleData, setRoleData] = useState<RoleData | null>(null);
+  const { myVariable, setMyVariable } = useMyVariable();
 
     useEffect(() => {
       supabase.auth.getSession().then(({ data: { session } }) => {
@@ -53,29 +55,33 @@ const Nav = () => {
     const guildId = '919622034546372679';
   
     axios.get(`/api/userRoles?userId=${discordUserId}&guildId=${guildId}`)
-  .then(response => {
-    if (response.status !== 200) {
-      throw new Error('Network response was not ok');
-    }
-    setRoleData(prevState => {
-      if (prevState) {
-        return {
-          roles: prevState.roles,
-          userRoles: prevState.userRoles,
-          isAdmin: response.data.isAdmin
-        };
-      } else {
-        // Assuming default values for roles and userRoles
-        return {
-          roles: {},
-          userRoles: [],
-          isAdmin: response.data.isAdmin
-        };
+    .then(response => {
+      if (response.status !== 200) {
+        throw new Error('Network response was not ok');
       }
-    });
-    console.log("user is admin:", response.data.isAdmin); 
-  })
-  .catch(error => console.error('Error:', error));
+      setMyVariable(prevState => ({
+        ...prevState,
+        isAdmin: response.data.isAdmin
+      }));
+      setRoleData(prevState => {
+        if (prevState) {
+          return {
+            roles: prevState.roles,
+            userRoles: prevState.userRoles,
+            isAdmin: response.data.isAdmin
+          };
+        } else {
+          // Assuming default values for roles and userRoles
+          return {
+            roles: {},
+            userRoles: [],
+            isAdmin: response.data.isAdmin
+          };
+        }
+      });
+      console.log("user is admin:", response.data.isAdmin); 
+    })
+    .catch(error => console.error('Error:', error));
   
   }, [session]);  
 

@@ -135,7 +135,7 @@ const MeetingSummary: NextPage = () => {
         <button className={styles.navButton} onClick={() => setActiveComponent('one')}>Full Archival Template</button>
         <button className={styles.navButton} onClick={() => setActiveComponent('two')}>Minimalist Template</button>
         <button className={styles.navButton} onClick={() => setActiveComponent('three')}>Narrative Template</button>
-        <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Confirm Summaries</button>
+        {myVariable.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Confirm Summaries</button>}
         </div>)}
         
       </div>

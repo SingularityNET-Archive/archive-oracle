@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
+import styles from '../styles/typea.module.css';
 
 const MinimalistAgenda = ({ onUpdate }: any) => {
   const { myVariable, setMyVariable } = useMyVariable();
@@ -25,6 +26,7 @@ const MinimalistAgenda = ({ onUpdate }: any) => {
       {discussionPoints.map((point: any, pointIndex: any) => (
         <div key={pointIndex}>
           <input
+            className={styles['form-input']}
             type="text"
             placeholder="Discussion Point"
             value={point}

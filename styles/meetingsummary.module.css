@@ -19,6 +19,8 @@
   width: 190px;
   padding: 0.5em;
   margin: 0.5em;
+  background-color: #2b1f1f;
+  color: white;
 }
 
 .selectGreen {
@@ -26,7 +28,7 @@
 }
 
 .selectGreen option {
-  color: initial;  /* This will reset the color to the default for options inside the dropdown */
+  color: white;  /* This will reset the color to the default for options inside the dropdown */
 }
 
 .mainContent {
@@ -45,6 +47,7 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
+  color: white;
 }
 
 .navButton:focus {

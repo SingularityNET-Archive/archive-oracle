@@ -11,6 +11,9 @@ const filterKeys = (source: any, template: any) => {
   Object.keys(template).forEach(key => {
     if (key === "type") {
       result[key] = "Minimalist"; 
+    } else if (key === "date") {
+      // Explicitly setting the date to be empty
+      result[key] = "";
     } else if (source.hasOwnProperty(key)) {
       // If the key is an object, recursively filter its keys
       if (typeof source[key] === 'object' && !Array.isArray(source[key])) {
@@ -31,7 +34,7 @@ const MinimalistTemplate = () => {
   const today = new Date().toISOString().split('T')[0];
   const defaultFormData = {
     name: "Weekly Meeting",
-    date: today,
+    date: "",
     workgroup: "",
     workgroup_id: "",
     meetingInfo: {
@@ -68,11 +71,22 @@ const MinimalistTemplate = () => {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
+    if (!formData.date) {
+      alert("Please select the meeting date.");
+      return;
+    }
     setLoading(true);
-    const data: any = await saveAgenda(formData);
-    console.log("Submitted Form Data:", formData, data);
-    setLoading(false);
-  }
+    try {
+      const data: any = await saveAgenda(formData);
+      console.log("Submitted Form Data:", formData, data);
+      alert("Meeting summary successfully submitted!"); // Notify the user here
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+      alert("There was an error submitting the meeting summary."); // Notify about the failure if you wish
+    } finally {
+      setLoading(false);
+    }
+  }  
 
   return (
     <div className={styles['form-container']}>
@@ -90,7 +104,7 @@ const MinimalistTemplate = () => {
           className={styles['form-input']}
         />
         <label className={styles['form-label']}>
-          Date: (It loads the previous meeting date, please update the meeting date for new meeting)
+          Date: (previous meeting {myVariable.summary.date})
         </label>
         <input
           type="date"

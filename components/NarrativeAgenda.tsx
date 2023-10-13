@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
+import styles from '../styles/typea.module.css';
 
 const NarrativeAgenda = ({ onUpdate }: any) => {
   const { myVariable, setMyVariable } = useMyVariable();
@@ -63,6 +64,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
 
       {mode === 'Narrative' ? (
         <textarea
+          className={styles['form-input']}
           placeholder="Describe what happened..."
           value={narrative}
           onChange={(e) => setNarrative(e.target.value)}
@@ -73,6 +75,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
           {issues.map((issue: any, index: any) => (
             <div key={index}>
               <input
+                className={styles['form-input']}
                 type="text"
                 placeholder="Issue"
                 value={issue}
@@ -93,6 +96,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
       {actionItems.map((item: any, index: any) => (
         <div key={index}>
           <input
+            className={styles['form-input']}
             type="text"
             placeholder="Action Text"
             value={item.text}
@@ -103,6 +107,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
             }}
           />
           <input
+            className={styles['form-input']}
             type="text"
             placeholder="Assignee"
             value={item.assignee}
@@ -113,6 +118,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
             }}
           />
           <input
+            className={styles['form-input']}
             type="date"
             placeholder="Due Date"
             value={item.dueDate}
@@ -131,6 +137,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
       {decisionItems.map((item: any, index: any) => (
         <div key={index}>
           <input
+            className={styles['form-input']}
             type="text"
             placeholder="Decision"
             value={item.decision}
@@ -141,6 +148,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
             }}
           />
           <input
+            className={styles['form-input']}
             type="text"
             placeholder="Rationale"
             value={item.rationale}
@@ -151,6 +159,7 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
             }}
           />
           <input
+            className={styles['form-input']}
             type="text"
             placeholder="Opposing"
             value={item.opposing}
