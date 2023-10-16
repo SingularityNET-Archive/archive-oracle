@@ -66,33 +66,35 @@ const Home: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <div>
-        <h1>Home</h1>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <button onClick={getInfo} disabled={loading}>
-          {loading ? "Loading..." : "Test GPT2"}
-        </button>
-        <p>{info ? info : ""}</p>
-      </div>
-      <div>
-        <button onClick={testOpenAi} disabled={loading}>
-          {loading ? "Loading..." : "Test OpenAi"}
-        </button>
-      </div>
-      <div>
-        <button onClick={fetchDocs} disabled={loading}>
-          {loading ? "Loading..." : "GetDocs"}
-        </button>
-      </div>
-      <div>
-        <button onClick={fetchArchives} disabled={loading}>
-          {loading ? "Loading..." : "GetArchives"}
-        </button>
-      </div>
+      {loading && (<div>
+        <div>
+          <h1>Home</h1>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button onClick={getInfo} disabled={loading}>
+            {loading ? "Loading..." : "Test GPT2"}
+          </button>
+          <p>{info ? info : ""}</p>
+        </div>
+        <div>
+          <button onClick={testOpenAi} disabled={loading}>
+            {loading ? "Loading..." : "Test OpenAi"}
+          </button>
+        </div>
+        <div>
+          <button onClick={fetchDocs} disabled={loading}>
+            {loading ? "Loading..." : "GetDocs"}
+          </button>
+        </div>
+        <div>
+          <button onClick={fetchArchives} disabled={loading}>
+            {loading ? "Loading..." : "GetArchives"}
+          </button>
+        </div>
+      </div>)}
     </div>
   );
 };

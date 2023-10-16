@@ -1,13 +1,15 @@
 import { useState } from "react";
 import styles from '../styles/typea.module.css'; 
 import { updateGitbook } from '../utils/updateGitbook'
+import { useMyVariable } from '../context/MyVariableContext';
 
 const ConfirmSummaries = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const { myVariable, setMyVariable } = useMyVariable();
   const [formData, setFormData] = useState({
-    date: "",
-    workgroup: "",
-    meetingSummary: "",
+    date: myVariable.summary.date,
+    workgroup: myVariable.summary.workgroup,
+    meetingSummary: "This will show the markdown format to be submitted to the GitBook repo. Will build this once templates are finalized",
   });
 
   const handleChange = (e: any) => {
@@ -25,7 +27,7 @@ const ConfirmSummaries = () => {
     setLoading(false);
   }
   
-
+  console.log("myVariable", myVariable)
   return (
     <div className={styles['form-container']}>
       <h2>Confirm uploaded Summaries</h2>
