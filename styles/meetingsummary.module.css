@@ -38,6 +38,13 @@
   margin-top: -45px;
 }
 
+.pleaseSignIn {
+  flex-grow: 1;
+  padding: 1rem;
+  margin-left: 200px;
+  margin-top: 0px;
+}
+
 .navButton {
   width: 170px;
   display: block;
