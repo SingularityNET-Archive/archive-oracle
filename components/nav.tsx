@@ -19,19 +19,27 @@ const Nav = () => {
   const [roleData, setRoleData] = useState<RoleData | null>(null);
   const { myVariable, setMyVariable } = useMyVariable();
 
-    useEffect(() => {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        setSession(session)
-      })
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setMyVariable(prevState => ({
+        ...prevState,
+        isLoggedIn: !!session 
+      }));
+    })
 
-      const {
-        data: { subscription },
-      } = supabase.auth.onAuthStateChange((_event, session) => {
-        setSession(session)
-      })
-      
-      return () => subscription.unsubscribe()
-    }, [])
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setMyVariable(prevState => ({
+        ...prevState,
+        isLoggedIn: !!session 
+      }));
+    })
+    
+    return () => subscription.unsubscribe()
+  }, [])
 
     async function signInWithDiscord() {
       const { data, error } = await supabase.auth.signInWithOAuth({

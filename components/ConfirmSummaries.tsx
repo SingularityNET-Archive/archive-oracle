@@ -27,7 +27,7 @@ const ConfirmSummaries = () => {
     setLoading(false);
   }
   
-  console.log("myVariable", myVariable)
+  //console.log("myVariable", myVariable)
   return (
     <div className={styles['form-container']}>
       <h2>Confirm uploaded Summaries</h2>

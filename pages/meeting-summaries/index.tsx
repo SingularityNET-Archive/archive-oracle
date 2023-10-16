@@ -139,8 +139,11 @@ const MeetingSummary: NextPage = () => {
         </div>)}
         
       </div>
-      {selectedWorkgroupId  && (<div className={styles.mainContent}>
+      {myVariable.isLoggedIn && selectedWorkgroupId  && (<div className={styles.mainContent}>
         {getComponent()}
+      </div>)}
+      {!myVariable.isLoggedIn && (<div className={styles.mainContent}>
+        Please sign in with Discord
       </div>)}
     </div>
   );
