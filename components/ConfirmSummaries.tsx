@@ -7,8 +7,8 @@ const ConfirmSummaries = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { myVariable, setMyVariable } = useMyVariable();
   const [formData, setFormData] = useState({
-    date: myVariable.summary.date,
-    workgroup: myVariable.summary.workgroup,
+    date: myVariable.summary?.date || "",
+    workgroup: myVariable.summary?.workgroup || "",
     meetingSummary: "This will show the markdown format to be submitted to the GitBook repo. Will build this once templates are finalized",
   });
 

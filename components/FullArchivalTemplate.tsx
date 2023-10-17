@@ -113,9 +113,8 @@ const FullArchivalTemplate = () => {
           onChange={handleChange}
           className={styles['form-input']}
         />
-        <label className={styles['form-label']}>
-          Date: (previous meeting {myVariable.summary.date})
-        </label>
+        {myVariable.summary?.date && (<label className={styles['form-label']}>Date:  (previous meeting {myVariable.summary.date})</label>)}
+        {!myVariable.summary?.date && (<label className={styles['form-label']}>Date: </label>)}
         <input
           type="date"
           name="date"
