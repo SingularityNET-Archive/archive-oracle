@@ -59,14 +59,21 @@ const Nav = () => {
     // Guard clause: return if session is null
     if (!session) return;
   
-    const discordUserId = session.user.user_metadata.sub;
+    /*const discordUserId = session.user.user_metadata.sub;
     const guildId = '919622034546372679';
   
     axios.get(`/api/userRoles?userId=${discordUserId}&guildId=${guildId}`)
     .then(response => {
       if (response.status !== 200) {
         throw new Error('Network response was not ok');
-      }
+      }*/
+      const userId = session.user.id;
+
+      axios.get(`/api/userRoles?userId=${userId}`)
+      .then(response => {
+        if (response.status !== 200) {
+          throw new Error('Network response was not ok');
+        }
       setMyVariable(prevState => ({
         ...prevState,
         isAdmin: response.data.isAdmin
