@@ -9,12 +9,18 @@ import { useMyVariable } from '../../context/MyVariableContext';
 import { getWorkgroups } from '../../utils/getWorkgroups'
 import { updateWorkgroups } from '../../utils/updateWorkgroups'
 import { getSummaries } from '../../utils/getsummaries';
+import { getNames } from '../../utils/getNames'
 
 type Workgroup = {
   workgroup_id: string;
   workgroup: string;
   last_meeting_id: string;
   preferred_template: string;
+};
+
+type Names = {
+  value: any;
+  label: any;
 };
 
 const MeetingSummary: NextPage = () => {
@@ -25,10 +31,14 @@ const MeetingSummary: NextPage = () => {
   const { myVariable, setMyVariable } = useMyVariable();
   const [selectedWorkgroupId, setSelectedWorkgroupId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [names, setNames] = useState<Names[]>([])
 
   async function getWorkgroupList() {
     const workgroupList: any = await getWorkgroups();
+    const names = await getNames(); 
+    let newNames = names.map((value) => ({ value: value.name, label: value.name }))
     setWorkgroups(workgroupList);
+    setNames(newNames);
   }
 
   useEffect(() => {
@@ -65,7 +75,7 @@ const MeetingSummary: NextPage = () => {
       setSelectedWorkgroupId(selectedWorkgroupId); 
       const selectedWorkgroup = workgroups.find(workgroup => workgroup.workgroup_id === selectedWorkgroupId);
       if (selectedWorkgroup) {
-        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summary });
+        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summary, names });
       }
     }
   }  
@@ -87,7 +97,7 @@ const MeetingSummary: NextPage = () => {
       const newWorkgroupEntry = updatedWorkgroupList.find((workgroup: any) => workgroup.workgroup.toLowerCase() === newWorkgroup.toLowerCase());
       if (newWorkgroupEntry) {
         setSelectedWorkgroupId(newWorkgroupEntry.workgroup_id);
-        setMyVariable(prev => ({ ...prev, workgroup: newWorkgroupEntry })); // updating myVariable with new workgroup
+        setMyVariable(prev => ({ ...prev, workgroup: newWorkgroupEntry, names })); // updating myVariable with new workgroup
       }
       setShowNewWorkgroupInput(false);
     }
