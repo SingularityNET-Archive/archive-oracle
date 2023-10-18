@@ -10,7 +10,7 @@ interface SelectNamesProps {
 }
 
 const SelectNames: React.FC<SelectNamesProps> = ({ onSelect, initialValue }) => {
-  let initialOptions = initialValue.split(", ").map((val: any) => ({ label: val, value: val }));
+  let initialOptions = initialValue ? initialValue.split(", ").map((val: any) => ({ label: val, value: val })) : [];
   const [selectedLabels, setSelectedLabels] = React.useState(initialOptions);
   const { myVariable } = useMyVariable();
   const options = myVariable.names ||  [

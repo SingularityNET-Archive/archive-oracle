@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
 import styles from '../styles/typea.module.css';
+import SelectNames from '../components/SelectNames'
 
 const AgendaItems = ({onUpdate}: any) => {
     const { myVariable, setMyVariable } = useMyVariable();
@@ -117,16 +118,13 @@ const AgendaItems = ({onUpdate}: any) => {
                 }}
               />
           
-              <input 
-                className={styles['form-input']}
-                type="text"
-                placeholder="Assignee"
-                value={action.assignee}  
-                onChange={(e) => {
+              <SelectNames 
+                onSelect={(selectedNames: string) => {
                   const newAgenda = [...agendaItems];
-                  newAgenda[agendaIndex].actionItems[actionIndex].assignee = e.target.value;  
+                  newAgenda[agendaIndex].actionItems[actionIndex].assignee = selectedNames;
                   setAgendaItems(newAgenda);
                 }}
+                initialValue={action.assignee}
               />
           
               <input 
@@ -141,11 +139,11 @@ const AgendaItems = ({onUpdate}: any) => {
                 }}
               />
           
-              <button onClick={() => removeItem('actionItems', agendaIndex, actionIndex)}>Remove Action</button>
+              <button type="button" onClick={() => removeItem('actionItems', agendaIndex, actionIndex)}>Remove Action</button>
             </div>
           ))}
 
-          <button onClick={() => addItem('actionItems', agendaIndex)}>Add Action</button>
+          <button type="button" onClick={() => addItem('actionItems', agendaIndex)}>Add Action</button>
           {item?.decisionItems?.map((decision: any, decisionIndex: any) => (
             <div key={decisionIndex}>
               <input 
@@ -209,10 +207,10 @@ const AgendaItems = ({onUpdate}: any) => {
                   />
                   Affects only this workgroup
               </label>
-              <button onClick={() => removeItem('decisionItems', agendaIndex, decisionIndex)}>Remove Decision</button>
+              <button type="button" onClick={() => removeItem('decisionItems', agendaIndex, decisionIndex)}>Remove Decision</button>
             </div>
           ))}
-          <button onClick={() => addItem('decisionItems', agendaIndex)}>Add Decision</button>
+          <button type="button" onClick={() => addItem('decisionItems', agendaIndex)}>Add Decision</button>
 
           {item.discussionPoints.map((point: any, pointIndex: any) => (
             <div key={pointIndex}>
@@ -227,14 +225,14 @@ const AgendaItems = ({onUpdate}: any) => {
                   setAgendaItems(newAgenda);
                 }}
               />
-              <button onClick={() => removeItem('discussionPoints', agendaIndex, pointIndex)}>Remove Point</button>
+              <button type="button" onClick={() => removeItem('discussionPoints', agendaIndex, pointIndex)}>Remove Point</button>
             </div>
           ))}
-          <button onClick={() => addItem('discussionPoints', agendaIndex)}>Add Point</button>
-          <button onClick={() => removeAgendaItem(agendaIndex)}>Remove Agenda</button>
+          <button type="button" onClick={() => addItem('discussionPoints', agendaIndex)}>Add Point</button>
+          <button type="button" onClick={() => removeAgendaItem(agendaIndex)}>Remove Agenda</button>
         </div>
       ))}
-      <button onClick={addAgendaItem}>Add Agenda Item</button>
+      <button type="button" onClick={addAgendaItem}>Add Agenda Item</button>
     </div>
   );
 };

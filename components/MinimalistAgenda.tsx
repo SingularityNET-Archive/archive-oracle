@@ -36,10 +36,10 @@ const MinimalistAgenda = ({ onUpdate }: any) => {
               setDiscussionPoints(newDiscussionPoints);
             }}
           />
-          <button onClick={() => removeDiscussionPoint(pointIndex)}>Remove Point</button>
+          <button type="button" onClick={() => removeDiscussionPoint(pointIndex)}>Remove Point</button>
         </div>
       ))}
-      <button onClick={addDiscussionPoint}>Add Point</button>
+      <button type="button" onClick={addDiscussionPoint}>Add Point</button>
     </div>
   );
 };

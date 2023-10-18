@@ -85,10 +85,10 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
                   setIssues(newIssues);
                 }}
               />
-              <button onClick={() => removeIssue(index)}>Remove Issue</button>
+              <button type="button" onClick={() => removeIssue(index)}>Remove Issue</button>
             </div>
           ))}
-          <button onClick={addIssue}>Add Issue</button>
+          <button type="button" onClick={addIssue}>Add Issue</button>
         </div>
       )}
 
@@ -128,10 +128,10 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
               setActionItems(newActionItems);
             }}
           />
-          <button onClick={() => removeActionItem(index)}>Remove Action</button>
+          <button type="button" onClick={() => removeActionItem(index)}>Remove Action</button>
         </div>
       ))}
-      <button onClick={addActionItem}>Add Action</button>
+      <button type="button" onClick={addActionItem}>Add Action</button>
 
       <h3>Decision Items</h3>
       {decisionItems.map((item: any, index: any) => (
@@ -197,10 +197,10 @@ const NarrativeAgenda = ({ onUpdate }: any) => {
               />
               Affects only this workgroup
           </label>
-          <button onClick={() => removeDecisionItem(index)}>Remove Decision</button>
+          <button type="button" onClick={() => removeDecisionItem(index)}>Remove Decision</button>
         </div>
       ))}
-      <button onClick={addDecisionItem}>Add Decision</button>
+      <button type="button" onClick={addDecisionItem}>Add Decision</button>
     </div>
   );
 };

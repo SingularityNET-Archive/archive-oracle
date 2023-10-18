@@ -74,9 +74,9 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({ workgroup, onUpdate }) => {
         People present:
       </label>
       <SelectNames 
-            onSelect={(selectedNames: any) => handleSelection('peoplePresent', selectedNames)} 
-            initialValue={meetingInfo.peoplePresent || ""} 
-          />
+        onSelect={(selectedNames: any) => handleSelection('peoplePresent', selectedNames)} 
+        initialValue={meetingInfo.peoplePresent || ""} 
+      />
       <label className={styles['form-label']}>
         Purpose:
       </label>
