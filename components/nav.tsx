@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { supabase } from '../lib/supabaseClient';
 import { Session } from "@supabase/supabase-js";
 import { useMyVariable } from '../context/MyVariableContext';
+import { saveUser } from '../utils/saveUser'
 
 type RoleData = {
   roles: {
@@ -11,6 +12,8 @@ type RoleData = {
   };
   userRoles: string[];
   isAdmin: boolean;  
+  discordRoles: string[];
+  appRole: string;
 };
 
 
@@ -53,7 +56,6 @@ const Nav = () => {
     async function signout() {
       const { error } = await supabase.auth.signOut()
     }
-   //console.log(session)
 
    useEffect(() => {
     // Guard clause: return if session is null
@@ -67,8 +69,8 @@ const Nav = () => {
       if (response.status !== 200) {
         throw new Error('Network response was not ok');
       }*/
+      saveUsername();
       const userId = session.user.id;
-
       axios.get(`/api/userRoles?userId=${userId}`)
       .then(response => {
         if (response.status !== 200) {
@@ -76,29 +78,36 @@ const Nav = () => {
         }
       setMyVariable(prevState => ({
         ...prevState,
-        isAdmin: response.data.isAdmin
+        roles: response.data
       }));
       setRoleData(prevState => {
         if (prevState) {
           return {
             roles: prevState.roles,
             userRoles: prevState.userRoles,
-            isAdmin: response.data.isAdmin
+            isAdmin: response.data.isAdmin,
+            discordRoles: response.data.discordRoles,
+            appRole: response.data.appRole
           };
         } else {
           // Assuming default values for roles and userRoles
           return {
             roles: {},
             userRoles: [],
-            isAdmin: response.data.isAdmin
+            isAdmin: response.data.isAdmin,
+            discordRoles: response.data.discordRoles,
+            appRole: response.data.appRole
           };
         }
       });
-      console.log("user is admin:", response.data.isAdmin); 
     })
     .catch(error => console.error('Error:', error));
   
   }, [session]);  
+
+  async function saveUsername() {
+    const data = await saveUser(session?.user.user_metadata);
+  }
 
   return (
     <nav className="routes">
@@ -110,8 +119,8 @@ const Nav = () => {
           Upload Meeting Summaries
         </Link>
         {roleData?.isAdmin && (
-          <Link href='/admin-panel' className="navitems">
-            Admin Panel
+          <Link href='/submit-meeting-summary' className="navitems">
+            Submit Meeting Summary
           </Link>
         )}
         <Link href='/contact' className="navitems">

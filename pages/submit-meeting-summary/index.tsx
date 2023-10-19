@@ -23,7 +23,7 @@ type Names = {
   label: any;
 };
 
-const MeetingSummary: NextPage = () => {
+const SubmitMeetingSummary: NextPage = () => {
   const [activeComponent, setActiveComponent] = useState('one');
   const [workgroups, setWorkgroups] = useState<Workgroup[]>([]);
   const [showNewWorkgroupInput, setShowNewWorkgroupInput] = useState(false);
@@ -161,4 +161,4 @@ const MeetingSummary: NextPage = () => {
   );
 };
 
-export default MeetingSummary;
+export default SubmitMeetingSummary;
