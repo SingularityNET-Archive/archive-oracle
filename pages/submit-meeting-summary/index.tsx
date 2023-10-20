@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import styles from '../../styles/meetingsummary.module.css';
-import FullArchivalTemplate from '../../components/FullArchivalTemplate';
+import CustomTemplate from '../../components/CustomTemplate';
 import MinimalistTemplate from '../../components/MinimalistTemplate';
 import NarrativeTemplate from '../../components/NarrativeTemplate';
 import ConfirmSummaries from '../../components/ConfirmSummaries'
@@ -58,7 +58,7 @@ const SubmitMeetingSummary: NextPage = () => {
         case 'Narrative':
           setActiveComponent('three');
           break;
-        case 'FullArchival':
+        case 'Custom':
         default: // default to FullArchival if type is undefined or unexpected
           setActiveComponent('one');
           break;
@@ -106,7 +106,7 @@ const SubmitMeetingSummary: NextPage = () => {
 
   const getComponent = () => {
     switch (activeComponent) {
-      case 'one': return <FullArchivalTemplate key={selectedWorkgroupId} />;
+      case 'one': return <CustomTemplate key={selectedWorkgroupId} />;
       case 'two': return <MinimalistTemplate key={selectedWorkgroupId} />;
       case 'three': return <NarrativeTemplate key={selectedWorkgroupId} />;
       case 'four': return <ConfirmSummaries key={selectedWorkgroupId} />;
@@ -142,9 +142,7 @@ const SubmitMeetingSummary: NextPage = () => {
           </>
         )}
         {selectedWorkgroupId  && (<div>
-        <button className={styles.navButton} onClick={() => setActiveComponent('one')}>Full Archival Template</button>
-        <button className={styles.navButton} onClick={() => setActiveComponent('two')}>Minimalist Template</button>
-        <button className={styles.navButton} onClick={() => setActiveComponent('three')}>Narrative Template</button>
+        <button className={styles.navButton} onClick={() => setActiveComponent('one')}>Summary</button>
         {myVariable.roles.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Confirm Summaries</button>}
         </div>)}
         
