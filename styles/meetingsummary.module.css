@@ -1,18 +1,20 @@
 .container {
   display: flex;
+  flex-direction: column;
   margin-top: 4.5em;  /* Leaving space for the top fixed navbar */
   height: calc(100vh - 4.5em);
 }
 
 .navbar {
-  width: 200px;
-  height: 100%;
-  background-color: #2b1f1f;
+  width: 100%;
+  margin-top: -17px;
   display: flex; /* Added */
-  flex-direction: column; /* Added */
-  align-items: center; /* Added */
-  position: fixed; 
-  z-index: 1000; 
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:flex-start;
+  position: fixed;
+  background-color: black;
+  z-index: 9999;
 }
 
 .select {
@@ -21,6 +23,7 @@
   margin: 0.5em;
   background-color: #2b1f1f;
   color: white;
+  z-index: 9999;  
 }
 
 .selectGreen {
@@ -34,8 +37,8 @@
 .mainContent {
   flex-grow: 1;
   padding: 1rem;
-  margin-left: 180px;
-  margin-top: -45px;
+  margin-left: 5px;
+  margin-top: 5px;
 }
 
 .pleaseSignIn {
@@ -55,6 +58,7 @@
   border: none;
   cursor: pointer;
   color: white;
+  z-index: 9999;  
 }
 
 .navButton:focus {

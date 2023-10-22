@@ -115,14 +115,9 @@ const Nav = () => {
         <Link href="/" className="navitems">
           Home
         </Link>
-        <Link href='/meeting-summaries' className="navitems">
-          Upload Meeting Summaries
+        <Link href='/submit-meeting-summary' className="navitems">
+          Submit Meeting Summary
         </Link>
-        {roleData?.isAdmin && (
-          <Link href='/submit-meeting-summary' className="navitems">
-            Submit Meeting Summary
-          </Link>
-        )}
         <Link href='/contact' className="navitems">
           Contact
         </Link>

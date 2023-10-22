@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import styles from '../../styles/meetingsummary.module.css';
 import CustomTemplate from '../../components/CustomTemplate';
-import MinimalistTemplate from '../../components/MinimalistTemplate';
-import NarrativeTemplate from '../../components/NarrativeTemplate';
 import ConfirmSummaries from '../../components/ConfirmSummaries'
 import { useMyVariable } from '../../context/MyVariableContext';
 import { getWorkgroups } from '../../utils/getWorkgroups'
@@ -47,24 +45,10 @@ const SubmitMeetingSummary: NextPage = () => {
 
   async function handleSelectChange(e: any) {
     const selectedWorkgroupId = e.target.value;
-    const summary: any = await getSummaries(selectedWorkgroupId);
+    const summary: any = selectedWorkgroupId != 'add_new' ? await getSummaries(selectedWorkgroupId) : null;
 
-  // Adjust the active component based on summary.type
     if (summary && summary.type) {
-      switch (summary.type) {
-        case 'Minimalist':
-          setActiveComponent('two');
-          break;
-        case 'Narrative':
-          setActiveComponent('three');
-          break;
-        case 'Custom':
-        default: // default to FullArchival if type is undefined or unexpected
-          setActiveComponent('one');
-          break;
-      }
-    } else {
-      setActiveComponent('one'); // default to FullArchival if summary or summary.type is undefined
+      setActiveComponent('one');
     }
 
     if (selectedWorkgroupId === 'add_new') {
@@ -107,8 +91,6 @@ const SubmitMeetingSummary: NextPage = () => {
   const getComponent = () => {
     switch (activeComponent) {
       case 'one': return <CustomTemplate key={selectedWorkgroupId} />;
-      case 'two': return <MinimalistTemplate key={selectedWorkgroupId} />;
-      case 'three': return <NarrativeTemplate key={selectedWorkgroupId} />;
       case 'four': return <ConfirmSummaries key={selectedWorkgroupId} />;
       default: return <div>Select a component</div>;
     }
@@ -141,11 +123,10 @@ const SubmitMeetingSummary: NextPage = () => {
             )}
           </>
         )}
-        {selectedWorkgroupId  && (<div>
+        {selectedWorkgroupId  && (<>
         <button className={styles.navButton} onClick={() => setActiveComponent('one')}>Summary</button>
         {myVariable.roles.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Confirm Summaries</button>}
-        </div>)}
-        
+        </>)}
       </div>
       {myVariable.isLoggedIn && selectedWorkgroupId  && (<div className={styles.mainContent}>
         {getComponent()}
