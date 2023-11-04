@@ -1,5 +1,5 @@
 .form-container {
-  max-width: 600px;
+  max-width: 1000px;
   padding: 2rem;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -10,14 +10,53 @@
   flex-direction: column;
 }
 
+.column-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-flex-start {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.row-flex-space-between {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .peoplediv {
   display: flex;
   flex-direction: row;
+  justify-content: flex-start;
 }
-
-.people {
+.form-column-flex {
   display: flex;
   flex-direction: column;
+  margin-right: 50px;
+}
+
+.links-column-flex {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.people1 {
+  display: flex;
+  flex-direction: column;
+  margin-right: 50px;
+  margin-bottom: 12px;
+  flex-grow: 1;
+}
+.people2 {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+  flex-grow: 3;
 }
 
 .form-label {
@@ -28,7 +67,17 @@
 
 .form-input,
 .form-textarea {
-  padding: 0.5rem;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1rem; 
+  margin-right: 1em;
+  background-color: #2b1f1f;
+  color: white;
+}
+
+.form-select {
+  padding: 0.6rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-bottom: 1rem; 
@@ -38,7 +87,8 @@
 }
 
 .form-textarea {
-  min-height: 300px;
+  min-height: 120px;
+  min-width: 500px;
   background-color: #2b1f1f;
   color: white;
 }
@@ -55,4 +105,74 @@
 .submit-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.agenda-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px;
+  margin-bottom: 25px;
+  background-color: rgb(22, 47, 97);
+}
+
+.agenda-title {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 4;
+}
+
+.action-item {
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background-color: black;
+}
+
+.action-assignee-column-flex {
+  display: flex;
+  flex-direction: column;
+  margin-right: 12px;
+}
+
+.remove-button-container {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 4;
+}
+
+.remove-button {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 1rem;
+  margin-bottom: 1rem; 
+  margin-right: 1em;
+  background-color: #680202;
+  color: white;
+  cursor: pointer;
+}
+.add-button {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1rem; 
+  margin-left: 1em;
+  background-color: rgb(1, 121, 61);
+  color: white;
+  cursor: pointer;
+}
+
+.decision-item {
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background-color: black;
+}
+
+.discussion-points {
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background-color: black;
 }

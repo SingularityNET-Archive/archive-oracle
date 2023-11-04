@@ -16,7 +16,7 @@ const CustomAgendaItems = ({onUpdate}: any) => {
                                    status: "carry over",
                                    narrative: '',
                                    issues: [],
-                                   actionItems: [{ text: "", assignee: "", dueDate: "" }],
+                                   actionItems: [{ text: "", assignee: "", dueDate: "", status: "" }],
                                    decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
                                    discussionPoints: [""]
                                },
@@ -27,7 +27,7 @@ const CustomAgendaItems = ({onUpdate}: any) => {
                                status: "carry over",
                                narrative: '',
                                issues: [],
-                               actionItems: [{ text: "", assignee: "", dueDate: "" }],
+                               actionItems: [{ text: "", assignee: "", dueDate: "", status: "" }],
                                decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
                                discussionPoints: [""]
                              }];
@@ -36,10 +36,11 @@ const CustomAgendaItems = ({onUpdate}: any) => {
       
   useEffect(() => {
     onUpdate(agendaItems);
+    //console.log("agendaItems", agendaItems)
   }, [agendaItems]);
 
   const addAgendaItem = () => {
-    setAgendaItems([...agendaItems, { agenda: "", status: "carry over",  narrative: '', issues: [], actionItems: [{ text: "", assignee: "", dueDate: "" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
+    setAgendaItems([...agendaItems, { agenda: "", status: "carry over",  narrative: '', issues: [], actionItems: [{ text: "", assignee: "", dueDate: "", status: "" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
   };
 
   const removeAgendaItem = (index: number) => {
@@ -51,7 +52,7 @@ const CustomAgendaItems = ({onUpdate}: any) => {
   const addItem = (type: string, agendaIndex: number) => {
     const newAgendaItems: any = [...agendaItems];
     if (type === 'actionItems') {
-      newAgendaItems[agendaIndex][type].push({ text: "", assignee: "", dueDate: "" });
+      newAgendaItems[agendaIndex][type].push({ text: "", assignee: "", dueDate: "", status: "" });
     } else if (type === 'decisionItems') {  // Update here
       newAgendaItems[agendaIndex][type].push({ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" });
     } else if (type === 'issues') {  // Update here
@@ -71,58 +72,56 @@ const CustomAgendaItems = ({onUpdate}: any) => {
 
   return (
     <div>
-      {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (<h3>Agenda Items</h3>)}
+      {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (<h1>Agenda Items</h1>)}
       {agendaItems.map((item: any, agendaIndex: any) => (
-        <div key={agendaIndex}>
+        <div key={agendaIndex} className={styles['agenda-item']}>
           {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (
             <>
-            <h4>Agenda item {agendaIndex + 1}</h4>
-            <input 
-              className={styles['form-input']}
-              type="text"
-              placeholder="Agenda Item"
-              value={item.agenda}
-              onChange={(e) => {
-                const newAgenda = [...agendaItems];
-                newAgenda[agendaIndex].agenda = e.target.value;
-                setAgendaItems(newAgenda);
-              }}
-            />
+              <h2>Agenda item {agendaIndex + 1}</h2>
+                <div className={styles['row-flex-start']}>
+                  <div className={styles['agenda-title']}>
+                  <label className={styles['form-label']}>
+                    Agenda Title
+                  </label>
+                    <input 
+                      className={styles['form-input']}
+                      type="text"
+                      placeholder="Agenda Item"
+                      value={item.agenda}
+                      onChange={(e) => {
+                        const newAgenda = [...agendaItems];
+                        newAgenda[agendaIndex].agenda = e.target.value;
+                        setAgendaItems(newAgenda);
+                      }}
+                    />
+                  </div>
+                  <div className={styles['column-flex']}>
+                    <label className={styles['form-label']}>
+                      Status
+                    </label>
+                    <select
+                      className={styles['form-select']}
+                      value={item.status} 
+                      onChange={(e) => {
+                        const newAgenda = [...agendaItems];
+                        newAgenda[agendaIndex].status = e.target.value;  
+                        setAgendaItems(newAgenda);
+                      }}
+                      >
+                      <option value="carry over">Carry Over</option>
+                      <option value="resolved">Resolved</option>
+                    </select>
+                  </div>
+              </div>
             </>
           )}
-          {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (<label>
-              <input 
-                  type="radio"
-                  name={`agendaStatus-${agendaIndex}`}
-                  value="carry over"
-                  checked={item.status === "carry over"}
-                  onChange={(e) => {
-                      const newAgendaItems = [...agendaItems];
-                      newAgendaItems[agendaIndex].status = e.target.value;
-                      setAgendaItems(newAgendaItems);
-                  }}
-              />
-              Carry over
-          </label>)}
-          {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (<label>
-              <input 
-                  type="radio"
-                  name={`agendaStatus-${agendaIndex}`}
-                  value="resolved"
-                  checked={item.status === "resolved"}
-                  onChange={(e) => {
-                      const newAgendaItems = [...agendaItems];
-                      newAgendaItems[agendaIndex].status = e.target.value;
-                      setAgendaItems(newAgendaItems);
-                  }}
-              />
-              Resolved
-          </label>)}
+          
           {myVariable.workgroup.preferred_template.agendaItems[0].narrative == 1 && (
             <>
             <h2>Narrative</h2>
+            <div className={styles['action-item']}>
             <textarea
-              className={styles['form-input']}
+              className={styles['form-textarea']}
               placeholder="Describe what happened..."
               value={item.narrative}
               onChange={(e) => {
@@ -131,159 +130,226 @@ const CustomAgendaItems = ({onUpdate}: any) => {
                 setAgendaItems(newAgendaItems);
             }}
             />
+            </div>
             </>
           )} 
           {myVariable.workgroup.preferred_template.agendaItems[0].issues == 1 && (
-            <div>
+            <>
               <h3>Issues</h3>
-              {item?.issues?.map((issue: any, issueIndex: any) => (
-                <div key={issueIndex}>
-                  <input
+              <div className={styles['action-item']}>    
+                {item?.issues?.map((issue: any, issueIndex: any) => (
+                  <div className={styles['column-flex']} key={issueIndex}>
+                    <div className={styles['row-flex-start']}>
+                      <div className={styles['links-column-flex']}>
+                        <label className={styles['form-label']}>
+                          Issue {issueIndex+1}
+                        </label>
+                        <input
+                          className={styles['form-input']}
+                          type="text"
+                          placeholder="Issue"
+                          value={issue}
+                          onChange={(e) => {
+                              const newAgenda = [...agendaItems];
+                              newAgenda[agendaIndex].issues[issueIndex] = e.target.value;  
+                              setAgendaItems(newAgenda);
+                            }}
+                        />
+                      </div>
+                      <div>
+                        {issue == '' && (<button className={styles['remove-button']} type="button" onClick={() => removeItem('issues', agendaIndex, issueIndex)}>Remove Issue</button>)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <button className={styles['add-button']} type="button" onClick={() => addItem('issues', agendaIndex)}>Add Issue</button>
+              </div>
+            </>
+          )} 
+          {myVariable.workgroup.preferred_template.agendaItems[0].actionItems == 1 && (<h3>Action items</h3>)}  
+          {myVariable.workgroup.preferred_template.agendaItems[0].actionItems == 1 && item?.actionItems?.map((action: any, actionIndex: any) => (
+            <div key={actionIndex} className={styles['action-item']}>
+              <div className={styles['agenda-title']}>
+                <label className={styles['form-label']}>
+                  Action item {actionIndex+1}
+                </label>
+                <input 
+                  className={styles['form-input']}
+                  type="text"
+                  placeholder="Action Item"
+                  value={action.text} 
+                  onChange={(e) => {
+                    const newAgenda = [...agendaItems];
+                    newAgenda[agendaIndex].actionItems[actionIndex].text = e.target.value;  
+                    setAgendaItems(newAgenda);
+                  }}
+                />
+              </div>
+              <div className={styles['row-flex-start']}>
+                <div className={styles['action-assignee-column-flex']}>
+                  <label className={styles['form-label']}>
+                    Assignee
+                  </label>
+                  <SelectNames 
+                    onSelect={(selectedNames: string) => {
+                      const newAgenda = [...agendaItems];
+                      newAgenda[agendaIndex].actionItems[actionIndex].assignee = selectedNames;
+                      setAgendaItems(newAgenda);
+                    }}
+                    initialValue={action.assignee}
+                  />
+                </div>
+                <div className={styles['column-flex']}>
+                  <label className={styles['form-label']}>
+                    Due Date
+                  </label>
+                  <input 
+                    className={styles['form-input']}
+                    type="date"
+                    placeholder="Due Date"
+                    value={action.dueDate}  
+                    onChange={(e) => {
+                      const newAgenda = [...agendaItems];
+                      newAgenda[agendaIndex].actionItems[actionIndex].dueDate = e.target.value;  
+                      setAgendaItems(newAgenda);
+                    }}
+                  />
+                </div>
+                <div className={styles['column-flex']}>
+                  <label className={styles['form-label']}>
+                    Status
+                  </label>
+                  <select
+                  className={styles['form-select']}
+                  value={action.status} 
+                  onChange={(e) => {
+                    const newAgenda = [...agendaItems];
+                    newAgenda[agendaIndex].actionItems[actionIndex].status = e.target.value;  
+                    setAgendaItems(newAgenda);
+                  }}
+                  >
+                    <option value="todo">To do</option>
+                    <option value="in progress">In Progress</option>
+                    <option value="done">Done</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+                <div className={styles['remove-button-container']}>
+                  {action.text == '' && action.assignee == '' && (<button className={styles['remove-button']} type="button" onClick={() => removeItem('actionItems', agendaIndex, actionIndex)}>Remove Action</button>)}
+                </div>
+              </div>
+              
+            </div>
+          ))} 
+          {myVariable.workgroup.preferred_template.agendaItems[0].actionItems == 1 && (<button className={styles['add-button']} type="button" onClick={() => addItem('actionItems', agendaIndex)}>Add Action</button>)}
+          {myVariable.workgroup.preferred_template.agendaItems[0].decisionItems == 1 &&(<h3>Decisions</h3>)}
+          {myVariable.workgroup.preferred_template.agendaItems[0].decisionItems == 1 && item?.decisionItems?.map((decision: any, decisionIndex: any) => (
+            <div className={styles['decision-item']} key={decisionIndex}>
+              <div className={styles['row-flex-start']}>
+                <div className={styles['links-column-flex']}>
+                  <label className={styles['form-label']}>
+                    Decision Item {decisionIndex + 1}
+                  </label>
+                  <input 
                     className={styles['form-input']}
                     type="text"
-                    placeholder="Issue"
-                    value={issue}
+                    placeholder="Decision Item"
+                    value={decision.decision} 
                     onChange={(e) => {
-                        const newAgenda = [...agendaItems];
-                        newAgenda[agendaIndex].issues[issueIndex] = e.target.value;  
-                        setAgendaItems(newAgenda);
-                      }}
+                      const newAgenda = [...agendaItems];
+                      newAgenda[agendaIndex].decisionItems[decisionIndex].decision = e.target.value; // Update here
+                      setAgendaItems(newAgenda);
+                    }}
                   />
-                 <button type="button" onClick={() => removeItem('issues', agendaIndex, issueIndex)}>Remove Issue</button>
                 </div>
-              ))}
-              <button type="button" onClick={() => addItem('issues', agendaIndex)}>Add Issue</button>
-            </div>
-          )}   
-          {myVariable.workgroup.preferred_template.agendaItems[0].actionItems == 1 && item?.actionItems?.map((action: any, actionIndex: any) => (
-            <div key={actionIndex}>
-              <input 
-                className={styles['form-input']}
-                type="text"
-                placeholder="Action Item"
-                value={action.text} 
-                onChange={(e) => {
-                  const newAgenda = [...agendaItems];
-                  newAgenda[agendaIndex].actionItems[actionIndex].text = e.target.value;  
-                  setAgendaItems(newAgenda);
-                }}
-              />
-          
-              <SelectNames 
-                onSelect={(selectedNames: string) => {
-                  const newAgenda = [...agendaItems];
-                  newAgenda[agendaIndex].actionItems[actionIndex].assignee = selectedNames;
-                  setAgendaItems(newAgenda);
-                }}
-                initialValue={action.assignee}
-              />
-          
-              <input 
-                className={styles['form-input']}
-                type="date"
-                placeholder="Due Date"
-                value={action.dueDate}  
-                onChange={(e) => {
-                  const newAgenda = [...agendaItems];
-                  newAgenda[agendaIndex].actionItems[actionIndex].dueDate = e.target.value;  
-                  setAgendaItems(newAgenda);
-                }}
-              />
-          
-              <button type="button" onClick={() => removeItem('actionItems', agendaIndex, actionIndex)}>Remove Action</button>
+                <div className={styles['column-flex']}>
+                  <label className={styles['form-label']}>
+                    Who does this decision affect?
+                  </label>
+                  <select
+                  className={styles['form-select']}
+                  value={decision.effect} 
+                  onChange={(e) => {
+                    const newAgenda = [...agendaItems];
+                    newAgenda[agendaIndex].decisionItems[decisionIndex].effect = e.target.value;  
+                    setAgendaItems(newAgenda);
+                  }}
+                  >
+                    <option value="affectsOnlyThisWorkgroup">Affects only this Workgroup</option>
+                    <option value="affectsAllWorkgroups">Affects all Workgroups</option>
+                  </select>
+                </div>
+                </div>
+                <div className={styles['column-flex']}>
+                  <label className={styles['form-label']}>
+                    Rationale
+                  </label>
+                  <input 
+                    className={styles['form-input']}
+                    type="text"
+                    placeholder="Rationale"
+                    value={decision.rationale} 
+                    onChange={(e) => {
+                      const newAgenda = [...agendaItems];
+                      newAgenda[agendaIndex].decisionItems[decisionIndex].rationale = e.target.value; 
+                      setAgendaItems(newAgenda);
+                    }}
+                  />
+                </div>
+                <div className={styles['column-flex']}>
+                  <label className={styles['form-label']}>
+                    Opposing
+                  </label>
+                  <input 
+                    className={styles['form-input']}
+                    type="text"
+                    placeholder="Opposing"
+                    value={decision.opposing} 
+                    onChange={(e) => {
+                      const newAgenda = [...agendaItems];
+                      newAgenda[agendaIndex].decisionItems[decisionIndex].opposing = e.target.value; 
+                      setAgendaItems(newAgenda);
+                    }}
+                  />
+                </div>
+              
+              {decision.rationale == '' && decision.decision == '' && (<button className={styles['remove-button']} type="button" onClick={() => removeItem('decisionItems', agendaIndex, decisionIndex)}>Remove Decision</button>)}
             </div>
           ))}
-
-          {myVariable.workgroup.preferred_template.agendaItems[0].actionItems == 1 && (<button type="button" onClick={() => addItem('actionItems', agendaIndex)}>Add Action</button>)}
-          {myVariable.workgroup.preferred_template.agendaItems[0].decisionItems == 1 && item?.decisionItems?.map((decision: any, decisionIndex: any) => (
-            <div key={decisionIndex}>
-              <input 
-                className={styles['form-input']}
-                type="text"
-                placeholder="Decision Item"
-                value={decision.decision} 
-                onChange={(e) => {
-                  const newAgenda = [...agendaItems];
-                  newAgenda[agendaIndex].decisionItems[decisionIndex].decision = e.target.value; // Update here
-                  setAgendaItems(newAgenda);
-                }}
-              />
-              <input 
-                className={styles['form-input']}
-                type="text"
-                placeholder="Rationale"
-                value={decision.rationale} 
-                onChange={(e) => {
-                  const newAgenda = [...agendaItems];
-                  newAgenda[agendaIndex].decisionItems[decisionIndex].rationale = e.target.value; 
-                  setAgendaItems(newAgenda);
-                }}
-              />
-              <input 
-                className={styles['form-input']}
-                type="text"
-                placeholder="Opposing"
-                value={decision.opposing} 
-                onChange={(e) => {
-                  const newAgenda = [...agendaItems];
-                  newAgenda[agendaIndex].decisionItems[decisionIndex].opposing = e.target.value; 
-                  setAgendaItems(newAgenda);
-                }}
-              />
-              <label>
-                  <input 
-                      type="radio"
-                      name={`decisionEffect-${agendaIndex}-${decisionIndex}`}
-                      value="affectsAllWorkgroups"
-                      checked={decision.effect === "affectsAllWorkgroups"}
-                      onChange={(e) => {
-                          const newAgenda = [...agendaItems];
-                          newAgenda[agendaIndex].decisionItems[decisionIndex].effect = e.target.value;
-                          setAgendaItems(newAgenda);
-                      }}
-                  />
-                  Affects all workgroups
-              </label>
-              <label>
-                  <input 
-                      type="radio"
-                      name={`decisionEffect-${agendaIndex}-${decisionIndex}`}
-                      value="affectsOnlyThisWorkgroup"
-                      checked={decision.effect === "affectsOnlyThisWorkgroup"}
-                      onChange={(e) => {
-                          const newAgenda = [...agendaItems];
-                          newAgenda[agendaIndex].decisionItems[decisionIndex].effect = e.target.value;
-                          setAgendaItems(newAgenda);
-                      }}
-                  />
-                  Affects only this workgroup
-              </label>
-              <button type="button" onClick={() => removeItem('decisionItems', agendaIndex, decisionIndex)}>Remove Decision</button>
-            </div>
-          ))}
-          {myVariable.workgroup.preferred_template.agendaItems[0].decisionItems == 1 && (<button type="button" onClick={() => addItem('decisionItems', agendaIndex)}>Add Decision</button>)}
-
+          {myVariable.workgroup.preferred_template.agendaItems[0].decisionItems == 1 && (<button className={styles['add-button']} type="button" onClick={() => addItem('decisionItems', agendaIndex)}>Add Decision</button>)}
+          {myVariable.workgroup.preferred_template.agendaItems[0].discussionPoints == 1 && (<h3>Discussion Points</h3>)} 
+        {myVariable.workgroup.preferred_template.agendaItems[0].discussionPoints == 1 && (<div className={styles['discussion-points']}>
           {myVariable.workgroup.preferred_template.agendaItems[0].discussionPoints == 1 && item.discussionPoints.map((point: any, pointIndex: any) => (
             <div key={pointIndex}>
-              <input 
-                className={styles['form-input']}
-                type="text"
-                placeholder="Discussion Point"
-                value={point}
-                onChange={(e) => {
-                  const newAgenda = [...agendaItems];
-                  newAgenda[agendaIndex].discussionPoints[pointIndex] = e.target.value;
-                  setAgendaItems(newAgenda);
-                }}
-              />
-              <button type="button" onClick={() => removeItem('discussionPoints', agendaIndex, pointIndex)}>Remove Point</button>
+              <div className={styles['row-flex-start']}>
+                <div className={styles['links-column-flex']}>
+                  <label className={styles['form-label']}>
+                      Discussion Point {pointIndex + 1}
+                  </label>
+                  <input 
+                    className={styles['form-input']}
+                    type="text"
+                    placeholder="Discussion Point"
+                    value={point}
+                    onChange={(e) => {
+                      const newAgenda = [...agendaItems];
+                      newAgenda[agendaIndex].discussionPoints[pointIndex] = e.target.value;
+                      setAgendaItems(newAgenda);
+                    }}
+                  />
+                </div> 
+                <div>
+                  {point == '' && (<button className={styles['remove-button']} type="button" onClick={() => removeItem('discussionPoints', agendaIndex, pointIndex)}>Remove Point</button>)}
+                </div>
+              </div>
             </div>
           ))}
-          {myVariable.workgroup.preferred_template.agendaItems[0].discussionPoints == 1 && (<button type="button" onClick={() => addItem('discussionPoints', agendaIndex)}>Add Discussion Point</button>)}
-          {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (<button type="button" onClick={() => removeAgendaItem(agendaIndex)}>Remove Agenda</button>)}
+        </div>)}
+          {myVariable.workgroup.preferred_template.agendaItems[0].discussionPoints == 1 && (<button className={styles['add-button']} type="button" onClick={() => addItem('discussionPoints', agendaIndex)}>Add Discussion Point</button>)}
+          {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && item.agenda == '' && (<button className={styles['remove-button']} type="button" onClick={() => removeAgendaItem(agendaIndex)}>Remove Agenda</button>)}
         </div>
       ))}
-      {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (<button type="button" onClick={addAgendaItem}>Add Agenda Item</button>)}
+      {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (<button className={styles['add-button']} type="button" onClick={addAgendaItem}>Add Agenda Item</button>)}
     </div>
   );
 };

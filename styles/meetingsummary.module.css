@@ -35,6 +35,8 @@
 }
 
 .mainContent {
+  display: flex;
+  justify-content: space-around;
   flex-grow: 1;
   padding: 1rem;
   margin-left: 5px;

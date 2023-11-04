@@ -99,8 +99,7 @@ const CustomTemplate = () => {
 
   return (
     <div className={styles['form-container']}>
-      <h2>Custom Template</h2>
-      <h3>{formData.meetingInfo.date} - {formData.workgroup}</h3>
+      <h2>{formData.workgroup} {formData.meetingInfo.date}</h2>
       <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
         <CustomMeetingInfo workgroup={formData.workgroup} onUpdate={(info: any) => setFormData({...formData, meetingInfo: info})} />
         <CustomAgendaItems onUpdate={(items: any) => setFormData({...formData, agendaItems: items})} />

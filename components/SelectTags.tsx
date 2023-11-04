@@ -4,12 +4,12 @@ import styles from '../styles/typea.module.css';
 import CreatableSelect from 'react-select/creatable';
 import { saveNewNames } from '../utils/saveNewNames'
 
-interface SelectNamesProps {
+interface SelectTagsProps {
   onSelect: (names: string) => void;
   initialValue: string;
 }
 
-const SelectNames: React.FC<SelectNamesProps> = ({ onSelect, initialValue }) => {
+const SelectTags: React.FC<SelectTagsProps> = ({ onSelect, initialValue }) => {
   let initialOptions = initialValue ? initialValue.split(", ").map((val: any) => ({ label: val, value: val })) : [];
   const [selectedLabels, setSelectedLabels] = React.useState(initialOptions);
   const { myVariable } = useMyVariable();
@@ -69,4 +69,4 @@ const SelectNames: React.FC<SelectNamesProps> = ({ onSelect, initialValue }) => 
   );
 };
 
-export default SelectNames;
+export default SelectTags;
