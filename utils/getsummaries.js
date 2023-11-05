@@ -10,6 +10,7 @@ export async function getSummaries(workgroup_id) {
         .select('template, date, summary')
         .eq('workgroup_id', workgroup_id)
         .order('date', { ascending: false })  
+        .order('created_at', { ascending: false }) 
         .limit(1);  
         
         if (error && status !== 406) throw error
