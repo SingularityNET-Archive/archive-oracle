@@ -1,26 +1,27 @@
 import { supabase } from "../lib/supabaseClient";
 
-export async function saveNewTags(inputTags) {
+export async function saveNewTags(inputTags, type) {
   async function updateTags(inputTags) {
     let status = 'started';
     
     // Fetch all existing SubGroups from the database
-    const { data: existingNames, error: fetchError } = await supabase
+    const { data: existingTags, error: fetchError } = await supabase
       .from("tags")
-      .select("tag");
+      .select("tag")
+      .eq('type', type);
       
     if (fetchError) throw fetchError;
 
-    // Convert the existing Namess to a Set for faster lookup
-    const existingNamesSet = new Set(existingNames.map(item => item.name));
+    // Convert the existing tags to a Set for faster lookup
+    const existingTagsSet = new Set(existingTags.map(item => item.tag));
 
     // Filter out the Namess that already exist
-    const newNames = inputTags.filter(name => !existingNamesSet.has(name));
+    const newTags = inputTags.filter(tag => !existingTagsSet.has(tag));
 
     // Insert new labels
-    for (const name of newNames) {
+    for (const tag of newTags) {
       const updates = {
-        name,
+        tag,
         type
       };
 

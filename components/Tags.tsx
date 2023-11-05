@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
 import styles from '../styles/typea.module.css';
+import SelectTags from '../components/SelectTags';
 
 type TagsProps = {
   tags: { topicsCovered: string, references: string, emotions: string, other: string },
@@ -28,54 +29,54 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
       <h3>Tags</h3>
       <div className={styles['row-flex-start']}>
         <div className={styles['links-column-flex']}>
-          <div className={styles['column-flex']}>
+        <div>
             <label className={styles['form-label']}>
-              Topics Covered
+            Topics Covered
             </label>
-            <input 
-              className={styles['form-input']}
-              type="text"
-              placeholder="Topics Covered"
-              value={localTags.topicsCovered}
-              onChange={(e) => setLocalTags({ ...localTags, topicsCovered: e.target.value })}
+            <SelectTags 
+              onSelect={(selectedNames: string) => {
+                setLocalTags({ ...localTags, topicsCovered: selectedNames });
+              }}
+              initialValue={localTags.topicsCovered}
+              type="topicsCovered" 
             />
           </div>
-          <div className={styles['column-flex']}>
+          <div>
             <label className={styles['form-label']}>
               References
             </label>
-            <input 
-              className={styles['form-input']}
-              type="text"
-              placeholder="References"
-              value={localTags.references}
-              onChange={(e) => setLocalTags({ ...localTags, references: e.target.value })}
+            <SelectTags 
+              onSelect={(selectedNames: string) => {
+                setLocalTags({ ...localTags, references: selectedNames });
+              }}
+              initialValue={localTags.references}
+              type="references" 
             />
           </div>
         </div>
         <div className={styles['links-column-flex']}>
-          <div className={styles['column-flex']}>
+          <div>
             <label className={styles['form-label']}>
               Emotions
             </label>
-            <input 
-              className={styles['form-input']}
-              type="text"
-              placeholder="Emotions"
-              value={localTags.emotions}
-              onChange={(e) => setLocalTags({ ...localTags, emotions: e.target.value })}
+            <SelectTags 
+              onSelect={(selectedNames: string) => {
+                setLocalTags({ ...localTags, emotions: selectedNames });
+              }}
+              initialValue={localTags.emotions}
+              type="emotions" 
             />
           </div>
-          <div className={styles['column-flex']}>
+          <div>
             <label className={styles['form-label']}>
               Other / General
             </label>
-            <input 
-              className={styles['form-input']}
-              type="text"
-              placeholder="Other / General"
-              value={localTags.other}
-              onChange={(e) => setLocalTags({ ...localTags, other: e.target.value })}
+            <SelectTags 
+              onSelect={(selectedNames: string) => {
+                setLocalTags({ ...localTags, other: selectedNames });
+              }}
+              initialValue={localTags.other}
+              type="other" 
             />
           </div>
         </div>

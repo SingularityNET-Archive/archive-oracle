@@ -2,27 +2,28 @@ import React from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
 import styles from '../styles/typea.module.css';
 import CreatableSelect from 'react-select/creatable';
-import { saveNewNames } from '../utils/saveNewNames'
+import { saveNewTags } from '../utils/saveNewTags'
 
 interface SelectTagsProps {
   onSelect: (names: string) => void;
   initialValue: string;
+  type: string;
 }
 
-const SelectTags: React.FC<SelectTagsProps> = ({ onSelect, initialValue }) => {
+const SelectTags: React.FC<SelectTagsProps> = ({ onSelect, initialValue, type }) => {
   let initialOptions = initialValue ? initialValue.split(", ").map((val: any) => ({ label: val, value: val })) : [];
   const [selectedLabels, setSelectedLabels] = React.useState(initialOptions);
   const { myVariable } = useMyVariable();
-  const options = myVariable.names ||  [
+  const options = myVariable.tags[`${type}`] ||  [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' }
   ];
-
+  //console.log("options", options)
   async function handleInputChange(selected: any) {
     setSelectedLabels(selected);  // Update local state
     let labs: string[] = selected.map((item: any) => item.label);
-    const status = await saveNewNames(labs);
+    const status = await saveNewTags(labs, type);
     onSelect(labs.join(", ")); // Update parent component's state
   }
   

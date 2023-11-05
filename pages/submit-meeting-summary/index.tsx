@@ -8,6 +8,7 @@ import { getWorkgroups } from '../../utils/getWorkgroups'
 import { updateWorkgroups } from '../../utils/updateWorkgroups'
 import { getSummaries } from '../../utils/getsummaries';
 import { getNames } from '../../utils/getNames'
+import { getTags } from '../../utils/getTags'
 
 type Workgroup = {
   workgroup_id: string;
@@ -30,14 +31,37 @@ const SubmitMeetingSummary: NextPage = () => {
   const [selectedWorkgroupId, setSelectedWorkgroupId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [names, setNames] = useState<Names[]>([])
+  const [tags, setTags] = useState({})
 
   async function getWorkgroupList() {
     const workgroupList: any = await getWorkgroups();
-    const names = await getNames(); 
-    let newNames = names.map((value) => ({ value: value.name, label: value.name }))
+    const names1 = await getNames(); 
+    const tags1 = await getTags(); 
+
+    let newNames = names1.map((value) => ({ value: value.name, label: value.name }));
+
+    let otherTags = tags1
+      .filter(tag => tag.type === 'other')
+      .map(tag => ({ value: tag.tag, label: tag.tag }));
+
+    let emotionTags = tags1
+      .filter(tag => tag.type === 'emotions')
+      .map(tag => ({ value: tag.tag, label: tag.tag }));
+
+    let topicTags = tags1
+      .filter(tag => tag.type === 'topicsCovered')
+      .map(tag => ({ value: tag.tag, label: tag.tag }));
+
+    let referenceTags = tags1
+      .filter(tag => tag.type === 'references')
+      .map(tag => ({ value: tag.tag, label: tag.tag }));
+     
+    //console.log("otherTags, emotionTags", otherTags, emotionTags );
     setWorkgroups(workgroupList);
     setNames(newNames);
-  }
+    setTags({ other: otherTags, emotions: emotionTags, topicsCovered: topicTags, references: referenceTags });
+}
+
 
   useEffect(() => {
     getWorkgroupList();
@@ -59,7 +83,7 @@ const SubmitMeetingSummary: NextPage = () => {
       setSelectedWorkgroupId(selectedWorkgroupId); 
       const selectedWorkgroup = workgroups.find(workgroup => workgroup.workgroup_id === selectedWorkgroupId);
       if (selectedWorkgroup) {
-        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summary, names });
+        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summary, names, tags });
       }
     }
   }  
@@ -81,7 +105,7 @@ const SubmitMeetingSummary: NextPage = () => {
       const newWorkgroupEntry = updatedWorkgroupList.find((workgroup: any) => workgroup.workgroup.toLowerCase() === newWorkgroup.toLowerCase());
       if (newWorkgroupEntry) {
         setSelectedWorkgroupId(newWorkgroupEntry.workgroup_id);
-        setMyVariable(prev => ({ ...prev, workgroup: newWorkgroupEntry, names })); // updating myVariable with new workgroup
+        setMyVariable(prev => ({ ...prev, workgroup: newWorkgroupEntry, names, tags })); // updating myVariable with new workgroup
       }
       setShowNewWorkgroupInput(false);
     }
