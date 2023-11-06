@@ -9,7 +9,7 @@ description: 18th September 2023 to 22nd September 2023
 ### Archival Workgroup
 
  - Name and date of meeting: Full Archival Workgroup, 2023-09-20
- - People present: Stephen [host], Vanessa [documenter], Peter, Tevo, André
+ - People present: Stephen [host], Stephen, Vanessa [documenter], Peter, Tevo, André
  - Purpose: Archiving all workgroup meeting summaries 
  - Meeting video: https://youtube.com/video123
  - Miro board: https://miro.com/board123
@@ -29,8 +29,10 @@ Decision Items:
     - [effect] affects only this workgroup
 
 Discussion points: 
-
-Comprises key questions raised, significant points made, things people said which brought insight to the conversation, things that the group learnt as a result of the conversation.
+ - Discussed key questions raised 
+ - Significant points made
+ - Discussed things people said which brought insight to the conversation
+ - Discussed things that the group learnt as a result of the conversation
 
 #### Agenda item 2 - Template document - [resolved]
 
@@ -44,8 +46,10 @@ Decision Items:
     - [effect] affects all workgroups
 
 Discussion points: 
-
-Comprises key questions raised, significant points made, things people said which brought insight to the conversation, things that the group learnt as a result of the conversation.
+ - Discussed key questions raised 
+ - Significant points made
+ - Discussed things people said which brought insight to the conversation
+ - Discussed things that the group learnt as a result of the conversation
 
 Keywords/tags:
  - topics covered: onboarding, contribution, dework video
@@ -60,7 +64,7 @@ Keywords/tags:
  - Name and date of meeting: Minimalist Workgroup, 2023-09-21
  - People present: Rojo [host], Lily [documenter], Peter
 
-In this meeting we discussed: 
+Discussion points: 
  - Discussed workgroup progress (projects, social media) 
  - Discussed ways to increase the number of clips output
  - Discussed Lily’s progress on the onboarding video
