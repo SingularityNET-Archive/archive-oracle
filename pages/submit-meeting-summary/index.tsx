@@ -56,7 +56,7 @@ const SubmitMeetingSummary: NextPage = () => {
       .filter(tag => tag.type === 'references')
       .map(tag => ({ value: tag.tag, label: tag.tag }));
      
-    //console.log("otherTags, emotionTags", otherTags, emotionTags );
+    //console.log("myVariable", myVariable );
     setWorkgroups(workgroupList);
     setNames(newNames);
     setTags({ other: otherTags, emotions: emotionTags, topicsCovered: topicTags, references: referenceTags });
@@ -154,6 +154,9 @@ const SubmitMeetingSummary: NextPage = () => {
       </div>
       {myVariable.isLoggedIn && selectedWorkgroupId  && (<div className={styles.mainContent}>
         {getComponent()}
+      </div>)}
+      {myVariable.isLoggedIn && !selectedWorkgroupId  && (<div className={styles.nomainContent}>
+        Please select workgroup
       </div>)}
       {!myVariable.isLoggedIn && (<div className={styles.pleaseSignIn}>
         <div>

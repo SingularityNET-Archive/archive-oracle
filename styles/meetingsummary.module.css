@@ -43,6 +43,15 @@
   margin-top: 5px;
 }
 
+.nomainContent {
+  display: flex;
+  justify-content: space-around;
+  flex-grow: 1;
+  padding: 1rem;
+  margin-left: 5px;
+  margin-top: 80px;
+}
+
 .pleaseSignIn {
   flex-grow: 1;
   padding: 1rem;
