@@ -23,7 +23,7 @@ Actions Items:
  - [action] Finish overview page [assignee] Stephen [due] 2023-09-27 [status] in progress
 
 Decision Items:
-1. Put updates in Telegram
+ - Put updates in Telegram
     - [rationale] Nobody is currently using Discord
     - [opposing] Discord will be better for updates, we just need to onboard better.
     - [effect] affects only this workgroup
@@ -40,7 +40,7 @@ Actions Items:
  - [action] Create Template document [assignee] Vanessa [due] 2023-09-27 [status] done
 
 Decision Items:
-1. Present templates in Town Hall
+ - Present templates in Town Hall
     - [rationale] Inform people why this is important and try to get them motivated to participate
     - [opposing]
     - [effect] affects all workgroups
