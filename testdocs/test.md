@@ -6,7 +6,7 @@ description: 18th September 2023 to 22nd September 2023
 
 ## Wednesday 20th September 2023
 
-### Full Archival Workgroup
+### Archival Workgroup
 
  - Name and date of meeting: Full Archival Workgroup, 2023-09-20
  - People present: Stephen [host], Vanessa [documenter], Peter, Tevo, André
@@ -16,29 +16,32 @@ description: 18th September 2023 to 22nd September 2023
  - Other media: 
  - Transcript: https://readai.com/transacript123
 
-#### Agenda item 1 - Gitbook Updates - [carried over]
+#### Agenda item 1 - Gitbook Updates - [carry over]
 
 Actions Items: 
- - [action] Create onboarding page in Gitbook [assignee] Vanessa [due] 2023-09-27
- - [action] Finish overview page [assignee] Stephen [due] 2023-09-27
+ - [action] Create onboarding page in Gitbook [assignee] Vanessa [due] 2023-09-27 [status] in progress
+ - [action] Finish overview page [assignee] Stephen [due] 2023-09-27 [status] in progress
 
 Decision Items:
 1. Put updates in Telegram
     - [rationale] Nobody is currently using Discord
     - [opposing] Discord will be better for updates, we just need to onboard better.
+    - [effect] affects only this workgroup
 
 Discussion points: 
 
 Comprises key questions raised, significant points made, things people said which brought insight to the conversation, things that the group learnt as a result of the conversation.
 
-#### Agenda item 2 - Template document - [new]
+#### Agenda item 2 - Template document - [resolved]
 
 Actions Items: 
- - [action] Create Template document [assignee] Vanessa [due] 2023-09-27
+ - [action] Create Template document [assignee] Vanessa [due] 2023-09-27 [status] done
 
 Decision Items:
 1. Present templates in Town Hall
     - [rationale] Inform people why this is important and try to get them motivated to participate
+    - [opposing]
+    - [effect] affects all workgroups
 
 Discussion points: 
 
@@ -48,6 +51,7 @@ Keywords/tags:
  - topics covered: onboarding, contribution, dework video
  - references: Dework's Documentation page, Dework's Youtube channel
  - emotions: collaborative
+ - other: Deepfund proposal
 
 ## Thursday 21st September 2023
 
