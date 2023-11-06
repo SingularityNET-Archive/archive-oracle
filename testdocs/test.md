@@ -8,7 +8,6 @@ description: 18th September 2023 to 22nd September 2023
 
 ### Archival Workgroup
 
- - Type of meeting: Weekly Meeting
  - People present: Stephen [host], Stephen, Vanessa [documenter], Peter, Tevo, André
  - Purpose: Archiving all workgroup meeting summaries 
  - Meeting video: https://youtube.com/video123
