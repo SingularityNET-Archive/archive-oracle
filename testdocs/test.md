@@ -8,7 +8,7 @@ description: 18th September 2023 to 22nd September 2023
 
 ### Archival Workgroup
 
- - Name and date of meeting: Full Archival Workgroup, 2023-09-20
+ - Name of meeting: Weekly Meeting
  - People present: Stephen [host], Stephen, Vanessa [documenter], Peter, Tevo, André
  - Purpose: Archiving all workgroup meeting summaries 
  - Meeting video: https://youtube.com/video123
