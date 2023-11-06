@@ -59,10 +59,13 @@ Keywords/tags:
 
 ## Thursday 21st September 2023
 
-### Minimalist Workgroup
+### Vidoe Workgroup
 
- - Name and date of meeting: Minimalist Workgroup, 2023-09-21
+ - Type of meeting: Weekly Meeting
  - People present: Rojo [host], Lily [documenter], Peter
+
+Narrative:
+ - The field description probably needs to give guidance on making them concise and information-dense, and avoiding filler.
 
 Discussion points: 
  - Discussed workgroup progress (projects, social media) 
@@ -74,26 +77,24 @@ Keywords/tags:
  - topics covered: onboarding, contribution, dework video
  - references: Dework's Documentation page, Dework's Youtube channel
  - emotions: collaborative
+ - other: Deepfund proposal
 
-### Narrative Workgroup
+### Governance Workgroup
 
- - Name and date of meeting: Narrative Workgroup, 2023-09-21
+ - Type of meeting: Weekly Meeting
  - People present: Felix [host], Tevo [documenter], Peter
  - Media: https://miro.com/board123
 
-Meeting narrative: 
- - [Issues]
-1. Onboarding email gives mistaken impression that recipients have definitely been accepted as ambassadors. Needs correcting.
-2. Some meetings have not been very welcoming to new people.
-3. Name of "ambassadors only" meeting might be unclear, especially since new people have received an email that may have given them the impression that they are already ambassadors.
-4. There is discussion in other workgroups about hierarchies, levels, names etc for different levels of involvement: but since these are not agreed yet, we'll send out the onboarding email to the backlog of people (c. 300) describing the process as it currently stands.
-5. Suggestion to implement the idea from a few meetings ago of asking people to attend as many meetings as they can, just once, and send feedback. This is includd in draft onboarding email: to be discussed further outside meeting.
+Issues: 
+ - Onboarding email gives mistaken impression that recipients have definitely been accepted as ambassadors. Needs correcting.
+ - Some meetings have not been very welcoming to new people.
+ - Name of "ambassadors only" meeting might be unclear, especially since new people have received an email that may have given them the impression that they are already ambassadors.
+ - There is discussion in other workgroups about hierarchies, levels, names etc for different levels of involvement: but since these are not agreed yet, we'll send out the onboarding email to the backlog of people (c. 300) describing the process as it currently stands.
+ - Suggestion to implement the idea from a few meetings ago of asking people to attend as many meetings as they can, just once, and send feedback. This is includd in draft onboarding email: to be discussed further outside meeting.
 
 Action items: 
- - [action] Fix onboaarding email [assignee] Felix [due] 2023-09-27
- - [action] Send out new emails [assignee] Teov [due] 2023-09-27
-
-Decision Items:
+ - [action] Fix onboaarding email [assignee] Felix [due] 2023-09-27 [status] in progress
+ - [action] Send out new emails [assignee] Teov [due] 2023-09-27 [status] in progress
 
 Keywords/tags:
  - topics covered: onboarding, meetings
