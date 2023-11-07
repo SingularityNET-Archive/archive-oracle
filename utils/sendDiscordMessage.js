@@ -1,4 +1,3 @@
-//https://lambent-kelpie-e8b15c.netlify.app/api/discord
 import axios from 'axios';
 
 export async function sendDiscordMessage(summary, renderedMarkdown) {

@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const avatarUrl = 'https://github.com/treasuryguild/treasury-dapp/raw/main/public/logo132.png';
 
   if (typeof webhookUrl === 'undefined') {
-    webhookUrl = process.env.TEST_DISCORD_WEBHOOK_URL;
+    webhookUrl = process.env.DISCORD_WEBHOOK_URL;
     if (!webhookUrl) {
       return res.status(500).json({ error: 'Discord webhook URL is not defined' });
     }

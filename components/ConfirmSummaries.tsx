@@ -30,12 +30,12 @@ const ConfirmSummaries = () => {
     e.preventDefault();
     setLoading(true);
   
-    //const data = await updateGitbook(formData);
+    const data = await updateGitbook(formData);
     //console.log("returned from util function", data)
     await sendDiscordMessage(myVariable.summary, renderedMarkdown);
     setLoading(false);
   }
-  console.log(myVariable)
+  
   return (
     <div>
       <h2 className={styles['confirm-heading']}>Confirm uploaded Summary</h2>
