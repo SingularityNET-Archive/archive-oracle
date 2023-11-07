@@ -1,19 +1,19 @@
 import axios from 'axios';
 
-export async function sendDiscordMessage(summary, renderedMarkdown) {
-  const workgroup = summary.workgroup
-  const content = `content`;
+export async function sendDiscordMessage(myVariable, markdown) {
+  const workgroup = myVariable.summary.workgroup
+  const username = myVariable.summary.username
+  const purpose = myVariable.summary.meetingInfo.purpose
+  const content = ``;
   const embeds = [
     {
       color: 0x16fa3c,
-      title: 'Title',
+      title: `${workgroup} meeting summary`,
       url: ``,
       author: {
-        name: `author name`,
-        url: `url`,
-        icon_url: ``,
+        name: ``,
       },
-      description: `description`,
+      description: `Purpose - ${purpose}`,
       fields: [
         {
           name: `fields name`,
@@ -22,7 +22,7 @@ export async function sendDiscordMessage(summary, renderedMarkdown) {
         },
       ],
       footer: {
-        text: `footer`
+        text: `Summary created by ${username}`
         //icon_url: 'https://github.com/treasuryguild/Treasury-Guild/raw/main/logo132.png',
       },
     },
@@ -38,7 +38,7 @@ export async function sendDiscordMessage(summary, renderedMarkdown) {
 
   console.log("SendDiscord", "Content", content, "Embeds", embeds, workgroup)
   try {
-    const response = await axios.post('https://genuine-custard-2ef739.netlify.app/api/discord', { content, embeds, workgroup }, { 
+    const response = await axios.post('http://localhost:3000/api/discord', { content, embeds, workgroup }, { 
       headers: { 'Content-Type': 'application/json' },
     });
 
