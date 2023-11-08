@@ -53,7 +53,7 @@ const CustomTemplate = () => {
       { 
         agenda: "", 
         status: "carry over", 
-        actionItems: [{ text: "", assignee: "", dueDate: "" }],  
+        actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],  
         decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
         discussionPoints: [""],
         narrative: '',

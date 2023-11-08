@@ -8,11 +8,13 @@ import { useMyVariable } from '../context/MyVariableContext';
 
 const ConfirmSummaries = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const { myVariable } = useMyVariable();
+  const { myVariable, setMyVariable } = useMyVariable();
   const [formData, setFormData] = useState({
     date: myVariable.summary?.meetingInfo?.date || "",
     workgroup: myVariable.summary?.workgroup || "",
     meetingSummary: generateMarkdown(myVariable.summary),
+    meeting_id: myVariable.summary?.meeting_id || "",
+    confirmed: myVariable.summary?.confirmed || false
   });
   const [renderedMarkdown, setRenderedMarkdown] = useState("");
   const formattedDate = new Date(formData.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -29,13 +31,27 @@ const ConfirmSummaries = () => {
   async function handleSubmit(e: any) {
     e.preventDefault();
     setLoading(true);
-  
-    const data = await updateGitbook(formData);
-    console.log("returned from util function", data)
-    //await sendDiscordMessage(myVariable, renderedMarkdown);
+    if (myVariable.summary.confirmed == false) {
+      const data = await updateGitbook(formData);
+      //console.log("returned from util function", formData)
+      if (data) {
+        setMyVariable({
+          ...myVariable,
+          summary: {
+            ...myVariable.summary,
+            confirmed: true,
+          },
+        });
+      }
+      //console.log(myVariable)
+      //await sendDiscordMessage(myVariable, renderedMarkdown);
+    } else {
+      alert('Summary already confirmed')
+    }
+    
     setLoading(false);
   }
-  console.log(myVariable)
+  //console.log(myVariable)
   return (
     <div>
       <h2 className={styles['confirm-heading']}>Confirm uploaded Summary</h2>

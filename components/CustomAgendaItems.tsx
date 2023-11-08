@@ -16,7 +16,7 @@ const CustomAgendaItems = ({onUpdate}: any) => {
                                    status: "carry over",
                                    narrative: '',
                                    issues: [],
-                                   actionItems: [{ text: "", assignee: "", dueDate: "", status: "" }],
+                                   actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],
                                    decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
                                    discussionPoints: [""]
                                },
@@ -27,7 +27,7 @@ const CustomAgendaItems = ({onUpdate}: any) => {
                                status: "carry over",
                                narrative: '',
                                issues: [],
-                               actionItems: [{ text: "", assignee: "", dueDate: "", status: "" }],
+                               actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],
                                decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
                                discussionPoints: [""]
                              }];
@@ -40,7 +40,7 @@ const CustomAgendaItems = ({onUpdate}: any) => {
   }, [agendaItems]);
 
   const addAgendaItem = () => {
-    setAgendaItems([...agendaItems, { agenda: "", status: "carry over",  narrative: '', issues: [], actionItems: [{ text: "", assignee: "", dueDate: "", status: "" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
+    setAgendaItems([...agendaItems, { agenda: "", status: "carry over",  narrative: '', issues: [], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
   };
 
   const removeAgendaItem = (index: number) => {
@@ -52,7 +52,7 @@ const CustomAgendaItems = ({onUpdate}: any) => {
   const addItem = (type: string, agendaIndex: number) => {
     const newAgendaItems: any = [...agendaItems];
     if (type === 'actionItems') {
-      newAgendaItems[agendaIndex][type].push({ text: "", assignee: "", dueDate: "", status: "" });
+      newAgendaItems[agendaIndex][type].push({ text: "", assignee: "", dueDate: "", status: "todo" });
     } else if (type === 'decisionItems') {  // Update here
       newAgendaItems[agendaIndex][type].push({ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" });
     } else if (type === 'issues') {  // Update here

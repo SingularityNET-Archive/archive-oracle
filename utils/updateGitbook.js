@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { confirmedStatusUpdate } from '../utils/confirmedStatusUpdate'
 
 export async function updateGitbook(formData) {
   try {
@@ -9,6 +10,9 @@ export async function updateGitbook(formData) {
     });
 
     const data = response.data;
+    if (data) {
+      await confirmedStatusUpdate(formData)
+    }
     console.log(data.message);
     return data;
   } catch (error) {

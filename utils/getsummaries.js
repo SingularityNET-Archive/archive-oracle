@@ -7,7 +7,7 @@ export async function getSummaries(workgroup_id) {
     try {
       const { data, error, status } = await supabase
         .from('meetingsummaries')
-        .select('template, date, summary, user_id')
+        .select('template, date, summary, user_id, meeting_id, confirmed')
         .eq('workgroup_id', workgroup_id)
         .order('date', { ascending: false })  
         .order('created_at', { ascending: false }) 
@@ -30,6 +30,8 @@ export async function getSummaries(workgroup_id) {
           // Insert the username into the summaryData object
           summaryData.username = userData.full_name;
           summary.username = summaryData.username;
+          summary.meeting_id = summaryData.meeting_id;
+          summary.confirmed = summaryData.confirmed;
         }
       }
     } catch (error) {
