@@ -28,7 +28,7 @@ export function generateMarkdown(summary) {
       if (item.narrative) {
         markdown += `#### Narrative:\n`;
         markdown += `${item.narrative}\n`
-        markdown += '\n';
+        markdown += '\n\n';
       }
       // Issues
       if (item.issues && item.issues.length > 0) {
