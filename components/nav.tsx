@@ -48,7 +48,7 @@ const Nav = () => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'discord',
         options: {
-          redirectTo: 'https://archive-oracle.netlify.app/meeting-summaries',
+          redirectTo: 'https://archive-oracle.netlify.app/submit-meeting-summary',
         },
       })
     }
