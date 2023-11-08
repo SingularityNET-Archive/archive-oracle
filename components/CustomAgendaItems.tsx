@@ -39,6 +39,32 @@ const CustomAgendaItems = ({onUpdate}: any) => {
     //console.log("agendaItems", agendaItems)
   }, [agendaItems]);
 
+  useEffect(() => {
+    // Update local agenda items state when myVariable.summary.agendaItems changes
+    const initialAgendaItems = myVariable.summary?.agendaItems?.map(item => ({
+      ...{
+        agenda: "",
+        status: "carry over",
+        narrative: '',
+        issues: [],
+        actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],
+        decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
+        discussionPoints: [""]
+      },
+      ...item
+    })) || [{
+      agenda: "",
+      status: "carry over",
+      narrative: '',
+      issues: [],
+      actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],
+      decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
+      discussionPoints: [""]
+    }];
+  
+    setAgendaItems(initialAgendaItems);
+  }, [myVariable.summary.agendaItems]);  
+
   const addAgendaItem = () => {
     setAgendaItems([...agendaItems, { agenda: "", status: "carry over",  narrative: '', issues: [], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
   };

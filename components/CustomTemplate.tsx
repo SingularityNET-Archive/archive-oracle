@@ -68,6 +68,12 @@ const CustomTemplate = () => {
   const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "", other: "" });
 
   useEffect(() => {
+    // Set the local state whenever myVariable.summary changes
+    setFormData(filterKeys(myVariable.summary || {}, defaultFormData));
+    //console.log(myVariable)
+  }, [myVariable.summary]); // Add myVariable.summary to the dependency array
+  
+  useEffect(() => {
     if (myVariable.workgroup && myVariable.workgroup.workgroup) {
       setFormData((prevState: any)=> ({ ...prevState, workgroup: myVariable.workgroup.workgroup, workgroup_id: myVariable.workgroup.workgroup_id }));
     }

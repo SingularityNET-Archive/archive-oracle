@@ -19,6 +19,7 @@ type MyVariable = {
   groupInfo: Group[];
   projectInfo?: any;
   workgroup?: any;
+  summaries?: any;
   summary?: any;
   roles?: any;
   isLoggedIn?: any;
@@ -40,7 +41,7 @@ interface MyVariableProviderProps {
 }
 
 export const MyVariableProvider: React.FC<MyVariableProviderProps> = ({ children }) => {
-  const [myVariable, setMyVariable] = useState<MyVariable>({ groupInfo: [], projectInfo: undefined, workgroup: undefined, summary: undefined, roles: undefined, isLoggedIn: undefined, names: [], tags: {}, currentUser: "" });
+  const [myVariable, setMyVariable] = useState<MyVariable>({ groupInfo: [], projectInfo: undefined, workgroup: undefined, summaries: undefined, summary: undefined, roles: undefined, isLoggedIn: undefined, names: [], tags: {}, currentUser: "" });
 
   return (
     <MyVariableContext.Provider value={{ myVariable, setMyVariable }}>

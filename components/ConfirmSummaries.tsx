@@ -23,6 +23,18 @@ const ConfirmSummaries = () => {
     setRenderedMarkdown(formData.meetingSummary);
   }, [formData.meetingSummary]);
 
+  useEffect(() => {
+    // Set the local state whenever myVariable.summary changes
+    setFormData({
+      date: myVariable.summary?.meetingInfo?.date || "",
+      workgroup: myVariable.summary?.workgroup || "",
+      meetingSummary: generateMarkdown(myVariable.summary),
+      meeting_id: myVariable.summary?.meeting_id || "",
+      confirmed: myVariable.summary?.confirmed || false
+    });
+    setRenderedMarkdown(generateMarkdown(myVariable.summary));
+  }, [myVariable.summary]); // Add myVariable.summary to the dependency array
+  
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

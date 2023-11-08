@@ -54,6 +54,39 @@ const CustomMeetingInfo: React.FC<CustomMeetingInfoProps> = ({ workgroup, onUpda
     onUpdate(meetingInfo);
   }, [meetingInfo]);
 
+  useEffect(() => {
+    // Destructure the current meetingInfo from myVariable.summary.meetingInfo or provide defaults
+    const {
+      name = 'Weekly Meeting',
+      date = '',
+      host = '',
+      documenter = '',
+      peoplePresent = '',
+      purpose = '',
+      meetingVideoLink = '',
+      miroBoardLink = '',
+      otherMediaLink = '',
+      transcriptLink = '',
+      mediaLink = '',
+    } = myVariable?.summary?.meetingInfo || {};
+  
+    // Set the local meetingInfo state with the values from myVariable.summary.meetingInfo
+    setMeetingInfo({
+      name,
+      date: '',
+      host,
+      documenter,
+      peoplePresent,
+      purpose,
+      meetingVideoLink,
+      miroBoardLink,
+      otherMediaLink,
+      transcriptLink,
+      mediaLink
+    });
+  }, [myVariable.summary.meetingInfo]); // Add myVariable.summary.meetingInfo to the dependency array
+  
+
   return (
     <>
     <div className={styles['row-flex-start']}>

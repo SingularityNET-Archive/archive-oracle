@@ -40,7 +40,7 @@ export function generateMarkdown(summary) {
       }
       // Action Items
       if (item.actionItems && item.actionItems.length > 0) {
-        markdown += `#### Actions Items:\n`;
+        markdown += `#### Action Items:\n`;
         item.actionItems.forEach(actionItem => {
           markdown += `- [action] ${actionItem.text} [assignee] ${actionItem.assignee} [due] ${actionItem.dueDate} [status] ${actionItem.status}\n`;
         });

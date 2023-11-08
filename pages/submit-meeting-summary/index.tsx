@@ -25,10 +25,12 @@ type Names = {
 const SubmitMeetingSummary: NextPage = () => {
   const [activeComponent, setActiveComponent] = useState('one');
   const [workgroups, setWorkgroups] = useState<Workgroup[]>([]);
+  const [meetings, setMeetings] = useState([]);
   const [showNewWorkgroupInput, setShowNewWorkgroupInput] = useState(false);
   const [newWorkgroup, setNewWorkgroup] = useState('');
   const { myVariable, setMyVariable } = useMyVariable();
   const [selectedWorkgroupId, setSelectedWorkgroupId] = useState('');
+  const [selectedMeetingId, setSelectedMeetingId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [names, setNames] = useState<Names[]>([])
   const [tags, setTags] = useState({})
@@ -56,7 +58,6 @@ const SubmitMeetingSummary: NextPage = () => {
       .filter(tag => tag.type === 'references')
       .map(tag => ({ value: tag.tag, label: tag.tag }));
      
-    //console.log("myVariable", myVariable );
     setWorkgroups(workgroupList);
     setNames(newNames);
     setTags({ other: otherTags, emotions: emotionTags, topicsCovered: topicTags, references: referenceTags });
@@ -69,9 +70,9 @@ const SubmitMeetingSummary: NextPage = () => {
 
   async function handleSelectChange(e: any) {
     const selectedWorkgroupId = e.target.value;
-    const summary: any = selectedWorkgroupId != 'add_new' ? await getSummaries(selectedWorkgroupId) : null;
-
-    if (summary && summary.type) {
+    const summaries: any = selectedWorkgroupId != 'add_new' ? await getSummaries(selectedWorkgroupId) : null;
+    setMeetings(summaries)
+    if (summaries && summaries[0].type) {
       setActiveComponent('one');
     }
 
@@ -83,10 +84,26 @@ const SubmitMeetingSummary: NextPage = () => {
       setSelectedWorkgroupId(selectedWorkgroupId); 
       const selectedWorkgroup = workgroups.find(workgroup => workgroup.workgroup_id === selectedWorkgroupId);
       if (selectedWorkgroup) {
-        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summary, names, tags });
+        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summaries, summary: summaries[0], names, tags });
       }
     }
+    //console.log("myVariable", myVariable );
   }  
+  async function handleSelectChange2(e: any) {
+    const newSelectedMeetingId = e.target.value;
+    setSelectedMeetingId(newSelectedMeetingId); // Correctly set the selectedMeetingId
+
+    // Find the selected summary using the new selectedMeetingId
+    const selectedSummary = meetings.find((meeting: any) => meeting.meeting_id === newSelectedMeetingId);
+  
+    // If there's a selected summary, update the myVariable state with that summary
+    if (selectedSummary) {
+      setMyVariable(prevMyVariable => ({
+        ...prevMyVariable,
+        summary: selectedSummary // Set the selected summary here
+      }));
+    }
+  }
 
   const handleNewWorkgroupChange = (e: any) => {
     setNewWorkgroup(e.target.value);
@@ -131,12 +148,24 @@ const SubmitMeetingSummary: NextPage = () => {
               <select
                 name="" id="" 
                 className={`${styles.select} ${selectedWorkgroupId === '' ? styles.selectGreen : ''}`} 
-                value={selectedWorkgroupId} onChange={handleSelectChange}>
+                value={selectedWorkgroupId} onChange={handleSelectChange}
+                title="Select a workgroup">
                 <option value="" disabled>Please select Workgroup</option>
                 {workgroups.map((workgroup: any) => (
                   <option key={workgroup.workgroup_id} value={workgroup.workgroup_id}>{workgroup.workgroup}</option>
                 ))}
                 <option value="add_new">Add new WG</option>
+              </select>
+            )}
+            {workgroups.length > 0 && meetings.length > 0 && (
+              <select
+                name="" id="" 
+                className={styles.select} 
+                value={selectedMeetingId} onChange={handleSelectChange2}
+                title="Defaults to latest meeting, only change this when you want to use a previous meeting as template">
+                {meetings.map((meeting: any) => (
+                  <option key={meeting.meeting_id} value={meeting.meeting_id}>{meeting.date} {meeting.username}</option>
+                ))}
               </select>
             )}
             {showNewWorkgroupInput && (
@@ -148,7 +177,7 @@ const SubmitMeetingSummary: NextPage = () => {
           </>
         )}
         {selectedWorkgroupId  && (<>
-        <button className={styles.navButton} onClick={() => setActiveComponent('one')}>Summary</button>
+        {myVariable.roles.isAdmin && (<button className={styles.navButton} onClick={() => setActiveComponent('one')}>Summary</button>)}
         {myVariable.roles.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Confirm Summaries</button>}
         </>)}
       </div>
