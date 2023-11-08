@@ -1,28 +1,41 @@
 import axios from 'axios';
 
+function markdownHeadingsToBold(rawmarkdown) {
+  // This regex will match markdown headings, capturing the text after the hashes.
+  const headingRegex = /(?:^|\n)(#+)([^\n]+)/g;
+
+  return rawmarkdown.replace(headingRegex, (match, hashes, text) => {
+    // Replace the hashes with bold syntax.
+    return `${hashes.replace(/#/g, '').length > 0 ? '\n' : ''}**${text.trim()}**`;
+  });
+}
+
 export async function sendDiscordMessage(myVariable, markdown) {
   const workgroup = myVariable.summary.workgroup
   const username = myVariable.summary.username
+  const archivist = myVariable.currentUser
   const purpose = myVariable.summary.meetingInfo.purpose
+  const date = myVariable.summary.meetingInfo.date
+  const formattedMarkdown = markdownHeadingsToBold(markdown)
   const content = ``;
   const embeds = [
     {
       color: 0x16fa3c,
-      title: `${workgroup} meeting summary`,
+      title: `${workgroup} -> ${date} meeting summary`,
       url: ``,
       author: {
         name: ``,
       },
-      description: `Purpose - ${purpose}`,
+      description: ``,
       fields: [
         {
-          name: `fields name`,
-          value: `fields value`,
+          name: `Meeting Info`,
+          value: `${formattedMarkdown}`,
           inline: true,
         },
       ],
       footer: {
-        text: `Summary created by ${username}`
+        text: `Summary created by ${username} and archived by ${archivist}`
         //icon_url: 'https://github.com/treasuryguild/Treasury-Guild/raw/main/logo132.png',
       },
     },
@@ -36,9 +49,9 @@ export async function sendDiscordMessage(myVariable, markdown) {
     embeds[0].image = { url: myVariable.image_url };
   }*/
 
-  console.log("SendDiscord", "Content", content, "Embeds", embeds, workgroup)
+  console.log("Attempting to send Discord Message")
   try {
-    const response = await axios.post('http://localhost:3000/api/discord', { content, embeds, workgroup }, { 
+    const response = await axios.post('/api/discord', { content, embeds, workgroup }, { 
       headers: { 'Content-Type': 'application/json' },
     });
 

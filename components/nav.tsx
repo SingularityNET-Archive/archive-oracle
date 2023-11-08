@@ -78,7 +78,8 @@ const Nav = () => {
         }
       setMyVariable(prevState => ({
         ...prevState,
-        roles: response.data
+        roles: response.data,
+        currentUser: session?.user.user_metadata?.full_name
       }));
       setRoleData(prevState => {
         if (prevState) {

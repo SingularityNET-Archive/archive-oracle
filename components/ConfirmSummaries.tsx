@@ -44,14 +44,15 @@ const ConfirmSummaries = () => {
         });
       }
       //console.log(myVariable)
-      //await sendDiscordMessage(myVariable, renderedMarkdown);
+      await sendDiscordMessage(myVariable, renderedMarkdown);
+      //console.log(myVariable, "renderedMarkdown", renderedMarkdown)
     } else {
       alert('Summary already confirmed')
     }
     
     setLoading(false);
   }
-  //console.log(myVariable)
+  
   return (
     <div>
       <h2 className={styles['confirm-heading']}>Confirm uploaded Summary</h2>

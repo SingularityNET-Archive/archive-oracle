@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   webhookUrl = webhookUrls[workgroup] //remember to change to webhookUrls[walletSuffix];
 
-  const avatarUrl = 'https://github.com/treasuryguild/treasury-dapp/raw/main/public/logo132.png';
+  const avatarUrl = 'https://github.com/SingularityNET-Archive/archive-oracle/raw/main/public/SNet1.png';
 
   if (typeof webhookUrl === 'undefined') {
     webhookUrl = process.env.DISCORD_WEBHOOK_URL;

@@ -6,13 +6,13 @@ export function generateMarkdown(summary) {
       return 'No Summary present'; 
     }
     if (summary.meetingInfo) {
-      const { date, name, peoplePresent, purpose, mediaLink, miroBoardLink, transcriptLink } = summary.meetingInfo;
+      const { date, name, host, documenter, peoplePresent, purpose, mediaLink, miroBoardLink, transcriptLink } = summary.meetingInfo;
       
       //const formattedDate = new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       //markdown += `## ${formattedDate}\n\n`;
       //markdown += `### ${summary.workgroup}\n\n`;
       markdown += `- Type of meeting: ${name}\n`;
-      markdown += `- People present: ${peoplePresent.split(', ').map(p => p.trim()).join(', ')}\n`;
+      markdown += `- People present: ${host} [host], ${documenter} [documenter], ${peoplePresent.split(', ').map(p => p.trim()).join(', ')}\n`;
       markdown += `- Purpose: ${purpose}\n`;
       if (mediaLink) markdown += `- Meeting video: ${mediaLink}\n`;
       if (miroBoardLink) markdown += `- Miro board: ${miroBoardLink}\n`;
