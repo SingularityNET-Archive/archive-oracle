@@ -41,7 +41,7 @@ const CustomAgendaItems = ({onUpdate}: any) => {
 
   useEffect(() => {
     // Update local agenda items state when myVariable.summary.agendaItems changes
-    const initialAgendaItems = myVariable.summary?.agendaItems?.map(item => ({
+    const initialAgendaItems = myVariable.summary?.agendaItems?.map((item: any) => ({
       ...{
         agenda: "",
         status: "carry over",
