@@ -49,53 +49,104 @@ function parseMarkdownToEmbedFields(rawmarkdown) {
   return fieldsArray;
 }
 
-export async function sendDiscordMessage(myVariable, markdown) {
-  const workgroup = myVariable.summary.workgroup
-  const username = myVariable.summary.username
-  const archivist = myVariable.currentUser
-  //const purpose = myVariable.summary.meetingInfo.purpose
-  const date = myVariable.summary.meetingInfo.date
-  //const formattedMarkdown = markdownHeadingsToBold(markdown)
-  const fields = parseMarkdownToEmbedFields(markdown);
-  const content = ``;
-  const embeds = [
-    {
-      color: 0x16fa3c,
-      title: `${workgroup} -> ${date} meeting summary`,
-      url: ``,
-      author: {
-        name: ``,
-      },
-      description: ``,
-      fields: fields,
-      footer: {
-        text: `Summary created by ${username} and archived by ${archivist}`
-        //icon_url: 'https://github.com/treasuryguild/Treasury-Guild/raw/main/logo132.png',
-      },
-    },
-  ];
+function createDiscordEmbeds(rawmarkdown, title, footerText) {
+  const MAX_EMBED_DESCRIPTION_LENGTH = 2048;
+  const MAX_FIELD_VALUE_LENGTH = 1024;
+  const MAX_EMBED_FOOTER_TEXT_LENGTH = 2048;
+  const MAX_EMBED_CHARACTER_COUNT = 6000;
 
-  /*if(myVariable.thumbnail_url) {
-    embeds[0].thumbnail = { url: myVariable.thumbnail_url };
+  let fields = parseMarkdownToEmbedFields(rawmarkdown);
+  let embeds = [];
+  let currentEmbed = {
+    color: 0x3a24c9,
+    title: title || '',
+    fields: [],
+    footer: {}
+  };
+  let currentEmbedCharCount = currentEmbed.title.length;
+
+  fields.forEach(field => {
+    let fieldValue = field.value;
+    // If adding this field would exceed the max length for a field value, split it
+    while (fieldValue.length > 0) {
+      let sliceLength = Math.min(fieldValue.length, MAX_FIELD_VALUE_LENGTH);
+      let fieldValueSlice = fieldValue.slice(0, sliceLength);
+      let fieldCharCount = field.name.length + fieldValueSlice.length;
+
+      // If adding this field would exceed the max length for an embed, create a new one
+      if (currentEmbedCharCount + fieldCharCount > MAX_EMBED_CHARACTER_COUNT ||
+          currentEmbed.fields.length === 25) { // Also check for max field count per embed
+        // Finalize the current embed
+        embeds.push(currentEmbed);
+        // Start a new embed
+        currentEmbed = {
+          fields: [],
+          footer: {}
+        };
+        currentEmbedCharCount = 0;
+      }
+
+      // Add the field to the current embed
+      currentEmbed.fields.push({
+        name: field.name,
+        value: fieldValueSlice
+      });
+
+      // Adjust the character count
+      currentEmbedCharCount += fieldCharCount;
+      // Slice the processed part off the field value
+      fieldValue = fieldValue.slice(sliceLength);
+      // Continue with the same name but empty it to not add it again
+      field.name = '';
+    }
+  });
+
+  // Add footer to the last embed
+  if (footerText && footerText.length <= MAX_EMBED_FOOTER_TEXT_LENGTH) {
+    currentEmbed.footer.text = footerText;
   }
 
-  if(myVariable.image_url) {
-    embeds[0].image = { url: myVariable.image_url };
-  }*/
+  // Push the last embed if it has any fields
+  if (currentEmbed.fields.length > 0) {
+    embeds.push(currentEmbed);
+  }
 
-  console.log("Attempting to send Discord Message")
+  // Remove title from subsequent embeds
+  if (embeds.length > 1) {
+    embeds.forEach((embed, index) => {
+      if (index > 0) delete embed.title;
+    });
+  }
+
+  return embeds;
+}
+
+
+export async function sendDiscordMessage(myVariable, markdown) {
+  const workgroup = myVariable.summary.workgroup;
+  const username = myVariable.summary.username;
+  const archivist = myVariable.currentUser;
+  const date = myVariable.summary.meetingInfo.date;
+  
+  // Use the new function to create embeds
+  const title = `${workgroup} -> ${date} meeting summary`;
+  const footerText = `Summary created by ${username} and archived by ${archivist}`;
+  const embeds = createDiscordEmbeds(markdown, title, footerText);
+
+  console.log("Attempting to send Discord Message");
   try {
-    const response = await axios.post('/api/discord', { content, embeds, workgroup }, { 
+    const response = await axios.post('/api/discord', { content: '', embeds, workgroup }, { 
       headers: { 'Content-Type': 'application/json' },
     });
 
     if (response.status < 200 || response.status >= 300) {
       throw new Error('Failed to send message');
-    }    
+    }
+    console.log('Message sent successfully:', response.data);
   } catch (error) {
-    console.error(error);
+    console.error('Failed to send Discord message:', error);
     if (error.response) {
-      console.error(error.response.data);
+      console.error('Response error:', error.response.data);
     }
   }
 }

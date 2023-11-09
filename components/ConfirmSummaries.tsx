@@ -44,7 +44,7 @@ const ConfirmSummaries = () => {
     e.preventDefault();
     setLoading(true);
     if (myVariable.summary.confirmed == false) {
-      /*const data = await updateGitbook(formData);
+      const data = await updateGitbook(formData);
       //console.log("returned from util function", formData)
       if (data) {
         setMyVariable({
@@ -54,7 +54,7 @@ const ConfirmSummaries = () => {
             confirmed: true,
           },
         });
-      }*/
+      }
       //console.log(myVariable)
       await sendDiscordMessage(myVariable, renderedMarkdown);
       //console.log(myVariable, "renderedMarkdown", renderedMarkdown)
