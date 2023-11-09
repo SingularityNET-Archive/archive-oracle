@@ -157,7 +157,7 @@ const SubmitMeetingSummary: NextPage = () => {
                 <option value="add_new">Add new WG</option>
               </select>
             )}
-            {workgroups.length > 0 && meetings.length > 0 && (
+            {workgroups.length > 0 && meetings?.length > 0 && (
               <select
                 name="" id="" 
                 className={styles.select} 
