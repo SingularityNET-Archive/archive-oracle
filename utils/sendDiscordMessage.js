@@ -15,36 +15,61 @@ function parseMarkdownToEmbedFields(rawmarkdown) {
   // Split the raw markdown by lines
   const lines = rawmarkdown.split('\n');
 
-  // Initialize a variable to hold the meeting info as a string
   let meetingInfo = '';
+  let currentFieldName = '';
+  let currentValue = '';
   let parsingMeetingInfo = true; // Flag to indicate we are parsing the meeting info
 
-  lines.forEach((line) => {
+  lines.forEach((line, index) => {
     // Check if we are still parsing the meeting info
     if (parsingMeetingInfo) {
-      // If the line is a heading, we have reached the end of the meeting info
       if (line.startsWith('#### ')) {
-        parsingMeetingInfo = false;
-        // Add the meeting info as the first field
-        fieldsArray.push({ name: "Meeting Info", value: meetingInfo.trim() });
+        // Stop parsing meeting info if the next line is a heading that is not an agenda item
+        if (!lines[index + 1] || !lines[index + 1].startsWith('#### Agenda item')) {
+          parsingMeetingInfo = false;
+          // Add the meeting info as the first field
+          fieldsArray.push({ name: "Meeting Info", value: meetingInfo.trim() });
+          meetingInfo = '';
+        }
       } else {
-        // Add the line to the meeting info, with a newline if not empty
         meetingInfo += (meetingInfo ? '\n' : '') + line.trim();
       }
     }
-    
-    // If we're past the meeting info, start adding fields for each heading
+
     if (!parsingMeetingInfo) {
-      if (line.startsWith('#### ')) {
-        // Create a new field object with the heading as 'name'
-        const fieldName = line.replace('#### ', '').trim();
-        fieldsArray.push({ name: fieldName, value: '' });
-      } else if (fieldsArray.length > 0 && line.trim() !== '') {
-        // Add the line to the 'value' of the last field object, ensuring to add line breaks as necessary
-        fieldsArray[fieldsArray.length - 1].value += (fieldsArray[fieldsArray.length - 1].value ? '\n' : '') + line.trim();
+      if (line.startsWith('#### Agenda item')) {
+        // When we encounter an agenda item, we process the previous field
+        if (currentFieldName) {
+          fieldsArray.push({ name: currentFieldName, value: currentValue.trim() });
+        }
+        // Reset the currentValue for the new field
+        currentValue = '';
+        // Extract the agenda item number and the rest of the line as the field name and value respectively
+        const agendaMatch = line.match(/#### (Agenda item \d+)(.*)/);
+        if (agendaMatch && agendaMatch.length > 2) {
+          currentFieldName = agendaMatch[1].trim(); // This is "Agenda item X"
+          currentValue = agendaMatch[2].trim(); // This is the rest of the line after "Agenda item X"
+        }
+      } else if (line.startsWith('#### ')) {
+        // Process the previous field if it exists
+        if (currentFieldName) {
+          fieldsArray.push({ name: currentFieldName, value: currentValue.trim() });
+          currentFieldName = '';
+          currentValue = '';
+        }
+        // Start a new field
+        currentFieldName = line.replace('#### ', '').trim();
+      } else {
+        // If we're not parsing meeting info, add content to the current value
+        currentValue += (currentValue ? '\n' : '') + line.trim();
       }
     }
   });
+
+  // Add the last field if it exists
+  if (currentFieldName || currentValue) {
+    fieldsArray.push({ name: currentFieldName, value: currentValue.trim() });
+  }
 
   return fieldsArray;
 }
