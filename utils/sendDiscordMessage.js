@@ -51,7 +51,7 @@ export async function sendDiscordMessage(myVariable, markdown) {
 
   console.log("Attempting to send Discord Message")
   try {
-    const response = await axios.post('/api/discord', { content, embeds, workgroup }, { 
+    const response = await axios.post('https://archive-oracle.netlify.app/api/discord', { content, embeds, workgroup }, { 
       headers: { 'Content-Type': 'application/json' },
     });
 
