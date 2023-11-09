@@ -84,7 +84,7 @@ const CustomMeetingInfo: React.FC<CustomMeetingInfoProps> = ({ workgroup, onUpda
       transcriptLink,
       mediaLink
     });
-  }, [myVariable.summary.meetingInfo]); // Add myVariable.summary.meetingInfo to the dependency array
+  }, [myVariable.summary?.meetingInfo]); // Add myVariable.summary.meetingInfo to the dependency array
   
 
   return (

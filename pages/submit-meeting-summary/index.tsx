@@ -72,7 +72,7 @@ const SubmitMeetingSummary: NextPage = () => {
     const selectedWorkgroupId = e.target.value;
     const summaries: any = selectedWorkgroupId != 'add_new' ? await getSummaries(selectedWorkgroupId) : null;
     setMeetings(summaries)
-    if (summaries && summaries[0].type) {
+    if (summaries && summaries[0]?.type) {
       setActiveComponent('one');
     }
 

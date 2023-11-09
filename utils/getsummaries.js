@@ -2,7 +2,7 @@ import { supabase } from "../lib/supabaseClient";
 
 export async function getSummaries(workgroup_id) {
   let summaries = []; // Initialize an array to hold the summaries
-
+  let summary = {};
   async function getMeetingSummaries() {
     try {
       // Fetch the last 6 summaries from the database
@@ -27,13 +27,15 @@ export async function getSummaries(workgroup_id) {
 
           if (userError) throw userError;
           if (userData) {
+            summary = data.summary
             // Add the summary and user details to the summaries array
+
             summaries.push({
               username: userData.full_name,
               meeting_id: data.meeting_id,
               confirmed: data.confirmed,
               date: data.date,
-              ...data.summary
+              ...summary
             });
           }
         }

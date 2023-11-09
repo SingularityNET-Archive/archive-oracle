@@ -63,7 +63,7 @@ const CustomAgendaItems = ({onUpdate}: any) => {
     }];
   
     setAgendaItems(initialAgendaItems);
-  }, [myVariable.summary.agendaItems]);  
+  }, [myVariable.summary?.agendaItems]);  
 
   const addAgendaItem = () => {
     setAgendaItems([...agendaItems, { agenda: "", status: "carry over",  narrative: '', issues: [], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
