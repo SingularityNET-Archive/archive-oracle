@@ -9,8 +9,8 @@ export const commitToGithub = async (formData: any, token: string) => {
   const month = format(dateObj, "MMMM-yyyy").toLowerCase();
   const week = `week-${getWeek(dateObj)}`;
 
-  const owner = "Andre-Diamond";
-  const repo = "test";
+  const owner = "SingularityNET-Archive"; //SingularityNET-Archive/SingularityNET-Archive-GitBook
+  const repo = "SingularityNET-Archive-GitBook";
   const path = `timeline/${year}/${month}/${week}.md`;
 
   try {
