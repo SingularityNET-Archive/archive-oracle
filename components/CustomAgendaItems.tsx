@@ -52,7 +52,8 @@ const CustomAgendaItems = ({onUpdate}: any) => {
         discussionPoints: [""]
       },
       ...item
-    })) || [{
+    }))
+     || [{
       agenda: "",
       status: "carry over",
       narrative: '',

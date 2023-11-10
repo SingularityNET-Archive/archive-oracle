@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import styles from '../../styles/meetingsummary.module.css';
 import CustomTemplate from '../../components/CustomTemplate';
+import AgileTemplate from '../../components/AgileTemplate';
 import ConfirmSummaries from '../../components/ConfirmSummaries'
 import { useMyVariable } from '../../context/MyVariableContext';
 import { getWorkgroups } from '../../utils/getWorkgroups'
@@ -132,6 +133,7 @@ const SubmitMeetingSummary: NextPage = () => {
   const getComponent = () => {
     switch (activeComponent) {
       case 'one': return <CustomTemplate key={selectedWorkgroupId} />;
+      case 'two': return <AgileTemplate key={selectedWorkgroupId} />;
       case 'four': return <ConfirmSummaries key={selectedWorkgroupId} />;
       default: return <div>Select a component</div>;
     }
@@ -177,7 +179,7 @@ const SubmitMeetingSummary: NextPage = () => {
           </>
         )}
         {selectedWorkgroupId  && (<>
-        {myVariable.roles.isAdmin && (<button className={styles.navButton} onClick={() => setActiveComponent('one')}>Summary</button>)}
+        {myVariable.roles.isAdmin && (<button className={styles.navButton} onClick={() => setActiveComponent('two')}>Summary</button>)}
         {myVariable.roles.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Confirm Summaries</button>}
         </>)}
       </div>
