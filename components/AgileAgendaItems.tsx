@@ -3,6 +3,7 @@ import { useMyVariable } from '../context/MyVariableContext';
 import styles from '../styles/typea.module.css';
 import SelectNames from '../components/SelectNames'
 import Item from '../components/Item';
+import { getDefaultAgendaItem } from '../utils/getDefaultAgendaItem';
 
 const AgileAgendaItems = ({onUpdate}: any) => {
     const { myVariable, setMyVariable } = useMyVariable();
@@ -10,30 +11,10 @@ const AgileAgendaItems = ({onUpdate}: any) => {
     const [mode, setMode] = useState(firstAgendaItem.mode || 'Narrative');
     const [narrative, setNarrative] = useState(firstAgendaItem.narrative || '');
     const [issues, setIssues] = useState(firstAgendaItem.issues || ['']);
-    const initialAgendaItems = myVariable && myVariable.summary && myVariable.summary.agendaItems 
-                           ? myVariable.summary.agendaItems.map((item: any) => ({
-                               ...{
-                                   agenda: "",
-                                   status: "carry over",
-                                   narrative: "",
-                                   issues: [""],
-                                   actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],
-                                   decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
-                                   discussionPoints: [""],
-                                   learningPoints: [""]
-                               },
-                               ...item
-                             }))
-                           : [{
-                               agenda: "",
-                               status: "carry over",
-                               narrative: "",
-                               issues: [""],
-                               actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],
-                               decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
-                               discussionPoints: [""],
-                               learningPoints: [""]
-                             }];
+    const initialAgendaItems = myVariable?.summary?.agendaItems?.map((item: any) => ({
+      ...getDefaultAgendaItem(),
+      ...item
+    })) || [getDefaultAgendaItem()];
 
   const [agendaItems, setAgendaItems] = useState(initialAgendaItems);
       
@@ -43,33 +24,13 @@ const AgileAgendaItems = ({onUpdate}: any) => {
   }, [agendaItems]);
 
   useEffect(() => {
-    // Update local agenda items state when myVariable.summary.agendaItems changes
-    const initialAgendaItems = myVariable.summary?.agendaItems?.map((item: any) => ({
-      ...{
-        agenda: "",
-        status: "carry over",
-        narrative: "",
-        issues: [""],
-        actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],
-        decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
-        discussionPoints: [""],
-        learningPoints: [""]
-      },
+    const agendaItemsFromVariable = myVariable.summary?.agendaItems?.map((item: any) => ({
+      ...getDefaultAgendaItem(),
       ...item
-    }))
-     || [{
-      agenda: "",
-      status: "carry over",
-      narrative: "",
-      issues: [""],
-      actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],
-      decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
-      discussionPoints: [""],
-      learningPoints: [""]
-    }];
+    })) || [getDefaultAgendaItem()];
   
-    setAgendaItems(initialAgendaItems);
-  }, [myVariable.summary?.agendaItems]);  
+    setAgendaItems(agendaItemsFromVariable);
+  }, [myVariable.summary?.agendaItems]);
 
   const addAgendaItem = () => {
     setAgendaItems([...agendaItems, { agenda: "", status: "carry over",  narrative: '', issues: [], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
@@ -85,9 +46,9 @@ const AgileAgendaItems = ({onUpdate}: any) => {
     const newAgendaItems: any = [...agendaItems];
     if (type === 'actionItems') {
       newAgendaItems[agendaIndex][type].push({ text: "", assignee: "", dueDate: "", status: "todo" });
-    } else if (type === 'decisionItems') {  // Update here
+    } else if (type === 'decisionItems') {  
       newAgendaItems[agendaIndex][type].push({ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" });
-    } else if (type === 'issues' || type === 'discussionPoints' || type === 'learningPoints') {  // Update here
+    } else if (type === 'issues' || type === 'discussionPoints' || type === 'learningPoints') {  
       newAgendaItems[agendaIndex][type].push("");
     } else {
       newAgendaItems[agendaIndex][type].push("");
@@ -116,7 +77,147 @@ const AgileAgendaItems = ({onUpdate}: any) => {
       return newAgendaItems;
     });
   };
-  
+
+  const itemTypesConfig = [
+  {
+    type: "narrative",
+    isEnabled: (template: any) => template.narrative === 1,
+    render: (item: any, agendaIndex: any) => (
+      <>
+        <h3>Narrative</h3>
+        <div className={styles['action-item']}> 
+          <Item
+            type="narrative"
+            item={item.narrative}
+            agendaIndex={agendaIndex}
+            itemIndex={0} 
+            onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('narrative', agendaIdx, itemIdx, updatedItem)}
+            onRemove={removeItem}
+          />
+        </div>
+      </>
+    )
+  },
+  {
+    type: "issues",
+    isEnabled: (template: any) => template.issues === 1,
+    render: (item: any, agendaIndex: any) => (
+      <>
+        <h3>Issues</h3>
+        <div className={styles['action-item']}>    
+          {item?.issues?.map((issue: any, issueIndex: any) => (
+            <Item
+            key={`${agendaIndex}-issue-${issueIndex}`}
+            type="issues"
+            item={issue}
+            agendaIndex={agendaIndex}
+            itemIndex={issueIndex}
+            onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('issues', agendaIdx, itemIdx, updatedItem)}
+            onRemove={removeItem}
+          />
+          ))}
+          <button className={styles['add-button']} type="button" onClick={() => addItem('issues', agendaIndex)}>Add Issue</button>
+        </div>
+      </>
+    )
+  },
+  {
+    type: "actionItems",
+    isEnabled: (template: any) => template.actionItems === 1,
+    render: (item: any, agendaIndex: any) => (
+      <>
+        <h3>Action items</h3>
+        {item?.actionItems?.map((action: any, actionIndex: any) => ( 
+          <Item
+            key={`${agendaIndex}-action-${actionIndex}`}
+            type="actionItems"
+            item={action}
+            agendaIndex={agendaIndex}
+            itemIndex={actionIndex}
+            onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('actionItems', agendaIdx, itemIdx, updatedItem)}
+            onRemove={removeItem}
+          />
+        ))}
+        <button className={styles['add-button']} type="button" onClick={() => addItem('actionItems', agendaIndex)}>Add Action</button>
+      </>
+    )
+  },
+  {
+    type: "decisionItems",
+    isEnabled: (template: any) => template.decisionItems === 1,
+    render: (item: any, agendaIndex: any) => (
+      <>
+        <h3>Decisions</h3>
+        {item?.decisionItems?.map((decision: any, decisionIndex: any) => (
+            <Item
+            key={`${agendaIndex}-decision-${decisionIndex}`}
+            type="decisionItems"
+            item={decision}
+            agendaIndex={agendaIndex}
+            itemIndex={decisionIndex}
+            onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('decisionItems', agendaIdx, itemIdx, updatedItem)}
+            onRemove={removeItem}
+          />
+        ))}
+        <button className={styles['add-button']} type="button" onClick={() => addItem('decisionItems', agendaIndex)}>Add Decision</button>
+      </>
+    )
+  },
+  {
+    type: "discussionPoints",
+    isEnabled: (template: any) => template.discussionPoints === 1,
+    render: (item: any, agendaIndex: any) => (
+      <>
+        <h3>Discussion Points</h3>
+        <div className={styles['discussion-points']}>
+        {item.discussionPoints.map((point: any, pointIndex: any) => (
+              <Item
+                  key={`${agendaIndex}-discussion-${pointIndex}`}
+                  type="discussionPoints"
+                  item={point}
+                  agendaIndex={agendaIndex}
+                  itemIndex={pointIndex}
+                  onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('discussionPoints', agendaIdx, itemIdx, updatedItem)}
+                  onRemove={removeItem}
+              />
+            ))}
+        </div>
+        <button className={styles['add-button']} type="button" onClick={() => addItem('discussionPoints', agendaIndex)}>Add Discussion Point</button>
+      </>
+    )
+  },
+  {
+    type: "learningPoints",
+    isEnabled: (template: any) => template.learningPoints === 1,
+    render: (item: any, agendaIndex: any) => (
+      <>
+        <h3>Learning Points</h3>
+        <div className={styles['discussion-points']}>
+          {item.learningPoints.map((point: any, pointIndex: any) => (
+              <Item
+                  key={`${agendaIndex}-learning-${pointIndex}`}
+                  type="learningPoints"
+                  item={point}
+                  agendaIndex={agendaIndex}
+                  itemIndex={pointIndex}
+                  onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('learningPoints', agendaIdx, itemIdx, updatedItem)}
+                  onRemove={removeItem}
+              />
+            ))}
+        </div>
+        <button className={styles['add-button']} type="button" onClick={() => addItem('learningPoints', agendaIndex)}>Add Learning Point</button>
+      </>
+    )
+  },
+  /*{
+    type: "issues",
+    isEnabled: (template: any) => template.issues === 1,
+    render: (item: any, agendaIndex: any) => (
+      // ... rendering logic for issues ...
+    )
+  },*/
+];
+
 
   return (
     <div>
@@ -164,96 +265,13 @@ const AgileAgendaItems = ({onUpdate}: any) => {
             </>
           )}
           
-          {myVariable.workgroup.preferred_template.agendaItems[0].narrative == 1 && (
-            <>
-            <h3>Narrative</h3>
-            <div className={styles['action-item']}> 
-            <Item
-                type="narrative"
-                item={item.narrative}
-                agendaIndex={agendaIndex}
-                itemIndex={0} 
-                onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('narrative', agendaIdx, itemIdx, updatedItem)}
-                onRemove={removeItem}
-            />
-            </div>
-            </>
-          )} 
-          {myVariable.workgroup.preferred_template.agendaItems[0].issues == 1 && (
-            <>
-              <h3>Issues</h3>
-              <div className={styles['action-item']}>    
-                {item?.issues?.map((issue: any, issueIndex: any) => (
-                  <Item
-                  key={issueIndex}
-                  type="issues"
-                  item={issue}
-                  agendaIndex={agendaIndex}
-                  itemIndex={issueIndex}
-                  onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('issues', agendaIdx, itemIdx, updatedItem)}
-                  onRemove={removeItem}
-                />
-                ))}
-                <button className={styles['add-button']} type="button" onClick={() => addItem('issues', agendaIndex)}>Add Issue</button>
-              </div>
-            </>
-          )} 
-          {myVariable.workgroup.preferred_template.agendaItems[0].actionItems == 1 && (<h3>Action items</h3>)}  
-          {myVariable.workgroup.preferred_template.agendaItems[0].actionItems == 1 && item?.actionItems?.map((action: any, actionIndex: any) => ( 
-            <Item
-              key={actionIndex}
-              type="actionItems"
-              item={action}
-              agendaIndex={agendaIndex}
-              itemIndex={actionIndex}
-              onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('actionItems', agendaIdx, itemIdx, updatedItem)}
-              onRemove={removeItem}
-            />
-          ))} 
-          {myVariable.workgroup.preferred_template.agendaItems[0].actionItems == 1 && (<button className={styles['add-button']} type="button" onClick={() => addItem('actionItems', agendaIndex)}>Add Action</button>)}
-          {myVariable.workgroup.preferred_template.agendaItems[0].decisionItems == 1 &&(<h3>Decisions</h3>)}
-          {myVariable.workgroup.preferred_template.agendaItems[0].decisionItems == 1 && item?.decisionItems?.map((decision: any, decisionIndex: any) => (
-            <Item
-            key={decisionIndex}
-            type="decisionItems"
-            item={decision}
-            agendaIndex={agendaIndex}
-            itemIndex={decisionIndex}
-            onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('decisionItems', agendaIdx, itemIdx, updatedItem)}
-            onRemove={removeItem}
-          />
-          ))}
-          {myVariable.workgroup.preferred_template.agendaItems[0].decisionItems == 1 && (<button className={styles['add-button']} type="button" onClick={() => addItem('decisionItems', agendaIndex)}>Add Decision</button>)}
-          {myVariable.workgroup.preferred_template.agendaItems[0].discussionPoints == 1 && (<h3>Discussion Points</h3>)} 
-          {myVariable.workgroup.preferred_template.agendaItems[0].discussionPoints == 1 && (<div className={styles['discussion-points']}>
-            {myVariable.workgroup.preferred_template.agendaItems[0].discussionPoints == 1 && item.discussionPoints.map((point: any, pointIndex: any) => (
-              <Item
-                  key={pointIndex}
-                  type="discussionPoints"
-                  item={point}
-                  agendaIndex={agendaIndex}
-                  itemIndex={pointIndex}
-                  onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('discussionPoints', agendaIdx, itemIdx, updatedItem)}
-                  onRemove={removeItem}
-              />
-            ))}
-          </div>)}
-          {myVariable.workgroup.preferred_template.agendaItems[0].discussionPoints == 1 && (<button className={styles['add-button']} type="button" onClick={() => addItem('discussionPoints', agendaIndex)}>Add Discussion Point</button>)}
-          {myVariable.workgroup.preferred_template.agendaItems[0].learningPoints == 1 && (<h3>Learning Points</h3>)} 
-          {myVariable.workgroup.preferred_template.agendaItems[0].learningPoints == 1 && (<div className={styles['discussion-points']}>
-            {myVariable.workgroup.preferred_template.agendaItems[0].learningPoints == 1 && item.learningPoints.map((point: any, pointIndex: any) => (
-              <Item
-                  key={pointIndex}
-                  type="learningPoints"
-                  item={point}
-                  agendaIndex={agendaIndex}
-                  itemIndex={pointIndex}
-                  onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('learningPoints', agendaIdx, itemIdx, updatedItem)}
-                  onRemove={removeItem}
-              />
-            ))}
-          </div>)}
-          {myVariable.workgroup.preferred_template.agendaItems[0].learningPoints == 1 && (<button className={styles['add-button']} type="button" onClick={() => addItem('learningPoints', agendaIndex)}>Add Learning Point</button>)}
+          {itemTypesConfig.map(({ type, isEnabled, render }) => {
+          if (isEnabled(myVariable.workgroup.preferred_template.agendaItems[0])) {
+            return render(item, agendaIndex);
+          }
+          return null;
+          })}
+
           {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && item.agenda == '' && (<button className={styles['remove-button']} type="button" onClick={() => removeAgendaItem(agendaIndex)}>Remove Agenda</button>)}
         </div>
       ))}
