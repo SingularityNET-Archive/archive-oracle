@@ -4,19 +4,19 @@ import styles from '../styles/typea.module.css';
 import SelectTags from '../components/SelectTags';
 
 type TagsProps = {
-  tags: { topicsCovered: string, references: string, emotions: string, other: string },
-  setTags: React.Dispatch<React.SetStateAction<{ topicsCovered: string, references: string, emotions: string, other: string }>>
+  tags: { topicsCovered: string, references: string, emotions: string, other: string, gamesPlayed: string },
+  setTags: React.Dispatch<React.SetStateAction<{ topicsCovered: string, references: string, emotions: string, other: string, gamesPlayed: string }>>
 }
 
 const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
   const { myVariable } = useMyVariable();
-
   // Set the initial state using myVariable.summary.tags
   const initialState = myVariable.summary && myVariable.summary.tags ? myVariable.summary.tags : {
     topicsCovered: "",
     references: "",
     emotions: "",
-    other: ""
+    other: "",
+    gamesPlayed: ""
   };
   const [localTags, setLocalTags] = React.useState(initialState);
 
@@ -27,6 +27,20 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
   return (
     <div>
       <h3>Tags</h3>
+      {myVariable.workgroup?.workgroup == 'Gamers Guild' && (<div className={styles['links-column-flex']}>
+          <div>
+            <label className={styles['form-label']}>
+              Games Played
+            </label>
+            <SelectTags 
+              onSelect={(selectedNames: string) => {
+                setLocalTags({ ...localTags, gamesPlayed: selectedNames });
+              }}
+              initialValue={localTags.gamesPlayed}
+              type="gamesPlayed" 
+            />
+          </div>
+        </div>)}
       <div className={styles['row-flex-start']}>
         <div className={styles['links-column-flex']}>
         <div>

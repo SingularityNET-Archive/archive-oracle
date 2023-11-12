@@ -1,15 +1,14 @@
 import styles from '../styles/typea.module.css';
-import SelectNames from '../components/SelectNames'
 import ActionItem from '../components/ActionItem';
 import DecisionItem from '../components/DecisionItem';
 
-const Narrative = ({ value, onChange }: any) => (
+const TextAreaInput = ({ value, onChange, placeholder, type }: any) => (
   <div className={styles['column-flex']}>
       <textarea
           className={styles['form-textarea']}
-          placeholder="Describe the narrative..."
+          placeholder={placeholder}
           value={value}
-          onChange={(e) => onChange('narrative', e.target.value)}
+          onChange={(e) => onChange(type, e.target.value)}
       />
   </div>
 );
@@ -18,7 +17,7 @@ const Narrative = ({ value, onChange }: any) => (
 const TextInput: any = ({ label, placeholder, value, onChange, type, itemIndex }: any) => (
   <div className={styles['links-column-flex']}>
       <label className={styles['form-label']}>
-          {label} {itemIndex + 1}
+          {label}
       </label>
       <input
           className={styles['form-input']}
@@ -30,11 +29,22 @@ const TextInput: any = ({ label, placeholder, value, onChange, type, itemIndex }
   </div>
 );
 
+function getOrdinal(n: any) {
+  const ordinals = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (ordinals[(v - 20) % 10] || ordinals[v] || ordinals[0]);
+}
 // Higher-order function to create common item structure
 const createItem = (type: any, agendaIndex: any, itemIndex: any, item: any, handleUpdate: any, onRemove: any) => {
+  let label = ''
+  if (type === 'leaderboard') { label = (getOrdinal(itemIndex + 1)) + ' place' }
+  else if (type === 'discussionPoints') { label = 'Discussion Point ' + (itemIndex + 1)}
+  else if (type === 'learningPoints') { label = 'Learning Point ' + (itemIndex + 1)}
+  else if (type === 'issues') { label = 'Issue ' + (itemIndex + 1)}
+  else { label = type + ' ' + (itemIndex + 1)}
   const commonInput = (itemType: any, placeholder: any) => (
       <TextInput
-          label={itemType}
+          label={label}
           placeholder={placeholder}
           value={item}
           onChange={(e: any) => handleUpdate(itemType, e.target.value)}
@@ -43,7 +53,7 @@ const createItem = (type: any, agendaIndex: any, itemIndex: any, item: any, hand
   );
 
   const removeButton = item === '' && (
-      <button className={styles['remove-button']} onClick={() => onRemove(type, agendaIndex, itemIndex)}>
+      <button type="button" className={styles['remove-button']} onClick={() => onRemove(type, agendaIndex, itemIndex)}>
           Remove
       </button>
   );
@@ -60,7 +70,7 @@ const createItem = (type: any, agendaIndex: any, itemIndex: any, item: any, hand
 const Item = ({ type, item, agendaIndex, itemIndex, onUpdate, onRemove }: any) => {
     // Determine what inputs to render based on item type
     const handleUpdate = (key: any, value: any) => {
-        if (type === 'issues' || type === 'discussionPoints' || type === 'learningPoints') {
+        if (type === 'issues' || type === 'discussionPoints' || type === 'learningPoints' || type === 'leaderboard') {
             // For 'issues', since it's an array of strings, update directly
             onUpdate(agendaIndex, itemIndex, value);
         } else {
@@ -90,11 +100,18 @@ const Item = ({ type, item, agendaIndex, itemIndex, onUpdate, onRemove }: any) =
                       type={type} 
                   />;
         case 'issues':
+        case 'leaderboard':
         case 'learningPoints':
         case 'discussionPoints':
           return createItem(type, agendaIndex, itemIndex, item, handleUpdate, onRemove);
         case 'narrative':
-          return <Narrative value={item} onChange={handleUpdate} />;
+        case 'gameRules':
+          return <TextAreaInput 
+                     type={type} 
+                     value={item} 
+                     onChange={handleUpdate} 
+                     placeholder={`Please enter the ${type}`}
+                 />;
         default:
           return null;
       }

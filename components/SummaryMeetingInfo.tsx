@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/typea.module.css'; 
 import { useMyVariable } from '../context/MyVariableContext';
-import SelectNames from '../components/SelectNames'
+import SelectNames from './SelectNames'
 
-type AgileMeetingInfoProps = {
+type SummaryMeetingInfoProps = {
   workgroup: string;
   onUpdate: (info: any) => void;
 };
 
-const AgileMeetingInfo: React.FC<AgileMeetingInfoProps> = ({ workgroup, onUpdate }) => {
+const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUpdate }) => {
   const { myVariable, setMyVariable } = useMyVariable();
 
   const {
@@ -238,4 +238,4 @@ const AgileMeetingInfo: React.FC<AgileMeetingInfoProps> = ({ workgroup, onUpdate
   );
 };
 
-export default AgileMeetingInfo;
+export default SummaryMeetingInfo;

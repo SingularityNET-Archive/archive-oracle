@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import styles from '../../styles/meetingsummary.module.css';
-import CustomTemplate from '../../components/CustomTemplate';
-import AgileTemplate from '../../components/AgileTemplate';
+import SummaryTemplate from '../../components/SummaryTemplate';
 import ConfirmSummaries from '../../components/ConfirmSummaries'
 import { useMyVariable } from '../../context/MyVariableContext';
 import { getWorkgroups } from '../../utils/getWorkgroups'
@@ -24,7 +23,7 @@ type Names = {
 };
 
 const SubmitMeetingSummary: NextPage = () => {
-  const [activeComponent, setActiveComponent] = useState('one');
+  const [activeComponent, setActiveComponent] = useState('two');
   const [workgroups, setWorkgroups] = useState<Workgroup[]>([]);
   const [meetings, setMeetings] = useState([]);
   const [showNewWorkgroupInput, setShowNewWorkgroupInput] = useState(false);
@@ -58,10 +57,14 @@ const SubmitMeetingSummary: NextPage = () => {
     let referenceTags = tags1
       .filter(tag => tag.type === 'references')
       .map(tag => ({ value: tag.tag, label: tag.tag }));
+    
+    let gamesPlayedTags = tags1
+      .filter(tag => tag.type === 'gamesPlayed')
+      .map(tag => ({ value: tag.tag, label: tag.tag }));
      
     setWorkgroups(workgroupList);
     setNames(newNames);
-    setTags({ other: otherTags, emotions: emotionTags, topicsCovered: topicTags, references: referenceTags });
+    setTags({ other: otherTags, emotions: emotionTags, topicsCovered: topicTags, references: referenceTags, gamesPlayed: gamesPlayedTags });
 }
 
 
@@ -74,7 +77,7 @@ const SubmitMeetingSummary: NextPage = () => {
     const summaries: any = selectedWorkgroupId != 'add_new' ? await getSummaries(selectedWorkgroupId) : null;
     setMeetings(summaries)
     if (summaries && summaries[0]?.type) {
-      setActiveComponent('one');
+      setActiveComponent('two');
     }
 
     if (selectedWorkgroupId === 'add_new') {
@@ -132,8 +135,7 @@ const SubmitMeetingSummary: NextPage = () => {
 
   const getComponent = () => {
     switch (activeComponent) {
-      case 'one': return <CustomTemplate key={selectedWorkgroupId} />;
-      case 'two': return <AgileTemplate key={selectedWorkgroupId} />;
+      case 'two': return <SummaryTemplate key={selectedWorkgroupId} />;
       case 'four': return <ConfirmSummaries key={selectedWorkgroupId} />;
       default: return <div>Select a component</div>;
     }

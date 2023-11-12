@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import styles from '../styles/typea.module.css'; 
 import { useMyVariable } from '../context/MyVariableContext';
-import AgileMeetingInfo from '../components/AgileMeetingInfo'
-import AgileAgendaItems from '../components/AgileAgendaItems'
-import Tags from '../components/Tags'
+import SummaryMeetingInfo from './SummaryMeetingInfo'
+import SummaryAgendaItems from './SummaryAgendaItems'
+import Tags from './Tags'
 import { saveCustomAgenda } from '../utils/saveCustomAgenda';
 
 const filterKeys = (source: any, template: any) => {
@@ -28,7 +28,7 @@ const filterKeys = (source: any, template: any) => {
   return result;
 };
 
-const AgileTemplate = () => {
+const SummaryTemplate = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { myVariable, setMyVariable } = useMyVariable();
   const today = new Date().toISOString().split('T')[0];
@@ -61,12 +61,12 @@ const AgileTemplate = () => {
         learningPoints: [""],
       }
     ],
-    tags: { topicsCovered: "", references: "", emotions: "", other: "" },
+    tags: { topicsCovered: "", references: "", emotions: "", other: "", gamesPlayed: "" },
     type: "Custom"
   };
 
   const [formData, setFormData] = useState(filterKeys(myVariable.summary || {}, defaultFormData));
-  const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "", other: "" });
+  const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "", other: "", gamesPlayed: "" });
 
   useEffect(() => {
     // Set the local state whenever myVariable.summary changes
@@ -108,8 +108,8 @@ const AgileTemplate = () => {
     <div className={styles['form-container']}>
       <h2>{formData.workgroup} {formData.meetingInfo.date}</h2>
       <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
-        <AgileMeetingInfo workgroup={formData.workgroup} onUpdate={(info: any) => setFormData({...formData, meetingInfo: info})} />
-        <AgileAgendaItems onUpdate={(items: any) => setFormData({...formData, agendaItems: items})} />
+        <SummaryMeetingInfo workgroup={formData.workgroup} onUpdate={(info: any) => setFormData({...formData, meetingInfo: info})} />
+        <SummaryAgendaItems onUpdate={(items: any) => setFormData({...formData, agendaItems: items})} />
         <Tags tags={tags} setTags={setTags} />
         <button type="submit" disabled={loading} className={styles['submit-button']}>
           {loading ? "Loading..." : "Submit"}
@@ -119,4 +119,4 @@ const AgileTemplate = () => {
   );
 };
 
-export default AgileTemplate;
+export default SummaryTemplate;
