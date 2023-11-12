@@ -53,6 +53,7 @@ const SummaryTemplate = () => {
       { 
         agenda: "", 
         status: "carry over", 
+        townHallUpdates: "",
         narrative: "",
         issues: [""],
         actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],  

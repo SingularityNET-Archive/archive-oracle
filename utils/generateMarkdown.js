@@ -10,9 +10,15 @@ export function generateMarkdown(summary) {
     const { date, name, host, documenter, peoplePresent, purpose, mediaLink, miroBoardLink, transcriptLink } = summary.meetingInfo;
     //console.log(summary)
     // Add meeting information to markdown
-    markdown += `- Type of meeting: ${name}\n`;
-    markdown += `- People present: ${host} [host], ${documenter} [documenter], ${peoplePresent.split(', ').map(p => p.trim()).join(', ')}\n`;
-    markdown += `- Purpose: ${purpose}\n`;
+    if (name) markdown += `- Type of meeting: ${name}\n`;
+    if (host || documenter || peoplePresent) {
+      markdown += `- People present: `;
+      if (host) markdown += `${host} [host], `;
+      if (documenter) markdown += `${documenter} [documenter], `;
+      if (peoplePresent) markdown += `${peoplePresent.split(', ').map(p => p.trim()).join(', ')}`;
+      markdown += '\n';
+    }
+    if (purpose) markdown += `- Purpose: ${purpose}\n`;
     if (mediaLink) markdown += `- Meeting video: ${mediaLink}\n`;
     if (miroBoardLink) markdown += `- Miro board: ${miroBoardLink}\n`;
     if (transcriptLink) markdown += `- Transcript: ${transcriptLink}\n`;
@@ -26,7 +32,7 @@ export function generateMarkdown(summary) {
   // Generic function to format items
   const formatItems = (title, items, itemType) => {
     let sectionContent = '';
-    if (itemType === 'narrative' || itemType === 'gameRules') {
+    if (itemType === 'townHallUpdates' || itemType === 'narrative' || itemType === 'gameRules') {
       if (items.trim()) {  // Check if narrative or gameRules are not empty
         sectionContent = `${items}\n\n`;
       }
@@ -69,6 +75,9 @@ export function generateMarkdown(summary) {
   summary.agendaItems?.forEach((item, index) => {
     if (item.agenda) {
       markdown += `#### Agenda item ${index + 1} - ${item.agenda} - [${item.status}]\n\n`;
+    }
+    if (item.townHallUpdates) {
+      formatItems("Town Hall Updates", item.townHallUpdates, 'townHallUpdates');
     }
     if (item.narrative) {
       formatItems("Narrative", item.narrative, 'narrative');

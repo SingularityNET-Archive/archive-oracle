@@ -28,7 +28,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   }, [myVariable.summary?.agendaItems]);
 
   const addAgendaItem = () => {
-    setAgendaItems([...agendaItems, { agenda: "", status: "carry over",  narrative: "", gameRules: "", leaderboard: [""], issues: [""], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
+    setAgendaItems([...agendaItems, { agenda: "", status: "carry over", townHallUpdates: "", narrative: "", gameRules: "", leaderboard: [""], issues: [""], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
   };
 
   const removeAgendaItem = (index: number) => {
@@ -61,7 +61,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
         const newAgendaItems = JSON.parse(JSON.stringify(prevAgendaItems));
 
         // Check if the type is 'narrative'
-        if (type === 'narrative' || type === 'gameRules') {
+        if (type === 'townHallUpdates' || type === 'narrative' || type === 'gameRules') {
             if (newAgendaItems[agendaIdx]) {
                 newAgendaItems[agendaIdx][type] = updatedItem[type]; // Directly set the narrative or gameRules string
             }
@@ -78,6 +78,25 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
 
 
   const itemTypesConfig = [
+  {
+    type: "townHallUpdates",
+    isEnabled: (template: any) => template.townHallUpdates === 1,
+    render: (item: any, agendaIndex: any) => (
+      <>
+        <h3>Town Hall Updates</h3>
+        <div className={styles['action-item']}> 
+          <Item
+            type="townHallUpdates"
+            item={item.townHallUpdates}
+            agendaIndex={agendaIndex}
+            itemIndex={0} 
+            onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('townHallUpdates', agendaIdx, itemIdx, updatedItem)}
+            onRemove={removeItem}
+          />
+        </div>
+      </>
+    )
+  },
   {
     type: "narrative",
     isEnabled: (template: any) => template.narrative === 1,
@@ -269,7 +288,7 @@ const orderMapping = {
   "Treasury Guild": ["actionItems", "decisionItems", "discussionPoints"],
   "Dework PBL": ["actionItems", "decisionItems", "discussionPoints"],
   "Knowledge Base Workgroup": ["actionItems", "decisionItems", "discussionPoints"],
-  "Onboarding Workgroup": ["discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
+  "Onboarding Workgroup": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
   "Translation Workgroup": ["discussionPoints", "decisionItems", "actionItems", "issues"],
   "Governance Workgroup": ["narrative", "decisionItems", "actionItems", "DiscussionPoints"]
 };

@@ -104,6 +104,7 @@ const Item = ({ type, item, agendaIndex, itemIndex, onUpdate, onRemove }: any) =
         case 'learningPoints':
         case 'discussionPoints':
           return createItem(type, agendaIndex, itemIndex, item, handleUpdate, onRemove);
+        case 'townHallUpdates':
         case 'narrative':
         case 'gameRules':
           return <TextAreaInput 
