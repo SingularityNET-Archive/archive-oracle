@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   
   axios.post(webhookUrl, {
-    username: 'Archive Oracle',
+    username: 'Meeting Summary',
     avatar_url: avatarUrl,
     content: content,
     embeds: embeds,
