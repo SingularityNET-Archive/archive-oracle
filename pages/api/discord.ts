@@ -10,11 +10,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   let webhookUrl: string | undefined;
   const webhookUrls: { [key: string]: string | undefined } = {
-    'Archival Workgroup': process.env.DISCORD_WEBHOOK_URL,
+    'Archival Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Onboarding Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Knowledge Base Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Video Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Writers Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Translation Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Governance Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Dework PBL': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Gamers Guld': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Treasury Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
   };
     
   
-  webhookUrl = webhookUrls[workgroup] //remember to change to webhookUrls[walletSuffix];
+  webhookUrl = webhookUrls[workgroup] //remember to change to webhookUrls[workgroup];
 
   const avatarUrl = 'https://github.com/SingularityNET-Archive/archive-oracle/raw/main/public/SNet1.png';
 
@@ -24,8 +33,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ error: 'Discord webhook URL is not defined' });
     }
   }
-  
-  // Get data from the client-side
   
   axios.post(webhookUrl, {
     username: 'Archive Oracle',

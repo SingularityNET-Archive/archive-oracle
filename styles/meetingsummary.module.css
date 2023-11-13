@@ -95,3 +95,14 @@
   padding: 0.1em;
   margin: 0.5em;
 }
+
+.form-label {
+  display: block;
+  margin-bottom: -0.4rem;
+  font-size: 0.7rem;
+}
+
+.column-flex {
+  display: flex;
+  flex-direction: column;
+}

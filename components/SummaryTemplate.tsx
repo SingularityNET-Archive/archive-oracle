@@ -86,16 +86,42 @@ const SummaryTemplate = () => {
     setFormData((prevState: any) => ({ ...prevState, tags })); 
   }, [tags]);
 
+  const removeEmptyValues = (obj: any) => {
+    Object.keys(obj).forEach(key => {
+      // If it's an object, recurse deeper
+      if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+        removeEmptyValues(obj[key]);
+      } 
+      // If it's an array, process it
+      else if (Array.isArray(obj[key])) {
+        // Clean the array items if they are objects
+        obj[key] = obj[key].map((item: any) => typeof item === 'object' ? removeEmptyValues(item) : item)
+          .filter((item: any) => item !== '' && !(Array.isArray(item) && item.length === 0)); // Filter out empty strings and empty arrays
+  
+        // If after processing, the array is empty, remove the key
+        if (obj[key].length === 0) {
+          delete obj[key];
+        }
+      } 
+      // If it's an empty string, remove it
+      else if (obj[key] === '') {
+        delete obj[key];
+      }
+    });
+    return obj;
+  };  
+  
   async function handleSubmit(e: any) {
     e.preventDefault();
     if (!formData.meetingInfo.date) {
       alert("Please select the meeting date.");
       return;
     }
+    const cleanedFormData = removeEmptyValues({ ...formData });
     setLoading(true);
     try {
-      const data: any = await saveCustomAgenda(formData);
-      console.log("Submitted Form Data:", formData, data);
+      const data: any = await saveCustomAgenda(cleanedFormData);
+      console.log("Submitted Form Data:", cleanedFormData, data);
       alert("Meeting summary successfully submitted!"); // Notify the user here
     } catch (error) {
       console.error("Error submitting the form:", error);
@@ -106,7 +132,15 @@ const SummaryTemplate = () => {
   } 
 
   return (
-    <div className={styles['form-container']}>
+    <>
+    {loading && (
+        <>
+        <div className={styles['loading']}>
+          Saving summary...
+        </div>
+        </>
+    )}
+    {!loading && (<div className={styles['form-container']}>
       <h2>{formData.workgroup} {formData.meetingInfo.date}</h2>
       <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
         <SummaryMeetingInfo workgroup={formData.workgroup} onUpdate={(info: any) => setFormData({...formData, meetingInfo: info})} />
@@ -116,7 +150,8 @@ const SummaryTemplate = () => {
           {loading ? "Loading..." : "Submit"}
         </button>
       </form>
-    </div>
+    </div>)}
+    </>
   );
 };
 

@@ -8,7 +8,8 @@
 .confirm-heading {
   display: flex;
   justify-content: space-around;
-  margin-top: 10px;
+  margin-top: 15px;
+  margin-bottom: -20px;
 }
 
 .gitbook-form {
@@ -183,8 +184,12 @@
   background-color: black;
 }
 
+.markdown-rendered-heading {
+  margin-top: 8rem;
+}
 .markdown-rendered{
   margin-top: 30px;
+  max-width: 700px;
 }
 
 .markdown-rendered ul,
@@ -195,4 +200,34 @@
 
 .markdown-rendered li {
   margin-bottom: 4px;
+}
+
+.meeting-summary-textarea {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1rem; 
+  margin-right: 1em;
+  background-color: #2b1f1f;
+  color: white;
+  min-height: 300px;
+  width: 700px;
+  resize: vertical;
+}
+
+@keyframes fade-in-out {
+  0% { opacity: 0; } 
+  50% { opacity: 1; } 
+  100% { opacity: 0; } 
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 4.5em);
+  justify-content: center; 
+  align-items: center;     
+  font-size: 3rem;
+  animation: fade-in-out 2s ease-in-out infinite; 
+  color: aquamarine;
 }

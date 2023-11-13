@@ -2,16 +2,29 @@ import styles from '../styles/typea.module.css';
 import ActionItem from '../components/ActionItem';
 import DecisionItem from '../components/DecisionItem';
 
-const TextAreaInput = ({ value, onChange, placeholder, type }: any) => (
-  <div className={styles['column-flex']}>
-      <textarea
-          className={styles['form-textarea']}
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange(type, e.target.value)}
-      />
-  </div>
-);
+const TextAreaInput = ({ value, onChange, placeholder, type }: any) => {
+  // Define titles for different types
+  const titles: any = {
+    narrative: 'Meeting narrative: Try to make your narrative concise and information-dense, and avoid filler',
+    townHallUpdates: 'Write down Weekly Town Hall updates',
+    gameRules: 'Write down Game Rules'
+  };
+
+  // Determine the title based on the type
+  const title = titles[type] || 'Default title for other types';
+
+  return (
+    <div className={styles['column-flex']}>
+        <textarea
+            className={styles['form-textarea']}
+            placeholder={placeholder}
+            value={value}
+            onChange={(e) => onChange(type, e.target.value)}
+            title={title}
+        />
+    </div>
+  );
+};
 
 // Generic input component for text fields
 const TextInput: any = ({ label, placeholder, value, onChange, type, itemIndex }: any) => (

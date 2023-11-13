@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import styles from '../../styles/meetingsummary.module.css';
 import SummaryTemplate from '../../components/SummaryTemplate';
-import ConfirmSummaries from '../../components/ConfirmSummaries'
+import ArchiveSummaries from '../../components/ArchiveSummaries'
 import { useMyVariable } from '../../context/MyVariableContext';
 import { getWorkgroups } from '../../utils/getWorkgroups'
 import { updateWorkgroups } from '../../utils/updateWorkgroups'
@@ -136,7 +136,7 @@ const SubmitMeetingSummary: NextPage = () => {
   const getComponent = () => {
     switch (activeComponent) {
       case 'two': return <SummaryTemplate key={selectedWorkgroupId} />;
-      case 'four': return <ConfirmSummaries key={selectedWorkgroupId} />;
+      case 'four': return <ArchiveSummaries key={selectedWorkgroupId} />;
       default: return <div>Select a component</div>;
     }
   }  
@@ -149,28 +149,38 @@ const SubmitMeetingSummary: NextPage = () => {
         ) : (
           <>
             {workgroups.length > 0 && (
-              <select
-                name="" id="" 
-                className={`${styles.select} ${selectedWorkgroupId === '' ? styles.selectGreen : ''}`} 
-                value={selectedWorkgroupId} onChange={handleSelectChange}
-                title="Select a workgroup">
-                <option value="" disabled>Please select Workgroup</option>
-                {workgroups.map((workgroup: any) => (
-                  <option key={workgroup.workgroup_id} value={workgroup.workgroup_id}>{workgroup.workgroup}</option>
-                ))}
-                <option value="add_new">Add new WG</option>
-              </select>
+              <>
+                <div className={styles['column-flex']}>
+                  <label className={styles['form-label']} htmlFor="">Select Workgroup</label>
+                  <select
+                    name="" id="" 
+                    className={`${styles.select} ${selectedWorkgroupId === '' ? styles.selectGreen : ''}`} 
+                    value={selectedWorkgroupId} onChange={handleSelectChange}
+                    title="Select a workgroup">
+                    <option value="" disabled>Please select Workgroup</option>
+                    {workgroups.map((workgroup: any) => (
+                      <option key={workgroup.workgroup_id} value={workgroup.workgroup_id}>{workgroup.workgroup}</option>
+                    ))}
+                    <option value="add_new">Add new WG</option>
+                  </select>
+                </div>
+              </>
             )}
             {workgroups.length > 0 && meetings?.length > 0 && (
-              <select
-                name="" id="" 
-                className={styles.select} 
-                value={selectedMeetingId} onChange={handleSelectChange2}
-                title="Defaults to latest meeting, only change this when you want to use a previous meeting as template">
-                {meetings.map((meeting: any) => (
-                  <option key={meeting.meeting_id} value={meeting.meeting_id}>{meeting.date} {meeting.username}</option>
-                ))}
-              </select>
+              <>
+              <div className={styles['column-flex']}>
+                <label className={styles['form-label']} htmlFor="">Select previous meeting data</label>
+                <select
+                  name="" id="" 
+                  className={styles.select} 
+                  value={selectedMeetingId} onChange={handleSelectChange2}
+                  title="Defaults to latest meeting, only change this when you want to use a previous meeting as template">
+                  {meetings.map((meeting: any) => (
+                    <option key={meeting.meeting_id} value={meeting.meeting_id}>{meeting.date} {meeting.username}</option>
+                  ))}
+                </select>
+              </div>
+              </>
             )}
             {showNewWorkgroupInput && (
               <>
@@ -182,14 +192,14 @@ const SubmitMeetingSummary: NextPage = () => {
         )}
         {selectedWorkgroupId  && (<>
         {myVariable.roles.isAdmin && (<button className={styles.navButton} onClick={() => setActiveComponent('two')}>Summary</button>)}
-        {myVariable.roles.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Confirm Summaries</button>}
+        {myVariable.roles.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Archive Summaries</button>}
         </>)}
       </div>
       {myVariable.isLoggedIn && selectedWorkgroupId  && (<div className={styles.mainContent}>
         {getComponent()}
       </div>)}
       {myVariable.isLoggedIn && !selectedWorkgroupId  && (<div className={styles.nomainContent}>
-        Please select workgroup
+        <h2>Please select workgroup</h2>
       </div>)}
       {!myVariable.isLoggedIn && (<div className={styles.pleaseSignIn}>
         <div>
