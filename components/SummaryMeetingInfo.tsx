@@ -12,7 +12,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
   const { myVariable, setMyVariable } = useMyVariable();
 
   const {
-    name = 'Weekly Meeting',
+    name = 'Weekly',
     date = '',
     host = '',
     documenter = '',
@@ -57,7 +57,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
   useEffect(() => {
     // Destructure the current meetingInfo from myVariable.summary.meetingInfo or provide defaults
     const {
-      name = 'Weekly Meeting',
+      name = 'Weekly',
       date = '',
       host = '',
       documenter = '',
@@ -93,22 +93,25 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     <div className={styles['form-column-flex']}>
       <div className={styles['row-flex-space-between']}>
           <div className={styles['column-flex']}>
-            {myVariable.workgroup.preferred_template.meetingInfo.name == 1 && (<>
+            {myVariable.workgroup?.preferred_template?.meetingInfo?.name == 1 && (<>
             <label className={styles['form-label']}>
-              Name:
+              Type of meeting:
             </label>
-            <input
-              type="name"
-              name="name"
-              value={meetingInfo.name || ""}
-              onChange={handleChange}
-              className={styles['form-input']}
-              title="Only change this if its not a regular weekly meeting"
-            />
+            <select
+                name="name"
+                value={meetingInfo.name || ""}
+                onChange={handleChange}
+                className={styles['form-input']}
+                title="Only change this if its not a regular weekly meeting"
+            >
+                <option value="Weekly">Weekly</option>
+                <option value="Biweekly">Biweekly</option>
+                <option value="One-off event">One-off event</option>
+            </select>
             </>)}
           </div>
           <div className={styles['column-flex']}>
-            {myVariable.workgroup.preferred_template.meetingInfo.date == 1 && (<>
+            {myVariable.workgroup?.preferred_template?.meetingInfo?.date == 1 && (<>
             {myVariable.summary?.meetingInfo?.date && (<label className={styles['form-label']}>Date:  (previous meeting {myVariable.summary.meetingInfo.date})</label>)}
             {!myVariable.summary?.meetingInfo?.date && (<label className={styles['form-label']}>Date: </label>)}
             <input
@@ -123,7 +126,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           </div>
         </div>
         <div className={styles['row-flex-start']}>
-          {myVariable.workgroup.preferred_template.meetingInfo.host == 1 && (
+          {myVariable.workgroup?.preferred_template?.meetingInfo?.host == 1 && (
           <div className={styles.people1}>
             <label className={styles['form-label']}>
               Host:
@@ -133,7 +136,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
               initialValue={meetingInfo.host || ""} 
             />
           </div>)}
-          {myVariable.workgroup.preferred_template.meetingInfo.documenter == 1 && (
+          {myVariable.workgroup?.preferred_template?.meetingInfo?.documenter == 1 && (
           <div className={styles.people2}>
             <label className={styles['form-label']}>
               Documenter:
@@ -146,7 +149,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
         </div>
         <div className={styles['row-flex-start']}>
           <div className={styles.people2}>
-            {myVariable.workgroup.preferred_template.meetingInfo.peoplePresent == 1 && (<>
+            {myVariable.workgroup?.preferred_template?.meetingInfo?.peoplePresent == 1 && (<>
             <label className={styles['form-label']}>
               People present:
             </label>
@@ -159,7 +162,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       </div>
     </div>
     <div className={styles['links-column-flex']}>
-      {myVariable.workgroup.preferred_template.meetingInfo.purpose == 1 && (<>
+      {myVariable.workgroup?.preferred_template?.meetingInfo?.purpose == 1 && (<>
       <label className={styles['form-label']}>
         Purpose:
       </label>
@@ -172,7 +175,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
         title="A sentence on what this group is about. Can be repeated for every summary"
       />
       </>)}
-        {myVariable.workgroup.preferred_template.meetingInfo.meetingVideoLink == 1 && (<>
+        {myVariable.workgroup?.preferred_template?.meetingInfo?.meetingVideoLink == 1 && (<>
         <label className={styles['form-label']}>
           Meeting video (link):
         </label>
@@ -184,7 +187,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           className={styles['form-input']}
         />
         </>)}
-        {myVariable.workgroup.preferred_template.meetingInfo.miroBoardLink == 1 && (<>
+        {myVariable.workgroup?.preferred_template?.meetingInfo?.miroBoardLink == 1 && (<>
         <label className={styles['form-label']}>
           Miro board (link):
         </label>
@@ -196,7 +199,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           className={styles['form-input']}
         />
         </>)}
-        {myVariable.workgroup.preferred_template.meetingInfo.otherMediaLink == 1 && (<>
+        {myVariable.workgroup?.preferred_template?.meetingInfo?.otherMediaLink == 1 && (<>
         <label className={styles['form-label']}>
           Other media (link):
         </label>
@@ -208,7 +211,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           className={styles['form-input']}
         />
         </>)}
-        {myVariable.workgroup.preferred_template.meetingInfo.transcriptLink == 1 && (<>
+        {myVariable.workgroup?.preferred_template?.meetingInfo?.transcriptLink == 1 && (<>
         <label className={styles['form-label']}>
           Transcript (link):
         </label>
@@ -220,7 +223,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           className={styles['form-input']}
         />
         </>)}
-        {myVariable.workgroup.preferred_template.meetingInfo.mediaLink == 1 && (<>
+        {myVariable.workgroup?.preferred_template?.meetingInfo?.mediaLink == 1 && (<>
         <label className={styles['form-label']}>
           Media (link):
         </label>

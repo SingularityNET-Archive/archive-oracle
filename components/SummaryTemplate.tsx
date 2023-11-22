@@ -28,6 +28,22 @@ const filterKeys = (source: any, template: any) => {
   return result;
 };
 
+function formatTimestamp(timestamp: any) {
+  // Parse the timestamp into a Date object
+  const date = new Date(timestamp);
+
+  // Format the date and time
+  // Get the YYYY-MM-DD format
+  const formattedDate = date.toISOString().split('T')[0];
+
+  // Get the HH:MM format
+  const hours = date.getUTCHours().toString().padStart(2, '0');
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+
+  // Combine the date and time with UTC
+  return `${formattedDate} ${hours}:${minutes} UTC`;
+}
+
 const SummaryTemplate = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { myVariable, setMyVariable } = useMyVariable();
@@ -37,7 +53,7 @@ const SummaryTemplate = () => {
     workgroup: "",
     workgroup_id: "",
     meetingInfo: {
-      name:"Weekly Meeting",
+      name:"Weekly",
       date:"",
       host:"",
       documenter:"",
@@ -76,9 +92,11 @@ const SummaryTemplate = () => {
   }, [myVariable.summary]); // Add myVariable.summary to the dependency array
   
   useEffect(() => {
+    setLoading(true);
     if (myVariable.workgroup && myVariable.workgroup.workgroup) {
       setFormData((prevState: any)=> ({ ...prevState, workgroup: myVariable.workgroup.workgroup, workgroup_id: myVariable.workgroup.workgroup_id }));
     }
+    setLoading(false);
     //console.log("workgroupData", myVariable)
   }, [myVariable.workgroup]);  
 
@@ -117,12 +135,23 @@ const SummaryTemplate = () => {
       alert("Please select the meeting date.");
       return;
     }
+    const updatedMyVariable = {
+      ...myVariable,
+      summary: {
+        ...myVariable.summary,
+        ...formData,
+        updated_at: new Date
+      }
+    };
+
+    // Now update the context state with this new object
+    setMyVariable(updatedMyVariable);
     const cleanedFormData = removeEmptyValues({ ...formData });
     setLoading(true);
     try {
       const data: any = await saveCustomAgenda(cleanedFormData);
       console.log("Submitted Form Data:", cleanedFormData, data);
-      alert("Meeting summary successfully submitted!"); // Notify the user here
+      //alert("Meeting summary successfully submitted!"); 
     } catch (error) {
       console.error("Error submitting the form:", error);
       alert("There was an error submitting the meeting summary."); // Notify about the failure if you wish
@@ -143,12 +172,13 @@ const SummaryTemplate = () => {
     {!loading && (<div className={styles['form-container']}>
       <h2>{formData.workgroup} {formData.meetingInfo.date}</h2>
       <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
-        <SummaryMeetingInfo workgroup={formData.workgroup} onUpdate={(info: any) => setFormData({...formData, meetingInfo: info})} />
+        {formData.meetingInfo.name && (<SummaryMeetingInfo workgroup={formData.workgroup} onUpdate={(info: any) => setFormData({...formData, meetingInfo: info})} />)}
         <SummaryAgendaItems onUpdate={(items: any) => setFormData({...formData, agendaItems: items})} />
         <Tags tags={tags} setTags={setTags} />
         <button type="submit" disabled={loading} className={styles['submit-button']}>
-          {loading ? "Loading..." : "Submit"}
+          {loading ? "Loading..." : "Save"}
         </button>
+        {myVariable.summary?.updated_at && (<p>{`(last saved ${formatTimestamp(myVariable.summary?.updated_at)})`}</p>)}
       </form>
     </div>)}
     </>

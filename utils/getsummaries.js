@@ -8,10 +8,10 @@ export async function getSummaries(workgroup_id) {
       // Fetch the last 6 summaries from the database
       const { data: summaryData, error, status } = await supabase
         .from('meetingsummaries')
-        .select('template, date, summary, user_id, meeting_id, confirmed')
+        .select('template, date, summary, user_id, meeting_id, confirmed, updated_at')
         .eq('workgroup_id', workgroup_id)
         .order('date', { ascending: false })  
-        .order('created_at', { ascending: false }) 
+        .order('updated_at', { ascending: false }) 
         .limit(6);
 
       if (error && status !== 406) throw error;
@@ -35,6 +35,7 @@ export async function getSummaries(workgroup_id) {
               meeting_id: data.meeting_id,
               confirmed: data.confirmed,
               date: data.date,
+              updated_at: data.updated_at,
               ...summary
             });
           }

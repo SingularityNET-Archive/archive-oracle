@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { NextPage } from "next";
+import { useRouter } from 'next/router';
 import styles from '../../styles/meetingsummary.module.css';
 import SummaryTemplate from '../../components/SummaryTemplate';
 import ArchiveSummaries from '../../components/ArchiveSummaries'
@@ -23,6 +24,7 @@ type Names = {
 };
 
 const SubmitMeetingSummary: NextPage = () => {
+  const router = useRouter();
   const [activeComponent, setActiveComponent] = useState('two');
   const [workgroups, setWorkgroups] = useState<Workgroup[]>([]);
   const [meetings, setMeetings] = useState([]);
@@ -36,6 +38,7 @@ const SubmitMeetingSummary: NextPage = () => {
   const [tags, setTags] = useState({})
 
   async function getWorkgroupList() {
+    setIsLoading(true);
     const workgroupList: any = await getWorkgroups();
     const names1 = await getNames(); 
     const tags1 = await getTags(); 
@@ -65,8 +68,30 @@ const SubmitMeetingSummary: NextPage = () => {
     setWorkgroups(workgroupList);
     setNames(newNames);
     setTags({ other: otherTags, emotions: emotionTags, topicsCovered: topicTags, references: referenceTags, gamesPlayed: gamesPlayedTags });
-}
+    setIsLoading(false);
+  }
 
+useEffect(() => {
+  async function fetchInitialData(workgroupId: string) {
+    setIsLoading(true);
+    const summaries: any = await getSummaries(workgroupId);
+    setMeetings(summaries)
+    if (summaries && summaries[0]?.type) {
+      setActiveComponent('two');
+    }
+      setShowNewWorkgroupInput(false);
+      setSelectedWorkgroupId(workgroupId); 
+      const selectedWorkgroup = workgroups.find(workgroup => workgroup.workgroup_id === workgroupId);
+      if (selectedWorkgroup) {
+        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summaries, summary: summaries[0], names, tags });
+      }
+      setIsLoading(false);
+  }
+
+  if (router.query.workgroup && workgroups.length > 0) {
+    fetchInitialData(router.query.workgroup as string);
+  }
+}, [router.query, workgroups]);
 
   useEffect(() => {
     getWorkgroupList();
@@ -91,6 +116,9 @@ const SubmitMeetingSummary: NextPage = () => {
         setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summaries, summary: summaries[0], names, tags });
       }
     }
+    if (selectedWorkgroupId !== 'add_new') {
+      router.push(`/submit-meeting-summary?workgroup=${selectedWorkgroupId}`, undefined, { shallow: true });
+    }
     //console.log("myVariable", myVariable );
   }  
   async function handleSelectChange2(e: any) {
@@ -99,7 +127,7 @@ const SubmitMeetingSummary: NextPage = () => {
 
     // Find the selected summary using the new selectedMeetingId
     const selectedSummary = meetings.find((meeting: any) => meeting.meeting_id === newSelectedMeetingId);
-  
+    
     // If there's a selected summary, update the myVariable state with that summary
     if (selectedSummary) {
       setMyVariable(prevMyVariable => ({
@@ -191,14 +219,14 @@ const SubmitMeetingSummary: NextPage = () => {
           </>
         )}
         {selectedWorkgroupId  && (<>
-        {myVariable.roles.isAdmin && (<button className={styles.navButton} onClick={() => setActiveComponent('two')}>Summary</button>)}
-        {myVariable.roles.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Archive Summaries</button>}
+        {myVariable.roles?.isAdmin && (<button className={styles.navButton} onClick={() => setActiveComponent('two')}>Summary</button>)}
+        {myVariable.roles?.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Archive Summaries</button>}
         </>)}
       </div>
       {myVariable.isLoggedIn && selectedWorkgroupId  && (<div className={styles.mainContent}>
         {getComponent()}
       </div>)}
-      {myVariable.isLoggedIn && !selectedWorkgroupId  && (<div className={styles.nomainContent}>
+      {myVariable.isLoggedIn && !selectedWorkgroupId && !isLoading && (<div className={styles.nomainContent}>
         <h2>Please select workgroup</h2>
       </div>)}
       {!myVariable.isLoggedIn && (<div className={styles.pleaseSignIn}>

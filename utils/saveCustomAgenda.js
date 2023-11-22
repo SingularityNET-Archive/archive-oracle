@@ -6,7 +6,8 @@ export async function saveCustomAgenda(agendaData) {
     template: agendaData.type,
     date: new Date(agendaData.meetingInfo.date).toISOString(),
     workgroup_id: agendaData.workgroup_id,
-    summary: agendaData
+    summary: agendaData,
+    updated_at: new Date
   }
   
   const { data, error } = await supabase

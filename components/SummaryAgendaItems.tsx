@@ -80,7 +80,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   const itemTypesConfig = [
   {
     type: "townHallUpdates",
-    isEnabled: (template: any) => template.townHallUpdates === 1,
+    isEnabled: (template: any) => template?.townHallUpdates === 1,
     render: (item: any, agendaIndex: any) => (
       <>
         <h3>Town Hall Updates</h3>
@@ -99,7 +99,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   },
   {
     type: "narrative",
-    isEnabled: (template: any) => template.narrative === 1,
+    isEnabled: (template: any) => template?.narrative === 1,
     render: (item: any, agendaIndex: any) => (
       <>
         <h3>Narrative</h3>
@@ -118,7 +118,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   },
   {
     type: "discussionPoints",
-    isEnabled: (template: any) => template.discussionPoints === 1,
+    isEnabled: (template: any) => template?.discussionPoints === 1,
     render: (item: any, agendaIndex: any) => (
       <>
         <h3>Discussion Points</h3>
@@ -141,7 +141,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   },
   {
     type: "actionItems",
-    isEnabled: (template: any) => template.actionItems === 1,
+    isEnabled: (template: any) => template?.actionItems === 1,
     render: (item: any, agendaIndex: any) => (
       <>
         <h3>Action items</h3>
@@ -162,7 +162,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   },
   {
     type: "decisionItems",
-    isEnabled: (template: any) => template.decisionItems === 1,
+    isEnabled: (template: any) => template?.decisionItems === 1,
     render: (item: any, agendaIndex: any) => (
       <>
         <h3>Decisions</h3>
@@ -183,7 +183,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   },
   {
     type: "gameRules",
-    isEnabled: (template: any) => template.gameRules === 1,
+    isEnabled: (template: any) => template?.gameRules === 1,
     render: (item: any, agendaIndex: any) => (
       <>
         <h3>Game Rules</h3>
@@ -202,7 +202,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   },
   {
     type: "leaderboard",
-    isEnabled: (template: any) => template.leaderboard === 1,
+    isEnabled: (template: any) => template?.leaderboard === 1,
     render: (item: any, agendaIndex: any) => (
       <>
         <h3>Leaderboard</h3>
@@ -225,7 +225,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   },
   {
     type: "learningPoints",
-    isEnabled: (template: any) => template.learningPoints === 1,
+    isEnabled: (template: any) => template?.learningPoints === 1,
     render: (item: any, agendaIndex: any) => (
       <>
         <h3>Learning Points</h3>
@@ -248,7 +248,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   },
   {
     type: "issues",
-    isEnabled: (template: any) => template.issues === 1,
+    isEnabled: (template: any) => template?.issues === 1,
     render: (item: any, agendaIndex: any) => (
       <>
         <h3>Issues</h3>
@@ -313,18 +313,18 @@ const reorderItemTypesConfig = (orderKey: WorkgroupKey) => {
   
 };
 
-if (typeof myVariable.workgroup.workgroup === 'string' && myVariable.workgroup.workgroup in orderMapping) {
-  reorderItemTypesConfig(myVariable.workgroup.workgroup as WorkgroupKey);
+if (typeof myVariable.workgroup?.workgroup === 'string' && myVariable.workgroup?.workgroup in orderMapping) {
+  reorderItemTypesConfig(myVariable.workgroup?.workgroup as WorkgroupKey);
 } else {
   console.warn("Invalid workgroup key");
 }
 
   return (
     <div>
-      {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (<h1>Agenda Items</h1>)}
+      {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1 && (<h1>Agenda Items</h1>)}
       {agendaItems.map((item: any, agendaIndex: any) => (
         <div key={agendaIndex} className={styles['agenda-item']}>
-          {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (
+          {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1 && (
             <>
               <h2>Agenda item {agendaIndex + 1}</h2>
                 <div className={styles['row-flex-start']}>
@@ -366,17 +366,17 @@ if (typeof myVariable.workgroup.workgroup === 'string' && myVariable.workgroup.w
           )}
           
           {itemTypesConfig.map(({ type, isEnabled, render }) => {
-            if (isEnabled(myVariable.workgroup.preferred_template.agendaItems[0])) {
+            if (isEnabled(myVariable.workgroup?.preferred_template?.agendaItems[0])) {
               // Add a unique key prop to each rendered element
               return <div key={`${type}-${agendaIndex}`}>{render(item, agendaIndex)}</div>;
             }
             return null;
           })}
 
-          {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && item.agenda == '' && (<button className={styles['remove-button']} type="button" onClick={() => removeAgendaItem(agendaIndex)}>Remove Agenda</button>)}
+          {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1 && item.agenda == '' && (<button className={styles['remove-button']} type="button" onClick={() => removeAgendaItem(agendaIndex)}>Remove Agenda</button>)}
         </div>
       ))}
-      {myVariable.workgroup.preferred_template.agendaItems[0].agenda == 1 && (<button className={styles['add-button']} type="button" onClick={addAgendaItem}>Add Agenda Item</button>)}
+      {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1 && (<button className={styles['add-button']} type="button" onClick={addAgendaItem}>Add Agenda Item</button>)}
     </div>
   );
 };
