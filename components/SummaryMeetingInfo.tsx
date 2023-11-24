@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/typea.module.css'; 
 import { useMyVariable } from '../context/MyVariableContext';
-import SelectNames from './SelectNames'
+import SelectNames from './SelectNames';
+import WorkingDocs from './WorkingDocs';
 
 type SummaryMeetingInfoProps = {
   workgroup: string;
@@ -10,6 +11,7 @@ type SummaryMeetingInfoProps = {
 
 const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUpdate }) => {
   const { myVariable, setMyVariable } = useMyVariable();
+  const [displayedWorkingDocs, setDisplayedWorkingDocs] = useState([{ title: '', link: '' }]);
 
   const {
     name = 'Weekly',
@@ -23,6 +25,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     otherMediaLink = '',
     transcriptLink = '',
     mediaLink = '',
+    workingDocs = [{ title: '', link: '' }]
   } = myVariable?.summary?.meetingInfo || {};
 
   const [meetingInfo, setMeetingInfo] = useState({
@@ -36,23 +39,43 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     miroBoardLink,
     otherMediaLink,
     transcriptLink,
-    mediaLink
+    mediaLink,
+    workingDocs
   });
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    const updatedInfo = { ...meetingInfo, [name]: value };
-    setMeetingInfo(updatedInfo);
+  const addNewDoc = () => {
+    const newDoc = { title: '', link: '' };
+    setDisplayedWorkingDocs([...displayedWorkingDocs, newDoc]);
   };
+
+  const handleChange = (e: any, docIndex = null) => {
+    const { name, value } = e.target;
+  
+    if (docIndex !== null) {
+      setDisplayedWorkingDocs(prevDisplayedDocs => {
+        const updatedDocs = [...prevDisplayedDocs];
+        updatedDocs[docIndex] = { ...updatedDocs[docIndex], [name]: value };
+        return updatedDocs;
+      });      
+    } else {
+      setMeetingInfo(prevMeetingInfo => {
+        const updatedMeetingInfo = { ...prevMeetingInfo, [name]: value };
+        return updatedMeetingInfo;
+      });
+    }
+  };
+  
+  useEffect(() => {
+    onUpdate({ ...meetingInfo, workingDocs: [...workingDocs, ...displayedWorkingDocs] });
+  }, [meetingInfo, displayedWorkingDocs]);
+  
+  
+  
   const handleSelection = (name: any, selectedNames: any) => {
     const updatedInfo = { ...meetingInfo, [name]: selectedNames };
     setMeetingInfo(updatedInfo);
   };
-
-  // useEffect to call onUpdate whenever meetingInfo changes
-  useEffect(() => {
-    onUpdate(meetingInfo);
-  }, [meetingInfo]);
+  
 
   useEffect(() => {
     // Destructure the current meetingInfo from myVariable.summary.meetingInfo or provide defaults
@@ -68,6 +91,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       otherMediaLink = '',
       transcriptLink = '',
       mediaLink = '',
+      workingDocs = [{ title: '', link: '' }]
     } = myVariable?.summary?.meetingInfo || {};
   
     // Set the local meetingInfo state with the values from myVariable.summary.meetingInfo
@@ -82,10 +106,10 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       miroBoardLink,
       otherMediaLink,
       transcriptLink,
-      mediaLink
+      mediaLink,
+      workingDocs
     });
   }, [myVariable.summary?.meetingInfo]); // Add myVariable.summary.meetingInfo to the dependency array
-  
 
   return (
     <>
@@ -151,7 +175,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           <div className={styles.people2}>
             {myVariable.workgroup?.preferred_template?.meetingInfo?.peoplePresent == 1 && (<>
             <label className={styles['form-label']}>
-              People present:
+              Present:
             </label>
             <SelectNames 
               onSelect={(selectedNames: any) => handleSelection('peoplePresent', selectedNames)} 
@@ -160,6 +184,9 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           </>)}
         </div>
       </div>
+      {myVariable.workgroup?.preferred_template?.meetingInfo?.workingDocs == 1 && (
+        <WorkingDocs handleChange={handleChange} addNewDoc={addNewDoc} docs={displayedWorkingDocs} 
+      />)}
     </div>
     <div className={styles['links-column-flex']}>
       {myVariable.workgroup?.preferred_template?.meetingInfo?.purpose == 1 && (<>
@@ -233,10 +260,12 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           value={meetingInfo.mediaLink || ""}
           onChange={handleChange}
           className={styles['form-input']}
+          autoComplete='off'
         />
         </>)}
-      </div> 
+      </div>  
     </div>
+    
     </>
   );
 };

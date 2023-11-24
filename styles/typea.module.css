@@ -231,3 +231,50 @@
   animation: fade-in-out 2s ease-in-out infinite; 
   color: aquamarine;
 }
+
+.form-container a{
+  color:#70b3fa;
+}
+.form-container a:hover {
+  color: #007bff;
+}
+
+.working-doc-input {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1rem; 
+  margin-right: 1em;
+  background-color: #2b1f1f;
+  color: white;
+  flex-grow: 1;
+}
+
+.working-doc-add-button {
+  padding: 0.2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: rgb(1, 121, 61);
+  color: white;
+  cursor: pointer;
+}
+
+.working-doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  /* add more styles as needed */
+}
+
+.working-doc-table th, .working-doc-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.working-doc-table th {
+  background-color: #191043;
+  text-align: left;
+}
+
+
+
+

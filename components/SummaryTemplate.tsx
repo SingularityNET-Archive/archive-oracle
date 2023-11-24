@@ -64,6 +64,7 @@ const SummaryTemplate = () => {
       otherMediaLink: "",
       transcriptLink: "",
       mediaLink: "",
+      workingDocs: [{ title: '', link: '' }]
     },  
     agendaItems: [
       { 
@@ -106,15 +107,26 @@ const SummaryTemplate = () => {
 
   const removeEmptyValues = (obj: any) => {
     Object.keys(obj).forEach(key => {
-      // If it's an object, recurse deeper
+      // If it's an object and not an array
       if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
-        removeEmptyValues(obj[key]);
+        // If the object is empty, delete the key
+        if (Object.keys(obj[key]).length === 0) {
+          delete obj[key];
+        } else {
+          // Recursively clean the object
+          removeEmptyValues(obj[key]);
+        }
       } 
-      // If it's an array, process it
+      // If it's an array
       else if (Array.isArray(obj[key])) {
         // Clean the array items if they are objects
         obj[key] = obj[key].map((item: any) => typeof item === 'object' ? removeEmptyValues(item) : item)
-          .filter((item: any) => item !== '' && !(Array.isArray(item) && item.length === 0)); // Filter out empty strings and empty arrays
+          .filter((item: any) => {
+            // Filter out empty strings, empty arrays, and empty objects
+            return item !== '' && 
+                   !(Array.isArray(item) && item.length === 0) &&
+                   !(typeof item === 'object' && Object.keys(item).length === 0);
+          });
   
         // If after processing, the array is empty, remove the key
         if (obj[key].length === 0) {
@@ -135,30 +147,42 @@ const SummaryTemplate = () => {
       alert("Please select the meeting date.");
       return;
     }
+  
+    // Merging new workingDocs with old ones
     const updatedMyVariable = {
       ...myVariable,
       summary: {
         ...myVariable.summary,
         ...formData,
-        updated_at: new Date
+        meetingInfo: {
+          ...formData.meetingInfo,
+          workingDocs: formData.meetingInfo.workingDocs // This now includes both old and new docs
+        },
+        updated_at: new Date()
       }
     };
-
-    // Now update the context state with this new object
+  
     setMyVariable(updatedMyVariable);
     const cleanedFormData = removeEmptyValues({ ...formData });
     setLoading(true);
+  
     try {
       const data: any = await saveCustomAgenda(cleanedFormData);
       console.log("Submitted Form Data:", cleanedFormData, data);
-      //alert("Meeting summary successfully submitted!"); 
     } catch (error) {
       console.error("Error submitting the form:", error);
-      alert("There was an error submitting the meeting summary."); // Notify about the failure if you wish
+      alert("There was an error submitting the meeting summary.");
     } finally {
       setLoading(false);
     }
-  } 
+  }
+  
+  const formatUrl = (url: string) => {
+    if (!url?.startsWith('http://') && !url?.startsWith('https://')) {
+      return `http://${url}`;
+    }
+    return url;
+  };
 
   return (
     <>
@@ -180,7 +204,35 @@ const SummaryTemplate = () => {
         </button>
         {myVariable.summary?.updated_at && (<p>{`(last saved ${formatTimestamp(myVariable.summary?.updated_at)})`}</p>)}
       </form>
-    </div>)}
+      <div className={styles['form-container']}>
+    {myVariable.summary?.meetingInfo?.workingDocs && (
+        <>
+            <h3>Working Documents</h3>
+            <table className={styles['working-doc-table']}>
+                <thead>
+                    <tr>
+                        <th>Doc Title</th>
+                        <th>Doc Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {myVariable.summary.meetingInfo.workingDocs.map((doc: any, index: any) => (
+                        <tr key={index}>
+                            <td>{doc.title}</td>
+                            <td>
+                                <a href={formatUrl(doc.link)} target="_blank" rel="noopener noreferrer">
+                                    {doc.link}
+                                </a>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </>
+    )}
+</div>
+
+      </div>)}
     </>
   );
 };

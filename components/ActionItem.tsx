@@ -11,7 +11,7 @@ const ActionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, type
                   className={styles['form-input']}
                   type="text"
                   placeholder="Action Item"
-                  value={item.text} 
+                  value={item.text || ""} 
                   onChange={(e) => handleUpdate('text', e.target.value)}
                 />
               </div>
@@ -33,7 +33,7 @@ const ActionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, type
                   className={styles['form-input']}
                   type="date"
                   placeholder="Due Date"
-                  value={item.dueDate}  
+                  value={item.dueDate || ""}  
                   onChange={(e) => handleUpdate('dueDate', e.target.value)}
                 />
                 </div>

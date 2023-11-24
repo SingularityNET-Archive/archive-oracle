@@ -11,7 +11,7 @@ const TextAreaInput = ({ value, onChange, placeholder, type }: any) => {
   };
 
   // Determine the title based on the type
-  const title = titles[type] || 'Default title for other types';
+  const title = titles[type] || 'Meeting narrative: Try to make your narrative concise and information-dense, and avoid filler';
 
   return (
     <div className={styles['column-flex']}>

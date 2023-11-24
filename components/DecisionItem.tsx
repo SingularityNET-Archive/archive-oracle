@@ -11,7 +11,7 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                     className={styles['form-input']}
                     type="text"
                     placeholder="Decision Item"
-                    value={item.decision} 
+                    value={item.decision || ""} 
                     onChange={(e) => handleUpdate('decision', e.target.value)}
                   />
                 </div>
@@ -25,7 +25,7 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                   onChange={(e) => handleUpdate('effect', e.target.value)}
                   >
                     <option value="affectsOnlyThisWorkgroup">Affects only this Workgroup</option>
-                    <option value="affectsAllWorkgroups">Affects all Workgroups</option>
+                    <option value="mayAffectOtherWorkgroups">May affect other workgroups</option>
                   </select>
                 </div>
                 </div>
@@ -37,19 +37,19 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                     className={styles['form-input']}
                     type="text"
                     placeholder="Rationale"
-                    value={item.rationale} 
+                    value={item.rationale || ""} 
                     onChange={(e) => handleUpdate('rationale', e.target.value)}
                   />
                 </div>
                 <div className={styles['column-flex']}>
                   <label className={styles['form-label']}>
-                    Opposing
+                    Opposing arguments
                   </label>
                   <input 
                     className={styles['form-input']}
                     type="text"
                     placeholder="Opposing"
-                    value={item.opposing} 
+                    value={item.opposing || ""} 
                     onChange={(e) => handleUpdate('opposing', e.target.value)}
                   />
                 </div>

@@ -9,5 +9,5 @@ export const getDefaultAgendaItem = () => ({
     actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],
     decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],
     discussionPoints: [""],
-    learningPoints: [""]
+    learningPoints: [""],
 });

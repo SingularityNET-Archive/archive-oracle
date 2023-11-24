@@ -28,7 +28,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   }, [myVariable.summary?.agendaItems]);
 
   const addAgendaItem = () => {
-    setAgendaItems([...agendaItems, { agenda: "", status: "carry over", townHallUpdates: "", narrative: "", gameRules: "", leaderboard: [""], issues: [""], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""] }]);
+    setAgendaItems([...agendaItems, { agenda: "", status: "carry over", townHallUpdates: "", narrative: "", gameRules: "", leaderboard: [""], issues: [""], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""], learningPoints: [""] }]);
   };
 
   const removeAgendaItem = (index: number) => {
@@ -77,13 +77,31 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
 };
 
 
+const getHeading = (itemType: any, workgroup: any) => {
+  switch(itemType) {
+    case "issues":
+      if(workgroup === "Onboarding Workgroup") return "To carry over for next meeting";
+      // Add more specific conditions for "issues" if needed
+      return "Issues"; // Default for "issues"
+
+    case "discussionPoints":
+      if(workgroup === "Onboarding Workgroup") return "In this meeting we discussed";
+      return "Discussion Points"; 
+
+    // Add cases for other item types as needed
+
+    default:
+      return "Default Heading"; 
+  }
+}
+
   const itemTypesConfig = [
   {
     type: "townHallUpdates",
     isEnabled: (template: any) => template?.townHallUpdates === 1,
     render: (item: any, agendaIndex: any) => (
       <>
-        <h3>Town Hall Updates</h3>
+        <h3>Town Hall Updates from this meeting</h3>
         <div className={styles['action-item']}> 
           <Item
             type="townHallUpdates"
@@ -121,7 +139,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
     isEnabled: (template: any) => template?.discussionPoints === 1,
     render: (item: any, agendaIndex: any) => (
       <>
-        <h3>Discussion Points</h3>
+        <h3>{getHeading("discussionPoints", myVariable.workgroup?.preferred_template?.workgroup)}</h3>
         <div className={styles['discussion-points']}>
         {item.discussionPoints.map((point: any, pointIndex: any) => (
               <Item
@@ -251,7 +269,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
     isEnabled: (template: any) => template?.issues === 1,
     render: (item: any, agendaIndex: any) => (
       <>
-        <h3>Issues</h3>
+        <h3>{getHeading("issues", myVariable.workgroup?.preferred_template?.workgroup)}</h3>
         <div className={styles['action-item']}>    
           {item?.issues?.map((issue: any, issueIndex: any) => (
             <Item
@@ -284,7 +302,7 @@ const orderMapping = {
   "Gamers Guild": ["narrative", "decisionItems", "actionItems", "gameRules", "leaderboard"],
   "Writers Workgroup": ["narrative", "decisionItems", "actionItems", "learningPoints"],
   "Video Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
-  "Archival Workgroup": ["actionItems", "decisionItems", "discussionPoints"],
+  "Archival Workgroup": ["actionItems", "decisionItems", "learningPoints"],
   "Treasury Guild": ["actionItems", "decisionItems", "discussionPoints"],
   "Dework PBL": ["actionItems", "decisionItems", "discussionPoints"],
   "Knowledge Base Workgroup": ["actionItems", "decisionItems", "discussionPoints"],
