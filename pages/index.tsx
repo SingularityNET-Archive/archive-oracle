@@ -1,10 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import styles from '../styles/home.module.css';
+import axios from 'axios';
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  
+  /*useEffect(() => {
+    const fetchMeetingSummaries = async () => {
+      const SERVER_API_URL = 'http://localhost:3000/api/getMeetingSummaries';
+      const API_KEY = process.env.SERVER_API_KEY; // Updated to use a public environment variable
+
+      setLoading(true); // Start loading
+      try {
+        const response = await axios.get(SERVER_API_URL, {
+          headers: {
+            'api_key': API_KEY,
+          },
+        });
+
+        console.log(response.data);
+        // Handle your data here
+      } catch (error) {
+        console.error('Error fetching meeting summaries:', error);
+        // Handle error here
+      } finally {
+        setLoading(false); // End loading
+      }
+    };
+
+    fetchMeetingSummaries();
+  }, []);*/
 
   return (
     <div className={styles.container}>
