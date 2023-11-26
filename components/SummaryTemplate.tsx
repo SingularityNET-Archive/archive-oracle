@@ -184,6 +184,12 @@ const SummaryTemplate = () => {
     return url;
   };
 
+  // Utility function to check if an object within an array is non-empty
+const hasNonEmptyObjects = (array: any) => {
+  return array.some((item: any) => Object.keys(item).length > 0);
+};
+
+
   return (
     <>
     {loading && (
@@ -205,7 +211,7 @@ const SummaryTemplate = () => {
         {myVariable.summary?.updated_at && (<p>{`(last saved ${formatTimestamp(myVariable.summary?.updated_at)})`}</p>)}
       </form>
       <div className={styles['form-container']}>
-    {myVariable.summary?.meetingInfo?.workingDocs && (
+      {myVariable.summary?.meetingInfo?.workingDocs && hasNonEmptyObjects(myVariable.summary.meetingInfo.workingDocs) && (
         <>
             <h3>Working Documents</h3>
             <table className={styles['working-doc-table']}>
