@@ -5,10 +5,10 @@ import axios from 'axios';
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  /*useEffect(() => {
+ /*useEffect(() => {
     const fetchMeetingSummaries = async () => {
-      const SERVER_API_URL = 'http://localhost:3000/api/getMeetingSummaries';
-      const API_KEY = process.env.SERVER_API_KEY; // Updated to use a public environment variable
+      const SERVER_API_URL = 'https://archive-oracle.netlify.app/api/getMeetingSummaries';
+      const API_KEY = process.env.SERVER_API_KEY; 
 
       setLoading(true); // Start loading
       try {

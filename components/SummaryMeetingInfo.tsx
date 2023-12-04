@@ -136,8 +136,8 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           </div>
           <div className={styles['column-flex']}>
             {myVariable.workgroup?.preferred_template?.meetingInfo?.date == 1 && (<>
-            {myVariable.summary?.meetingInfo?.date && (<label className={styles['form-label']}>Date:  (previous meeting {myVariable.summary.meetingInfo.date})</label>)}
-            {!myVariable.summary?.meetingInfo?.date && (<label className={styles['form-label']}>Date: </label>)}
+            {myVariable.summary?.meetingInfo?.date && (<label className={styles['form-label']}>Meeting Date:  (previous meeting {myVariable.summary.meetingInfo.date})</label>)}
+            {!myVariable.summary?.meetingInfo?.date && (<label className={styles['form-label']}>Meeting Date: </label>)}
             <input
               type="date"
               name="date"
