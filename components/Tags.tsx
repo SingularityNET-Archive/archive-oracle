@@ -4,8 +4,8 @@ import styles from '../styles/typea.module.css';
 import SelectTags from '../components/SelectTags';
 
 type TagsProps = {
-  tags: { topicsCovered: string, references: string, emotions: string, other: string, gamesPlayed: string },
-  setTags: React.Dispatch<React.SetStateAction<{ topicsCovered: string, references: string, emotions: string, other: string, gamesPlayed: string }>>
+  tags: { topicsCovered: string, emotions: string, other: string, gamesPlayed: string },
+  setTags: React.Dispatch<React.SetStateAction<{ topicsCovered: string, emotions: string, other: string, gamesPlayed: string }>>
 }
 
 const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
@@ -13,7 +13,6 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
   // Set the initial state using myVariable.summary.tags
   const initialState = myVariable.summary && myVariable.summary.tags ? myVariable.summary.tags : {
     topicsCovered: "",
-    references: "",
     emotions: "",
     other: "",
     gamesPlayed: ""
@@ -40,10 +39,10 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
               type="gamesPlayed" 
             />
           </div>
-        </div>)}
+      </div>)}
       <div className={styles['row-flex-start']}>
         <div className={styles['links-column-flex']}>
-        <div>
+          <div>
             <label className={styles['form-label']}>
             Topics Covered
             </label>
@@ -53,18 +52,6 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
               }}
               initialValue={localTags.topicsCovered}
               type="topicsCovered" 
-            />
-          </div>
-          <div>
-            <label className={styles['form-label']}>
-              References
-            </label>
-            <SelectTags 
-              onSelect={(selectedNames: string) => {
-                setLocalTags({ ...localTags, references: selectedNames });
-              }}
-              initialValue={localTags.references}
-              type="references" 
             />
           </div>
         </div>
@@ -81,20 +68,22 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
               type="emotions" 
             />
           </div>
-          <div>
-            <label className={styles['form-label']}>
-              Other / General
-            </label>
-            <SelectTags 
-              onSelect={(selectedNames: string) => {
-                setLocalTags({ ...localTags, other: selectedNames });
-              }}
-              initialValue={localTags.other}
-              type="other" 
-            />
-          </div>
         </div>
       </div>
+      <div className={styles['links-column-flex']}>
+            <div>
+              <label className={styles['form-label']}>
+                Other / General
+              </label>
+              <SelectTags 
+                onSelect={(selectedNames: string) => {
+                  setLocalTags({ ...localTags, other: selectedNames });
+                }}
+                initialValue={localTags.other}
+                type="other" 
+              />
+            </div>
+        </div>
     </div>
   );
 };

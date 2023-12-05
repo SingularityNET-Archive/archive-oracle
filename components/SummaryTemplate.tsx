@@ -79,12 +79,12 @@ const SummaryTemplate = () => {
         learningPoints: [""],
       }
     ],
-    tags: { topicsCovered: "", references: "", emotions: "", other: "", gamesPlayed: "" },
+    tags: { topicsCovered: "", emotions: "", other: "", gamesPlayed: "" },
     type: "Custom"
   };
 
   const [formData, setFormData] = useState(filterKeys(myVariable.summary || {}, defaultFormData));
-  const [tags, setTags] = useState({ topicsCovered: "", references: "", emotions: "", other: "", gamesPlayed: "" });
+  const [tags, setTags] = useState({ topicsCovered: "", emotions: "", other: "", gamesPlayed: "" });
 
   useEffect(() => {
     // Set the local state whenever myVariable.summary changes
@@ -227,7 +227,7 @@ const hasNonEmptyObjects = (array: any) => {
                             <td>{doc.title}</td>
                             <td>
                                 <a href={formatUrl(doc.link)} target="_blank" rel="noopener noreferrer">
-                                    {doc.link}
+                                    Link
                                 </a>
                             </td>
                         </tr>
