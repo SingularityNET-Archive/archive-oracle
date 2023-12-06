@@ -298,7 +298,7 @@ const getHeading = (itemType: any, workgroup: any) => {
 
 type WorkgroupKey = keyof typeof orderMapping;
 
-const orderMapping = {
+const orderMapping = myVariable.agendaItemOrder; /*{
   "Gamers Guild": ["narrative", "decisionItems", "actionItems", "gameRules", "leaderboard"],
   "Writers Workgroup": ["narrative", "decisionItems", "actionItems", "learningPoints"],
   "Video Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
@@ -309,7 +309,7 @@ const orderMapping = {
   "Onboarding Workgroup": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
   "Translation Workgroup": ["discussionPoints", "decisionItems", "actionItems", "issues"],
   "Governance Workgroup": ["narrative", "decisionItems", "actionItems", "DiscussionPoints"]
-};
+};*/
 
 const reorderItemTypesConfig = (orderKey: WorkgroupKey) => {
   const order = orderMapping[orderKey];

@@ -27,7 +27,7 @@ const SelectNames: React.FC<SelectNamesProps> = ({ onSelect, initialValue }) => 
   }
   
   return (
-    <div title="Click inside the box or arrow to start typing or select from the dropdown">
+    <div title="When you type, hit enter to add item and start typing again to add another or select from the dropdown">
        <CreatableSelect
           isMulti
           options={options}

@@ -25,7 +25,7 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                   onChange={(e) => handleUpdate('effect', e.target.value)}
                   >
                     <option value="affectsOnlyThisWorkgroup">Affects only this Workgroup</option>
-                    <option value="mayAffectOtherWorkgroups">May affect other workgroups</option>
+                    <option value="mayAffectOtherPeople">May affect other people</option>
                   </select>
                 </div>
                 </div>

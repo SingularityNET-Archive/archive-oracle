@@ -1,14 +1,13 @@
-export function generateMarkdown(summary) {
+export function generateMarkdown(summary, order) {
   let markdown = "";
   if (!summary) {
     console.log('No summary provided');
     return 'No Summary present'; 
   }
-
   // Process meetingInfo
   if (summary.meetingInfo) {
     const { date, name, host, documenter, peoplePresent, purpose, mediaLink, miroBoardLink, transcriptLink } = summary.meetingInfo;
-    //console.log(summary)
+
     // Add meeting information to markdown
     if (name) markdown += `- Type of meeting: ${name}\n`;
     if (host || documenter || peoplePresent) {
@@ -24,11 +23,13 @@ export function generateMarkdown(summary) {
     if (transcriptLink) markdown += `- Transcript: ${transcriptLink}\n`;
     markdown += '\n';
   }
+
   function getOrdinal(n) {
     const ordinals = ["th", "st", "nd", "rd"];
     const v = n % 100;
     return n + (ordinals[(v - 20) % 10] || ordinals[v] || ordinals[0]);
   }
+
   // Generic function to format items
   const formatItems = (title, items, itemType) => {
     let sectionContent = '';
@@ -69,39 +70,55 @@ export function generateMarkdown(summary) {
     if (sectionContent) {
       markdown += `#### ${title}:\n${sectionContent}\n`;
     }
-  }
+  };
 
-  // Process agendaItems and their contents
+  // Function to process and add each agenda item type to markdown
+  const processAgendaItem = (itemType, item) => {
+    switch(itemType) {
+      case 'townHallUpdates':
+        if (item.townHallUpdates) formatItems("Town Hall Updates", item.townHallUpdates, 'townHallUpdates');
+        break;
+      case 'narrative':
+        if (item.narrative) formatItems("Narrative", item.narrative, 'narrative');
+        break;
+      case 'actionItems':
+        if (item.actionItems && item.actionItems.length > 0) formatItems("Action Items", item.actionItems, 'actionItems');
+        break;
+      case 'decisionItems':
+        if (item.decisionItems && item.decisionItems.length > 0) formatItems("Decision Items", item.decisionItems, 'decisionItems');
+        break;
+      case 'discussionPoints':
+        if (item.discussionPoints && item.discussionPoints.length > 0) formatItems("Discussion Points", item.discussionPoints, 'discussionPoints');
+        break;
+      case 'learningPoints':
+        if (item.learningPoints && item.learningPoints.length > 0) formatItems("Learning Points", item.learningPoints, 'learningPoints');
+        break;
+      case 'issues':
+        if (item.issues && item.issues.length > 0) formatItems("Issues", item.issues, 'issues');
+        break;
+      case 'gameRules':
+        if (item.gameRules) formatItems("Game Rules", item.gameRules, 'gameRules');
+        break;
+      case 'leaderboard':
+        if (item.leaderboard && item.leaderboard.length > 0) formatItems("Leaderboard", item.leaderboard, 'leaderboard');
+        break;
+      // add other cases as needed
+    }
+  };
+
+  // Process agendaItems according to the specified order
   summary.agendaItems?.forEach((item, index) => {
     if (item.agenda) {
       markdown += `#### Agenda item ${index + 1} - ${item.agenda} - [${item.status}]\n\n`;
     }
-    if (item.townHallUpdates) {
-      formatItems("Town Hall Updates", item.townHallUpdates, 'townHallUpdates');
-    }
-    if (item.narrative) {
-      formatItems("Narrative", item.narrative, 'narrative');
-    }
-    if (item.actionItems && item.actionItems.length > 0) {
-      formatItems("Action Items", item.actionItems, 'actionItems');
-    }
-    if (item.decisionItems && item.decisionItems.length > 0) {
-      formatItems("Decision Items", item.decisionItems, 'decisionItems');
-    }
-    if (item.discussionPoints && item.discussionPoints.length > 0) {
-      formatItems("Discussion Points", item.discussionPoints, 'discussionPoints');
-    }
-    if (item.learningPoints && item.learningPoints.length > 0) {
-      formatItems("Learning Points", item.learningPoints, 'learningPoints');
-    }
-    if (item.issues && item.issues.length > 0) {
-      formatItems("Issues", item.issues, 'issues');
-    }
-    if (item.gameRules) {
-      formatItems("Game Rules", item.gameRules, 'gameRules');
-    }
-    if (item.leaderboard && item.leaderboard.length > 0) {
-      formatItems("Leaderboard", item.leaderboard, 'leaderboard');
+  
+    if (order) {
+      order.forEach(itemType => {
+        processAgendaItem(itemType, item);
+      });
+    } else {
+      //console.warn("Order is undefined. Items will not be ordered based on 'orderMapping'.");
+      // Optionally, handle the scenario when order is undefined
     }
   });
 
@@ -118,4 +135,3 @@ export function generateMarkdown(summary) {
 
   return markdown;
 };
-

@@ -107,8 +107,10 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  height: 4.5em;
+  height: 4em;
   margin-top: 2em;
+  font-size: larger;
+  font-weight: bold;
 }
 
 .submit-button:disabled {

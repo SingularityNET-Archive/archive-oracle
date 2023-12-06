@@ -25,15 +25,18 @@ const ArchiveSummaries = () => {
   }, [formData.meetingSummary]);
 
   useEffect(() => {
+    const currentOrder = myVariable.agendaItemOrder ? myVariable.agendaItemOrder[myVariable.workgroup?.workgroup] : undefined;
     // Set the local state whenever myVariable.summary changes
-    setFormData({
-      date: myVariable.summary?.meetingInfo?.date || "",
-      workgroup: myVariable.summary?.workgroup || "",
-      meetingSummary: generateMarkdown(myVariable.summary),
-      meeting_id: myVariable.summary?.meeting_id || "",
-      confirmed: myVariable.summary?.confirmed || false
-    });
-    setRenderedMarkdown(generateMarkdown(myVariable.summary));
+    if (currentOrder) {
+      setFormData({
+        date: myVariable.summary?.meetingInfo?.date || "",
+        workgroup: myVariable.summary?.workgroup || "",
+        meetingSummary: generateMarkdown(myVariable.summary, currentOrder),
+        meeting_id: myVariable.summary?.meeting_id || "",
+        confirmed: myVariable.summary?.confirmed || false
+      });
+      setRenderedMarkdown(generateMarkdown(myVariable.summary, currentOrder));
+    }
     adjustTextareaHeight();
   }, [myVariable.summary]); // Add myVariable.summary to the dependency array
   

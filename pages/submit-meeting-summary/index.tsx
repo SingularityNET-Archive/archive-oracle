@@ -70,7 +70,19 @@ const SubmitMeetingSummary: NextPage = () => {
     setTags({ other: otherTags, emotions: emotionTags, topicsCovered: topicTags, references: referenceTags, gamesPlayed: gamesPlayedTags });
     setIsLoading(false);
   }
-
+  const orderMapping = {
+    "Gamers Guild": ["narrative", "decisionItems", "actionItems", "gameRules", "leaderboard"],
+    "Writers Workgroup": ["narrative", "decisionItems", "actionItems", "learningPoints"],
+    "Video Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
+    "Archival Workgroup": ["actionItems", "decisionItems", "learningPoints"],
+    "Treasury Guild": ["actionItems", "decisionItems", "discussionPoints"],
+    "Dework PBL": ["actionItems", "decisionItems", "discussionPoints"],
+    "Knowledge Base Workgroup": ["actionItems", "decisionItems", "discussionPoints"],
+    "Onboarding Workgroup": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
+    "Translation Workgroup": ["discussionPoints", "decisionItems", "actionItems", "issues"],
+    "Governance Workgroup": ["narrative", "decisionItems", "actionItems", "DiscussionPoints"]
+  };
+  
 useEffect(() => {
   async function fetchInitialData(workgroupId: string) {
     setIsLoading(true);
@@ -83,7 +95,7 @@ useEffect(() => {
       setSelectedWorkgroupId(workgroupId); 
       const selectedWorkgroup = workgroups.find(workgroup => workgroup.workgroup_id === workgroupId);
       if (selectedWorkgroup) {
-        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summaries, summary: summaries[0], names, tags });
+        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summaries, summary: summaries[0], names, tags, agendaItemOrder: orderMapping});
       }
       setIsLoading(false);
   }
@@ -119,7 +131,7 @@ useEffect(() => {
     if (selectedWorkgroupId !== 'add_new') {
       router.push(`/submit-meeting-summary?workgroup=${selectedWorkgroupId}`, undefined, { shallow: true });
     }
-    //console.log("myVariable", myVariable );
+    console.log("myVariable", myVariable );
   }  
   async function handleSelectChange2(e: any) {
     const newSelectedMeetingId = e.target.value;
@@ -169,6 +181,21 @@ useEffect(() => {
     }
   }  
 
+  function formatDate(isoString: any) {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+  
+    const date = new Date(isoString);
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+  
+    return `${day} ${months[monthIndex]} ${year}`;
+  }
+  
+
   return (
     <div className={styles.container}>
       <div className={styles.navbar}>
@@ -204,7 +231,7 @@ useEffect(() => {
                   value={selectedMeetingId} onChange={handleSelectChange2}
                   title="Defaults to latest meeting, only change this when you want to use a previous meeting as template">
                   {meetings.map((meeting: any) => (
-                    <option key={meeting.meeting_id} value={meeting.meeting_id}>{meeting.date} {meeting.username}</option>
+                    <option key={meeting.meeting_id} value={meeting.meeting_id}>{formatDate(meeting.date)} {meeting.username}</option>
                   ))}
                 </select>
               </div>
