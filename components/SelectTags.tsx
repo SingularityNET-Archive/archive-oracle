@@ -27,6 +27,11 @@ const SelectTags: React.FC<SelectTagsProps> = ({ onSelect, initialValue, type })
     onSelect(labs.join(", ")); // Update parent component's state
   }
   
+  React.useEffect(() => {
+    let initialOptions = initialValue ? initialValue.split(", ").map((val) => ({ label: val, value: val })) : [];
+    setSelectedLabels(initialOptions);
+  }, [initialValue]);
+  
   return (
     <div title="When you type, hit enter to add item and start typing again to add another or select from the dropdown">
        <CreatableSelect

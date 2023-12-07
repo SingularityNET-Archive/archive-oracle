@@ -20,6 +20,12 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
   const [localTags, setLocalTags] = React.useState(initialState);
 
   React.useEffect(() => {
+    if (myVariable.summary && myVariable.summary.tags) {
+      setLocalTags(myVariable.summary.tags);
+    }
+  }, [myVariable.summary.tags]);
+
+  React.useEffect(() => {
     setTags(localTags);
   }, [localTags, setTags]);
 
