@@ -13,6 +13,7 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                     placeholder="Decision Item"
                     value={item.decision || ""} 
                     onChange={(e) => handleUpdate('decision', e.target.value)}
+                    title="Please provide details on the decision that is being made"
                   />
                 </div>
                 <div className={styles['column-flex']}>
@@ -23,7 +24,9 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                   className={styles['form-select']}
                   value={item.effect} 
                   onChange={(e) => handleUpdate('effect', e.target.value)}
+                  title="Please select who this decision will affect"
                   >
+                    <option value="" disabled selected>Please select</option>
                     <option value="affectsOnlyThisWorkgroup">Affects only this Workgroup</option>
                     <option value="mayAffectOtherPeople">May affect other people</option>
                   </select>
@@ -31,7 +34,7 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                 </div>
                 <div className={styles['column-flex']}>
                   <label className={styles['form-label']}>
-                    Rationale
+                    Rationale (Optional)
                   </label>
                   <input 
                     className={styles['form-input']}
@@ -39,11 +42,12 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                     placeholder="Rationale"
                     value={item.rationale || ""} 
                     onChange={(e) => handleUpdate('rationale', e.target.value)}
+                    title="Please provide the rationale for making this decision"
                   />
                 </div>
                 <div className={styles['column-flex']}>
                   <label className={styles['form-label']}>
-                    Opposing arguments
+                    Opposing arguments (Optional)
                   </label>
                   <input 
                     className={styles['form-input']}
@@ -51,6 +55,7 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                     placeholder="Opposing"
                     value={item.opposing || ""} 
                     onChange={(e) => handleUpdate('opposing', e.target.value)}
+                    title="Please provide any opposing arguments"
                   />
                 </div>
                 {item.decision == '' && item.rationale == '' && (

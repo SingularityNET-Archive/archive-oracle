@@ -28,7 +28,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
   }, [myVariable.summary?.agendaItems]);
 
   const addAgendaItem = () => {
-    setAgendaItems([...agendaItems, { agenda: "", status: "carry over", townHallUpdates: "", narrative: "", gameRules: "", leaderboard: [""], issues: [""], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }], discussionPoints: [""], learningPoints: [""] }]);
+    setAgendaItems([...agendaItems, { agenda: "", status: "carry over", townHallUpdates: "", narrative: "", gameRules: "", leaderboard: [""], issues: [""], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "" }], discussionPoints: [""], learningPoints: [""] }]);
   };
 
   const removeAgendaItem = (index: number) => {
@@ -42,7 +42,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
     if (type === 'actionItems') {
       newAgendaItems[agendaIndex][type].push({ text: "", assignee: "", dueDate: "", status: "todo" });
     } else if (type === 'decisionItems') {  
-      newAgendaItems[agendaIndex][type].push({ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" });
+      newAgendaItems[agendaIndex][type].push({ decision: "", rationale: "", opposing: "", effect: "" });
     } else {
       newAgendaItems[agendaIndex][type].push("");
     }

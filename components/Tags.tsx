@@ -23,7 +23,7 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
     if (myVariable.summary && myVariable.summary.tags) {
       setLocalTags(myVariable.summary.tags);
     }
-  }, [myVariable.summary.tags]);
+  }, [myVariable.summary?.tags]);
 
   React.useEffect(() => {
     setTags(localTags);
