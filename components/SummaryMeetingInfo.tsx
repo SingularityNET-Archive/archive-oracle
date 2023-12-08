@@ -11,7 +11,6 @@ type SummaryMeetingInfoProps = {
 
 const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUpdate }) => {
   const { myVariable, setMyVariable } = useMyVariable();
-  const [displayedWorkingDocs, setDisplayedWorkingDocs] = useState([{ title: '', link: '' }]);
 
   const {
     name = 'Weekly',
@@ -43,6 +42,9 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     workingDocs
   });
 
+  const [displayedWorkingDocs, setDisplayedWorkingDocs] = useState(workingDocs.length > 0 ? [] : [{ title: '', link: '' }]);
+  const allWorkingDocs = [...workingDocs, ...displayedWorkingDocs];
+
   const addNewDoc = () => {
     const newDoc = { title: '', link: '' };
     setDisplayedWorkingDocs([...displayedWorkingDocs, newDoc]);
@@ -56,7 +58,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
         const updatedDocs = [...prevDisplayedDocs];
         updatedDocs[docIndex] = { ...updatedDocs[docIndex], [name]: value };
         return updatedDocs;
-      });      
+      });
     } else {
       setMeetingInfo(prevMeetingInfo => {
         const updatedMeetingInfo = { ...prevMeetingInfo, [name]: value };
@@ -64,12 +66,36 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       });
     }
   };
+
+  const updateMyVariable = (e: any, index: number) => {
+    const updatedMyVariable = { ...myVariable };
+    // Initialize workingDocs as an empty array if it's undefined
+    if (!updatedMyVariable.summary.meetingInfo.workingDocs) {
+      updatedMyVariable.summary.meetingInfo.workingDocs = [];
+    }
+  
+    if (e) {
+      const { name, value } = e.target;
+      updatedMyVariable.summary.meetingInfo.workingDocs[index] = { ...updatedMyVariable.summary.meetingInfo.workingDocs[index], [name]: value };
+    } else {
+      // Check if the array is not empty before calling splice
+      if (updatedMyVariable.summary.meetingInfo.workingDocs.length > 0) {
+        updatedMyVariable.summary.meetingInfo.workingDocs.splice(index, 1);
+      }
+    }
+    setMyVariable(updatedMyVariable);
+  };  
+
+  const removeDoc = (index: number) => {
+    setDisplayedWorkingDocs(prevDocs => {
+      const updatedDocs = prevDocs.filter((_, i) => i !== index);
+      return updatedDocs;
+    });
+  };
   
   useEffect(() => {
     onUpdate({ ...meetingInfo, workingDocs: [...workingDocs, ...displayedWorkingDocs] });
   }, [meetingInfo, displayedWorkingDocs]);
-  
-  
   
   const handleSelection = (name: any, selectedNames: any) => {
     const updatedInfo = { ...meetingInfo, [name]: selectedNames };
@@ -110,9 +136,10 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       workingDocs
     });
   }, [myVariable.summary?.meetingInfo]); // Add myVariable.summary.meetingInfo to the dependency array
-
+  
   return (
     <>
+    <div className={styles['form-column-flex']}>
     <div className={styles['row-flex-start']}>
     <div className={styles['form-column-flex']}>
       <div className={styles['row-flex-space-between']}>
@@ -184,11 +211,8 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           </>)}
         </div>
       </div>
-      {myVariable.workgroup?.preferred_template?.meetingInfo?.workingDocs == 1 && (
-        <WorkingDocs handleChange={handleChange} addNewDoc={addNewDoc} docs={displayedWorkingDocs} 
-      />)}
-    </div>
-    <div className={styles['links-column-flex']}>
+      </div>
+      <div className={styles['links-column-flex']}>
       {myVariable.workgroup?.preferred_template?.meetingInfo?.purpose == 1 && (<>
       <label className={styles['form-label']}>
         Purpose:
@@ -263,9 +287,19 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           autoComplete='off'
         />
         </>)}
-      </div>  
+      </div>
     </div>
-    
+    {myVariable.workgroup?.preferred_template?.meetingInfo?.workingDocs == 1 && (
+        <WorkingDocs
+        handleChange={handleChange}
+        addNewDoc={addNewDoc}
+        docs={allWorkingDocs}
+        removeDoc={removeDoc}
+        originalDocsCount={workingDocs.length}
+        updateMyVariable={updateMyVariable}
+      />
+      )}
+    </div>
     </>
   );
 };

@@ -148,7 +148,10 @@ const SummaryTemplate = () => {
       return;
     }
   
-    // Merging new workingDocs with old ones
+    // Filter out working docs with both empty title and link
+    const filteredWorkingDocs = formData.meetingInfo.workingDocs.filter((doc: any) => doc.title || doc.link);
+  
+    // Merging new workingDocs with old ones after filtering
     const updatedMyVariable = {
       ...myVariable,
       summary: {
@@ -156,14 +159,14 @@ const SummaryTemplate = () => {
         ...formData,
         meetingInfo: {
           ...formData.meetingInfo,
-          workingDocs: formData.meetingInfo.workingDocs // This now includes both old and new docs
+          workingDocs: filteredWorkingDocs // This now includes filtered docs
         },
         updated_at: new Date()
       }
     };
   
     setMyVariable(updatedMyVariable);
-    const cleanedFormData = removeEmptyValues({ ...formData });
+    const cleanedFormData = removeEmptyValues({ ...formData, meetingInfo: { ...formData.meetingInfo, workingDocs: filteredWorkingDocs } });
     setLoading(true);
   
     try {
@@ -175,20 +178,7 @@ const SummaryTemplate = () => {
     } finally {
       setLoading(false);
     }
-  }
-  
-  const formatUrl = (url: string) => {
-    if (!url?.startsWith('http://') && !url?.startsWith('https://')) {
-      return `http://${url}`;
-    }
-    return url;
-  };
-
-  // Utility function to check if an object within an array is non-empty
-const hasNonEmptyObjects = (array: any) => {
-  return array.some((item: any) => Object.keys(item).length > 0);
-};
-
+  }  
 
   return (
     <>
@@ -210,34 +200,6 @@ const hasNonEmptyObjects = (array: any) => {
         </button>
         {myVariable.summary?.updated_at && (<p>{`(last saved ${formatTimestamp(myVariable.summary?.updated_at)})`}</p>)}
       </form>
-      <div className={styles['form-container']}>
-      {myVariable.summary?.meetingInfo?.workingDocs && hasNonEmptyObjects(myVariable.summary.meetingInfo.workingDocs) && (
-        <>
-            <h3>Working Documents</h3>
-            <table className={styles['working-doc-table']}>
-                <thead>
-                    <tr>
-                        <th>Doc Title</th>
-                        <th>Doc Link</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {myVariable.summary.meetingInfo.workingDocs.map((doc: any, index: any) => (
-                        <tr key={index}>
-                            <td>{doc.title}</td>
-                            <td>
-                                <a href={formatUrl(doc.link)} target="_blank" rel="noopener noreferrer">
-                                    Link
-                                </a>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </>
-    )}
-</div>
-
       </div>)}
     </>
   );
