@@ -12,7 +12,8 @@ export async function saveCustomAgenda(agendaData) {
   
   const { data, error } = await supabase
     .from('meetingsummaries')
-    .upsert(updates, { onConflict: ['name', 'date', 'workgroup_id', 'user_id'] });
+    .upsert(updates, { onConflict: ['name', 'date', 'workgroup_id', 'user_id'] })
+    .select('date, meeting_id, updated_at');
 
   if (error) {
     console.error('Error upserting data:', error);

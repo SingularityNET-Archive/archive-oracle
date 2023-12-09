@@ -54,6 +54,7 @@ const WorkingDocs = ({ handleChange, addNewDoc, docs, removeDoc, originalDocsCou
                   className={styles.input}
                   type="text"
                   name="title"
+                  autoComplete="off"
                   value={doc.title}
                   onChange={(e) => handleDocChange(e, index)}
                 />
@@ -65,6 +66,7 @@ const WorkingDocs = ({ handleChange, addNewDoc, docs, removeDoc, originalDocsCou
                     className={styles.input}
                     type="text"
                     name="link"
+                    autoComplete="off"
                     value={doc.link}
                     onChange={(e) => handleDocChange(e, index)}
                   />

@@ -355,6 +355,7 @@ if (typeof myVariable.workgroup?.workgroup === 'string' && myVariable.workgroup?
                       type="text"
                       placeholder="Agenda Item"
                       value={item.agenda}
+                      autoComplete="off"
                       onChange={(e) => {
                         const newAgenda = [...agendaItems];
                         newAgenda[agendaIndex].agenda = e.target.value;

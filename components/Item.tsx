@@ -20,6 +20,7 @@ const TextAreaInput = ({ value, onChange, placeholder, type }: any) => {
             placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(type, e.target.value)}
+            autoComplete="off"
             title={title}
         />
     </div>
@@ -38,6 +39,7 @@ const TextInput: any = ({ label, placeholder, value, onChange, type, itemIndex }
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          autoComplete="off"
       />
   </div>
 );

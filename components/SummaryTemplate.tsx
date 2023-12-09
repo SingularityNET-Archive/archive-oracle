@@ -6,6 +6,10 @@ import SummaryAgendaItems from './SummaryAgendaItems'
 import Tags from './Tags'
 import { saveCustomAgenda } from '../utils/saveCustomAgenda';
 
+type SummaryTemplateProps = {
+  updateMeetings: (newMeetingSummary: any) => void;
+};
+
 const filterKeys = (source: any, template: any) => {
   const result: any = {};
   Object.keys(template).forEach(key => {
@@ -44,7 +48,7 @@ function formatTimestamp(timestamp: any) {
   return `${formattedDate} ${hours}:${minutes} UTC`;
 }
 
-const SummaryTemplate = () => {
+const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { myVariable, setMyVariable } = useMyVariable();
   const today = new Date().toISOString().split('T')[0];
@@ -85,11 +89,11 @@ const SummaryTemplate = () => {
 
   const [formData, setFormData] = useState(filterKeys(myVariable.summary || {}, defaultFormData));
   const [tags, setTags] = useState({ topicsCovered: "", emotions: "", other: "", gamesPlayed: "" });
-
+  
   useEffect(() => {
     // Set the local state whenever myVariable.summary changes
     setFormData(filterKeys(myVariable.summary || {}, defaultFormData));
-    //console.log(myVariable)
+    console.log(myVariable)
   }, [myVariable.summary]); // Add myVariable.summary to the dependency array
   
   useEffect(() => {
@@ -152,26 +156,51 @@ const SummaryTemplate = () => {
     const filteredWorkingDocs = formData.meetingInfo.workingDocs.filter((doc: any) => doc.title || doc.link);
   
     // Merging new workingDocs with old ones after filtering
-    const updatedMyVariable = {
-      ...myVariable,
-      summary: {
-        ...myVariable.summary,
-        ...formData,
-        meetingInfo: {
-          ...formData.meetingInfo,
-          workingDocs: filteredWorkingDocs // This now includes filtered docs
-        },
-        updated_at: new Date()
-      }
-    };
-  
-    setMyVariable(updatedMyVariable);
+    let summary: any = {
+      ...myVariable.summary,
+      ...formData,
+      meetingInfo: {
+        ...formData.meetingInfo,
+        workingDocs: filteredWorkingDocs // This now includes filtered docs
+      },
+      updated_at: new Date()
+    }
+
     const cleanedFormData = removeEmptyValues({ ...formData, meetingInfo: { ...formData.meetingInfo, workingDocs: filteredWorkingDocs } });
     setLoading(true);
   
     try {
-      const data: any = await saveCustomAgenda(cleanedFormData);
-      console.log("Submitted Form Data:", cleanedFormData, data);
+      const data = await saveCustomAgenda(cleanedFormData);
+      if (data !== false) {
+        console.log("Calling updateMeetings with:", summary, data[0].date);
+        summary.date = data[0].date
+        summary.meeting_id = data[0].meeting_id
+        summary.updated_at = data[0].updated_at
+        // Ensure myVariable.summaries is initialized
+        let existingSummaries = myVariable.summaries || [];
+        
+        // Find index of summary with the same date
+        let existingSummaryIndex = existingSummaries.findIndex((s: any) => s.date === summary.date);
+        
+        if (existingSummaryIndex !== -1) {
+          // Replace existing summary
+          existingSummaries[existingSummaryIndex] = summary;
+        } else {
+          // Add new summary if one with the same date doesn't exist
+          existingSummaries.push(summary);
+        }
+        console.log("existingSummaries", existingSummaries);
+        updateMeetings(summary);
+        const updatedMyVariable = {
+          ...myVariable,
+          summary: summary,
+          summaries: existingSummaries
+        };
+      
+        setMyVariable(updatedMyVariable);
+      } else {
+        console.log("Error in saving custom agenda");
+      }    
     } catch (error) {
       console.error("Error submitting the form:", error);
       alert("There was an error submitting the meeting summary.");

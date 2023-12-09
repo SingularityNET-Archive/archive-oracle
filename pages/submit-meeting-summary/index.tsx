@@ -109,6 +109,10 @@ useEffect(() => {
     getWorkgroupList();
   }, []);
 
+  useEffect(() => {
+    console.log("meetings", meetings)
+  }, [meetings]);
+
   async function handleSelectChange(e: any) {
     const selectedWorkgroupId = e.target.value;
     const summaries: any = selectedWorkgroupId != 'add_new' ? await getSummaries(selectedWorkgroupId) : null;
@@ -175,7 +179,7 @@ useEffect(() => {
 
   const getComponent = () => {
     switch (activeComponent) {
-      case 'two': return <SummaryTemplate key={selectedWorkgroupId} />;
+      case 'two': return <SummaryTemplate key={selectedWorkgroupId} updateMeetings={updateMeetings} />;
       case 'four': return <ArchiveSummaries key={selectedWorkgroupId} />;
       default: return <div>Select a component</div>;
     }
@@ -194,6 +198,27 @@ useEffect(() => {
   
     return `${day} ${months[monthIndex]} ${year}`;
   }
+  
+  const updateMeetings = (newMeetingSummary: any) => {
+    console.log("Before update, meetings:", meetings, newMeetingSummary); // Log the current state before update
+  
+    setMeetings(prevMeetings => {
+      let updatedMeetings: any = [...prevMeetings];
+      const meetingIndex: any = updatedMeetings.findIndex((meeting: any) => meeting.meeting_id === newMeetingSummary.meeting_id);
+  
+      if (meetingIndex !== -1) {
+        // Replace existing summary
+        updatedMeetings[meetingIndex] = newMeetingSummary;
+      } else {
+        // Add new summary
+        updatedMeetings.unshift(newMeetingSummary);
+      }
+      updatedMeetings = updatedMeetings.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      setSelectedMeetingId(newMeetingSummary.meeting_id);
+      console.log("After update, meetings:", updatedMeetings); // Log the new state
+      return updatedMeetings;
+    });
+  };
   
 
   return (
@@ -231,7 +256,11 @@ useEffect(() => {
                   value={selectedMeetingId} onChange={handleSelectChange2}
                   title="Defaults to latest meeting, only change this when you want to use a previous meeting as template">
                   {meetings.map((meeting: any) => (
-                    <option key={meeting.meeting_id} value={meeting.meeting_id}>{formatDate(meeting.date)} {meeting.username}</option>
+                    <option 
+                      key={`${meeting.meeting_id}-${meeting.updated_at}`} 
+                      value={meeting.meeting_id}>
+                        {formatDate(meeting.date)} {meeting.username}
+                    </option>
                   ))}
                 </select>
               </div>

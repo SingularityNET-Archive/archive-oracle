@@ -223,6 +223,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
         value={meetingInfo.purpose || ""}
         onChange={handleChange}
         className={styles['form-input']}
+        autoComplete="off"
         title="A sentence on what this group is about. Can be repeated for every summary"
       />
       </>)}
@@ -236,6 +237,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           value={meetingInfo.meetingVideoLink || ""}
           onChange={handleChange}
           className={styles['form-input']}
+          autoComplete="off"
         />
         </>)}
         {myVariable.workgroup?.preferred_template?.meetingInfo?.miroBoardLink == 1 && (<>
@@ -248,6 +250,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           value={meetingInfo.miroBoardLink || ""}
           onChange={handleChange}
           className={styles['form-input']}
+          autoComplete="off"
         />
         </>)}
         {myVariable.workgroup?.preferred_template?.meetingInfo?.otherMediaLink == 1 && (<>
@@ -260,6 +263,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           value={meetingInfo.otherMediaLink || ""}
           onChange={handleChange}
           className={styles['form-input']}
+          autoComplete="off"
         />
         </>)}
         {myVariable.workgroup?.preferred_template?.meetingInfo?.transcriptLink == 1 && (<>
@@ -272,6 +276,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           value={meetingInfo.transcriptLink || ""}
           onChange={handleChange}
           className={styles['form-input']}
+          autoComplete="off"
         />
         </>)}
         {myVariable.workgroup?.preferred_template?.meetingInfo?.mediaLink == 1 && (<>
@@ -284,7 +289,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           value={meetingInfo.mediaLink || ""}
           onChange={handleChange}
           className={styles['form-input']}
-          autoComplete='off'
+          autoComplete="off"
         />
         </>)}
       </div>

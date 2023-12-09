@@ -13,6 +13,7 @@ const ActionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, type
                   placeholder="Action Item"
                   value={item.text || ""} 
                   onChange={(e) => handleUpdate('text', e.target.value)}
+                  autoComplete="off"
                 />
               </div>
               <div className={styles['row-flex-start']}>

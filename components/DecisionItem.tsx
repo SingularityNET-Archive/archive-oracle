@@ -13,6 +13,7 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                     placeholder="Decision Item"
                     value={item.decision || ""} 
                     onChange={(e) => handleUpdate('decision', e.target.value)}
+                    autoComplete="off"
                     title="Please provide details on the decision that is being made"
                   />
                 </div>
@@ -42,6 +43,7 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                     placeholder="Rationale"
                     value={item.rationale || ""} 
                     onChange={(e) => handleUpdate('rationale', e.target.value)}
+                    autoComplete="off"
                     title="Please provide the rationale for making this decision"
                   />
                 </div>
@@ -55,6 +57,7 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                     placeholder="Opposing"
                     value={item.opposing || ""} 
                     onChange={(e) => handleUpdate('opposing', e.target.value)}
+                    autoComplete="off"
                     title="Please provide any opposing arguments"
                   />
                 </div>
