@@ -6,7 +6,7 @@ export function generateMarkdown(summary, order) {
   }
   // Process meetingInfo
   if (summary.meetingInfo) {
-    const { date, name, host, documenter, peoplePresent, purpose, mediaLink, miroBoardLink, transcriptLink } = summary.meetingInfo;
+    const { date, name, host, documenter, peoplePresent, purpose, mediaLink, miroBoardLink, transcriptLink, workingDocs } = summary.meetingInfo;
 
     // Add meeting information to markdown
     if (name) markdown += `- Type of meeting: ${name}\n`;
@@ -21,7 +21,17 @@ export function generateMarkdown(summary, order) {
     if (mediaLink) markdown += `- Meeting video: ${mediaLink}\n`;
     if (miroBoardLink) markdown += `- Miro board: ${miroBoardLink}\n`;
     if (transcriptLink) markdown += `- Transcript: ${transcriptLink}\n`;
-    markdown += '\n';
+    //markdown += '\n';
+
+    // Process workingDocs
+    if (workingDocs) {
+      markdown += `- Working Docs:\n`;
+      workingDocs.forEach(doc => {    
+        if (doc.link) {
+          markdown += `  - [${doc.title}](${doc.link})\n`;
+        }
+      });
+    }
   }
 
   function getOrdinal(n) {

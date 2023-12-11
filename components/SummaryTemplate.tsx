@@ -93,7 +93,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   useEffect(() => {
     // Set the local state whenever myVariable.summary changes
     setFormData(filterKeys(myVariable.summary || {}, defaultFormData));
-    console.log(myVariable)
+    //console.log(myVariable)
   }, [myVariable.summary]); // Add myVariable.summary to the dependency array
   
   useEffect(() => {
@@ -172,7 +172,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     try {
       const data = await saveCustomAgenda(cleanedFormData);
       if (data !== false) {
-        console.log("Calling updateMeetings with:", summary, data[0].date);
+        //console.log("Calling updateMeetings with:", summary, data[0].date);
         summary.date = data[0].date
         summary.meeting_id = data[0].meeting_id
         summary.updated_at = data[0].updated_at
@@ -189,7 +189,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
           // Add new summary if one with the same date doesn't exist
           existingSummaries.push(summary);
         }
-        console.log("existingSummaries", existingSummaries);
+        //console.log("existingSummaries", existingSummaries);
         updateMeetings(summary);
         const updatedMyVariable = {
           ...myVariable,

@@ -109,10 +109,6 @@ useEffect(() => {
     getWorkgroupList();
   }, []);
 
-  useEffect(() => {
-    console.log("meetings", meetings)
-  }, [meetings]);
-
   async function handleSelectChange(e: any) {
     const selectedWorkgroupId = e.target.value;
     const summaries: any = selectedWorkgroupId != 'add_new' ? await getSummaries(selectedWorkgroupId) : null;
@@ -135,7 +131,7 @@ useEffect(() => {
     if (selectedWorkgroupId !== 'add_new') {
       router.push(`/submit-meeting-summary?workgroup=${selectedWorkgroupId}`, undefined, { shallow: true });
     }
-    console.log("myVariable", myVariable );
+    //console.log("myVariable", myVariable );
   }  
   async function handleSelectChange2(e: any) {
     const newSelectedMeetingId = e.target.value;
@@ -200,7 +196,7 @@ useEffect(() => {
   }
   
   const updateMeetings = (newMeetingSummary: any) => {
-    console.log("Before update, meetings:", meetings, newMeetingSummary); // Log the current state before update
+    //console.log("Before update, meetings:", meetings, newMeetingSummary); // Log the current state before update
   
     setMeetings(prevMeetings => {
       let updatedMeetings: any = [...prevMeetings];
@@ -215,7 +211,7 @@ useEffect(() => {
       }
       updatedMeetings = updatedMeetings.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
       setSelectedMeetingId(newMeetingSummary.meeting_id);
-      console.log("After update, meetings:", updatedMeetings); // Log the new state
+      //console.log("After update, meetings:", updatedMeetings); // Log the new state
       return updatedMeetings;
     });
   };

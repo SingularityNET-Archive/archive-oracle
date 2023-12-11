@@ -183,6 +183,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
               Host:
             </label>
             <SelectNames 
+              key={meetingInfo.host}
               onSelect={(selectedNames: any) => handleSelection('host', selectedNames)} 
               initialValue={meetingInfo.host || ""} 
             />
@@ -193,6 +194,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
               Documenter:
             </label>
             <SelectNames 
+              key={meetingInfo.documenter}
               onSelect={(selectedNames: any) => handleSelection('documenter', selectedNames)} 
               initialValue={meetingInfo.documenter || ""} 
             />
@@ -205,6 +207,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
               Present:
             </label>
             <SelectNames 
+              key={meetingInfo.peoplePresent}
               onSelect={(selectedNames: any) => handleSelection('peoplePresent', selectedNames)} 
               initialValue={meetingInfo.peoplePresent || ""} 
             />
