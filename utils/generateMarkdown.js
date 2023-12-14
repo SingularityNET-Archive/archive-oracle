@@ -1,3 +1,25 @@
+/*
+ * Markdown Generator for Meeting Summaries
+ * 
+ * This function, generateMarkdown, is designed to convert meeting summary data into a structured markdown format.
+ * It processes various components of a meeting summary, including:
+ * - Basic meeting information such as date, name, host, and purpose.
+ * - Links to meeting-related resources like media, Miro boards, and transcripts.
+ * - Detailed sections like action items, decision items, discussion points, and more.
+ * - Agenda items, presented in an ordered or default format based on the 'order' parameter.
+ * - Tags and keywords related to the meeting, covering topics and emotions.
+ * 
+ * The function handles the absence of summary data by returning a relevant message.
+ * Each section of the meeting summary is formatted according to predefined markdown patterns.
+ * The output is a comprehensive markdown text that can be used for documentation or display purposes.
+ * 
+ * Key features:
+ * - Versatile processing of diverse meeting information.
+ * - Customizable order of agenda items.
+ * - Error handling for missing summary data.
+ * - Rich markdown formatting for clear and readable output.
+ */
+
 export function generateMarkdown(summary, order) {
   let markdown = "";
   if (!summary) {
@@ -137,7 +159,6 @@ export function generateMarkdown(summary, order) {
     const { topicsCovered, references, emotions, other, gamesPlayed } = summary.tags;
     markdown += `#### Keywords/tags:\n`;
     if (topicsCovered) markdown += `- topics covered: ${topicsCovered}\n`;
-    if (references) markdown += `- references: ${references}\n`;
     if (emotions) markdown += `- emotions: ${emotions}\n`;
     if (other) markdown += `- other: ${other}\n`;
     if (gamesPlayed) markdown += `- games played: ${gamesPlayed}\n`;

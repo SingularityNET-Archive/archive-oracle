@@ -8,7 +8,7 @@ const Home: NextPage = () => {
  /*useEffect(() => {
     const fetchMeetingSummaries = async () => {
       const SERVER_API_URL = 'https://archive-oracle.netlify.app/api/getMeetingSummaries';
-      const API_KEY = process.env.SERVER_API_KEY; 
+      const API_KEY = process.env.NEXT_PUBLIC_SERVER_API_KEY; 
 
       setLoading(true); // Start loading
       try {

@@ -1,3 +1,22 @@
+/*
+ * Meeting Summaries Retrieval Function
+ * 
+ * This function, getSummaries, is designed to fetch and process meeting summaries for a specific workgroup from a database using Supabase.
+ * It operates by:
+ * - Fetching meeting summaries based on a given workgroup ID.
+ * - Identifying and processing the most recent confirmed meeting summary.
+ * - Retrieving associated user details for each summary from the 'users' table.
+ * - Constructing a comprehensive list of meeting summaries, enriched with user details.
+ * - Handling errors and edge cases, such as when no summaries are available or when Supabase queries fail.
+ * 
+ * The function returns an array of processed summaries, each containing details like the user's full name, meeting ID, confirmation status, and timestamps.
+ * 
+ * Key points:
+ * - Utilizes Supabase for data retrieval.
+ * - Employs logic to filter and sort meeting data.
+ * - Integrates user data for a more detailed summary output.
+ */
+
 import { supabase } from "../lib/supabaseClient";
 
 export async function getSummaries(workgroup_id) {
