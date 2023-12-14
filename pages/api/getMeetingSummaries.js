@@ -1,7 +1,7 @@
 import supabase from "../../lib/supabaseClient";
 
 export default async function handler(req, res) {
-  const API_KEY = process.env.NEXT_PUBLIC_SERVER_API_KEY;
+  const API_KEY = process.env.SERVER_API_KEY;
   const apiKeyHeader = req.headers['api_key'];
 
   if (!apiKeyHeader || apiKeyHeader !== API_KEY) {
