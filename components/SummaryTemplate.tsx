@@ -5,6 +5,8 @@ import SummaryMeetingInfo from './SummaryMeetingInfo'
 import SummaryAgendaItems from './SummaryAgendaItems'
 import Tags from './Tags'
 import { saveCustomAgenda } from '../utils/saveCustomAgenda';
+import { generateMarkdown } from '../utils/generateMarkdown';
+import axios from "axios";
 
 type SummaryTemplateProps = {
   updateMeetings: (newMeetingSummary: any) => void;
@@ -31,6 +33,20 @@ const filterKeys = (source: any, template: any) => {
   });
   return result;
 };
+
+function formatTimestampForPdf(timestamp: any) {
+  // Parse the timestamp into a Date object
+  const date = new Date(timestamp);
+
+  // Format the date as "12 December 2023 22:00 UTC"
+  const day = date.getUTCDate();
+  const month = date.toLocaleString('default', { month: 'long', timeZone: 'UTC' });
+  const year = date.getUTCFullYear();
+  const hours = date.getUTCHours().toString().padStart(2, '0');
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+
+  return `${day} ${month} ${year} ${hours}:${minutes} UTC`;
+}
 
 function formatTimestamp(timestamp: any) {
   // Parse the timestamp into a Date object
@@ -89,11 +105,53 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
 
   const [formData, setFormData] = useState(filterKeys(myVariable.summary || {}, defaultFormData));
   const [tags, setTags] = useState({ topicsCovered: "", emotions: "", other: "", gamesPlayed: "" });
+  const currentOrder = myVariable.agendaItemOrder ? myVariable.agendaItemOrder[myVariable.workgroup?.workgroup] : undefined;
+  
+  async function generatePdf(markdown: any) {
+    try {
+      const additionalLines = `# Meeting Summary for ${myVariable.workgroup?.workgroup}\n` +
+                        `Date: ${formatTimestampForPdf(myVariable.summary?.date)}\n\n`+
+                        `#### Meeting Info\n`;
+
+      // Combine additional lines with existing markdown
+      const combinedMarkdown = additionalLines + markdown;
+  
+      const response = await axios.post('/api/convertToPdf', { markdown: combinedMarkdown }, {
+        responseType: 'blob', // Important to handle the PDF binary data
+      });
+  
+  
+      // Creating a Blob URL from the response data
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      //window.open(url, '_blank');  // If you want to open the PDF in a new tab
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'Meeting-Summary.pdf'); // or any other filename
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error: any) {
+      console.error('Error:', error);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error(error.response.data);
+        console.error(error.response.status);
+        console.error(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error', error.message);
+      }
+    }
+  }
   
   useEffect(() => {
     // Set the local state whenever myVariable.summary changes
     setFormData(filterKeys(myVariable.summary || {}, defaultFormData));
-    //console.log(myVariable)
+    //console.log(myVariable, generateMarkdown(myVariable.summary, currentOrder))
   }, [myVariable.summary]); // Add myVariable.summary to the dependency array
   
   useEffect(() => {
@@ -228,6 +286,13 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
           {loading ? "Loading..." : "Save"}
         </button>
         {myVariable.summary?.updated_at && (<p>{`(last saved ${formatTimestamp(myVariable.summary?.updated_at)})`}</p>)}
+        <button
+          type="button"
+          onClick={() => generatePdf(generateMarkdown(myVariable.summary, currentOrder))}
+          className={styles['export-button']}
+        >
+          Export to PDF
+        </button>
       </form>
       </div>)}
     </>
