@@ -1,10 +1,18 @@
 import { mdToPdf } from 'md-to-pdf';
+import puppeteer from 'puppeteer';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const { markdown } = req.body;
-      const pdf = await mdToPdf({ content: markdown }).catch(console.error);
+
+      // Start a new browser instance
+      const browser = await puppeteer.launch({headless: 'new'});
+
+      const pdf = await mdToPdf({ content: markdown, browser }).catch(console.error);
+
+      // Close the browser instance after you're done with it
+      await browser.close();
 
       if (pdf) {
         res.setHeader('Content-Type', 'application/pdf');
