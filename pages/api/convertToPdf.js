@@ -1,3 +1,4 @@
+// pages/api/convertToPdf.js
 import { mdToPdf } from 'md-to-pdf';
 import puppeteer from 'puppeteer';
 
@@ -7,7 +8,9 @@ export default async function handler(req, res) {
       const { markdown } = req.body;
 
       // Start a new browser instance
-      const browser = await puppeteer.launch({headless: 'new'});
+      const browser = await puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Necessary for certain deployment platforms
+      });
 
       const pdf = await mdToPdf({ content: markdown, browser }).catch(console.error);
 
@@ -16,6 +19,7 @@ export default async function handler(req, res) {
 
       if (pdf) {
         res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=Meeting-Summary.pdf');
         res.send(pdf.content);
       } else {
         res.status(500).json({ message: 'Error generating PDF' });
