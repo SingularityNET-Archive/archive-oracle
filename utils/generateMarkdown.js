@@ -53,6 +53,7 @@ export function generateMarkdown(summary, order) {
           markdown += `  - [${doc.title}](${doc.link})\n`;
         }
       });
+      markdown += `\n`
     }
   }
 

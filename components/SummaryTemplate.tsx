@@ -106,47 +106,6 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   const [formData, setFormData] = useState(filterKeys(myVariable.summary || {}, defaultFormData));
   const [tags, setTags] = useState({ topicsCovered: "", emotions: "", other: "", gamesPlayed: "" });
   const currentOrder = myVariable.agendaItemOrder ? myVariable.agendaItemOrder[myVariable.workgroup?.workgroup] : undefined;
-  
-  async function generatePdf2(markdown: any) {
-    try {
-      const additionalLines = `# Meeting Summary for ${myVariable.workgroup?.workgroup}\n` +
-                        `Date: ${formatTimestampForPdf(myVariable.summary?.date)}\n\n`+
-                        `#### Meeting Info\n`;
-
-      // Combine additional lines with existing markdown
-      const combinedMarkdown = additionalLines + markdown;
-  
-      const response = await axios.post('/api/convertToPdf', { markdown: combinedMarkdown }, {
-        responseType: 'blob', // Important to handle the PDF binary data
-      });
-  
-  
-      // Creating a Blob URL from the response data
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      //window.open(url, '_blank');  // If you want to open the PDF in a new tab
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'Meeting-Summary.pdf'); // or any other filename
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (error: any) {
-      console.error('Error:', error);
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error(error.response.data);
-        console.error(error.response.status);
-        console.error(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error('Error', error.message);
-      }
-    }
-  }
 
   async function generatePdf(markdown: any) {
     try {

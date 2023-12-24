@@ -6,7 +6,10 @@ export default async function handler(req, res) {
       const { markdown } = req.body;
 
       // Forward the request to md-to-pdf service
-      const pdfResponse = await axios.post('https://md-to-pdf.fly.dev', new URLSearchParams({ markdown }), {
+      const pdfResponse = await axios.post('https://md-to-pdf.fly.dev', new URLSearchParams({
+  markdown,
+  engine: 'wkhtmltopdf' // Specify the engine here
+}), {
         responseType: 'arraybuffer', // To handle binary data
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
