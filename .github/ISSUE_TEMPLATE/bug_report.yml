@@ -41,18 +41,6 @@ body:
     validations:
       required: true
 
-  - type: radiobuttons
-    id: frequency
-    attributes:
-      label: Frequency of occurrence
-      description: "How often does the bug occur?"
-      options:
-        - label: "Always"
-        - label: "Sometimes"
-        - label: "Rarely"
-    validations:
-      required: true
-
   - type: checkboxes
     id: reproduce
     attributes:
@@ -72,47 +60,21 @@ body:
     validations:
       required: true
 
-  - type: number
-    id: occurrences
-    attributes:
-      label: Number of Occurrences
-      description: "Approximately how many times has this issue occurred?"
-      placeholder: "Enter a number"
-    validations:
-      required: false
-
   - type: input
-    id: email
+    id: version
     attributes:
-      label: Contact Email
-      description: "If we need further information, what email can we reach you at?"
-      placeholder: "Enter your email"
+      label: Version
+      description: "The version of the software where the bug was encountered."
+      placeholder: "Enter version number"
     validations:
       required: false
 
-  - type: input
-    id: url
+  - type: textarea
+    id: additional-context
     attributes:
-      label: Related URL
-      description: "If relevant, provide a link to where the issue can be observed."
-      placeholder: "Enter URL"
-    validations:
-      required: false
-
-  - type: date
-    id: date-observed
-    attributes:
-      label: Date Observed
-      description: "When did you first notice the bug?"
-      placeholder: "YYYY-MM-DD"
-    validations:
-      required: false
-
-  - type: file
-    id: screenshot
-    attributes:
-      label: Screenshot or Log File
-      description: "Attach a screenshot or log file if applicable."
+      label: Additional Context
+      description: "Any other context or information that could be helpful."
+      placeholder: "Add any other context about the problem here."
     validations:
       required: false
 
