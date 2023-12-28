@@ -51,6 +51,8 @@ body:
         - label: Yes, always
         - label: Yes, sometimes
         - label: No
+    validations:
+      required: true
 
   - type: textarea
     id: steps
