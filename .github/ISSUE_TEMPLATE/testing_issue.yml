@@ -35,12 +35,20 @@ body:
   - type: checkboxes
     id: type
     attributes:
-      label: Please select the type of issue?
-      description: "Check all applicable options."
+      label: Issue Type
+      description: "Please select the type(s) of issue you are reporting."
       options:
-        - label: "Bug"
-        - label: "Improvement"
-        - label: "Necessity"
+        - label: "Bug/Defect"
+        - label: "Feature Request"
+        - label: "Template Issue"
+        - label: "Performance Issue"
+        - label: "Usability/Interface"
+        - label: "Integration Issue"
+        - label: "Documentation/Help"
+        - label: "Security Concern"
+        - label: "General Inquiry/Feedback"
+    validations:
+      required: true
 
   - type: input
     id: Workgroup
