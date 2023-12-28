@@ -4,6 +4,7 @@ title: "*Enter title here* - [Date: YYYY-MM-DD]"
 labels: [tool-issue]
 assignees: 
   - Andre-Diamond
+projects: ["SingularityNET-Archive/projects/3"]
 
 body:
   - type: markdown
