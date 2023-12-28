@@ -48,6 +48,7 @@ body:
         - "High"
         - "Medium"
         - "Low"
+      default: "Please select"
     validations:
       required: true
 
