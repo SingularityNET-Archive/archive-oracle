@@ -48,9 +48,9 @@ body:
       label: Can you reproduce the bug?
       description: "Check all applicable options."
       options:
-        - label: Yes, always
-        - label: Yes, sometimes
-        - label: No
+        - label: "Yes, always"
+        - label: "Yes, sometimes"
+        - label: "No"
 
   - type: textarea
     id: steps
