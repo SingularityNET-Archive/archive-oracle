@@ -3,8 +3,7 @@ description: File a bug report
 title: "[BUG]: "
 labels: [bug]
 assignees: 
-  - assignee1
-  - assignee2
+  - Andre-Diamond
 
 body:
   - type: markdown
@@ -35,10 +34,22 @@ body:
       label: Severity
       description: "Select the severity level of the bug."
       options:
-        - label: Critical
-        - label: High
-        - label: Medium
-        - label: Low
+        - label: "Critical"
+        - label: "High"
+        - label: "Medium"
+        - label: "Low"
+    validations:
+      required: true
+
+  - type: radiobuttons
+    id: frequency
+    attributes:
+      label: Frequency of occurrence
+      description: "How often does the bug occur?"
+      options:
+        - label: "Always"
+        - label: "Sometimes"
+        - label: "Rarely"
     validations:
       required: true
 
@@ -61,21 +72,47 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: version
+  - type: number
+    id: occurrences
     attributes:
-      label: Version
-      description: "The version of the software where the bug was encountered."
-      placeholder: "Enter version number"
+      label: Number of Occurrences
+      description: "Approximately how many times has this issue occurred?"
+      placeholder: "Enter a number"
     validations:
       required: false
 
-  - type: textarea
-    id: additional-context
+  - type: input
+    id: email
     attributes:
-      label: Additional Context
-      description: "Any other context or information that could be helpful."
-      placeholder: "Add any other context about the problem here."
+      label: Contact Email
+      description: "If we need further information, what email can we reach you at?"
+      placeholder: "Enter your email"
+    validations:
+      required: false
+
+  - type: input
+    id: url
+    attributes:
+      label: Related URL
+      description: "If relevant, provide a link to where the issue can be observed."
+      placeholder: "Enter URL"
+    validations:
+      required: false
+
+  - type: date
+    id: date-observed
+    attributes:
+      label: Date Observed
+      description: "When did you first notice the bug?"
+      placeholder: "YYYY-MM-DD"
+    validations:
+      required: false
+
+  - type: file
+    id: screenshot
+    attributes:
+      label: Screenshot or Log File
+      description: "Attach a screenshot or log file if applicable."
     validations:
       required: false
 
