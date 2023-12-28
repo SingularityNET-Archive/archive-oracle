@@ -1,7 +1,7 @@
-name: Bug Report
-description: File a bug report
-title: "[BUG]: "
-labels: [bug]
+name: Testing Issue
+description: Provide archive tool issue
+title: "Archive Tool Issue - [Date: YYYY-MM-DD]"
+labels: [testing-issue]
 assignees: 
   - Andre-Diamond
 
@@ -10,21 +10,12 @@ body:
     attributes:
       value: "Thank you for taking the time to fill out this bug report."
 
-  - type: input
-    id: title
-    attributes:
-      label: Bug Title
-      description: "Provide a brief, descriptive title for the bug."
-      placeholder: "Enter title here"
-    validations:
-      required: true
-
   - type: textarea
     id: description
     attributes:
       label: Description
       description: "A detailed description of the issue."
-      placeholder: "Describe the bug in detail..."
+      placeholder: "Describe the issue in detail..."
     validations:
       required: true
 
@@ -32,7 +23,7 @@ body:
     id: severity
     attributes:
       label: Severity
-      description: "Select the severity level of the bug."
+      description: "Select the severity level of the issue."
       options:
         - "Critical"
         - "High"
@@ -42,30 +33,21 @@ body:
       required: true
 
   - type: checkboxes
-    id: reproduce
+    id: type
     attributes:
-      label: Can you reproduce the bug?
+      label: Please select the type of issue?
       description: "Check all applicable options."
       options:
-        - label: "Yes, always"
-        - label: "Yes, sometimes"
-        - label: "No"
-
-  - type: textarea
-    id: steps
-    attributes:
-      label: Steps to Reproduce
-      description: "Provide steps to reproduce the issue."
-      placeholder: "1. ...\n2. ...\n3. ..."
-    validations:
-      required: true
+        - label: "Bug"
+        - label: "Improvement"
+        - label: "Necessity"
 
   - type: input
-    id: version
+    id: Workgroup
     attributes:
-      label: Version
-      description: "The version of the software where the bug was encountered."
-      placeholder: "Enter version number"
+      label: Workgroup
+      description: "Which workgroup does this affect?"
+      placeholder: "All workgroups"
     validations:
       required: false
 
