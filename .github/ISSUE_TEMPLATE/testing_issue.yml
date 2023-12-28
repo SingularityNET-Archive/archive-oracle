@@ -1,6 +1,6 @@
 name: Testing Issue
 description: Provide archive tool issue
-title: "Archive Tool Issue - [Date: YYYY-MM-DD]"
+title: "*Enter title here* - [Date: YYYY-MM-DD]"
 labels: [tool-issue]
 assignees: 
   - Andre-Diamond
