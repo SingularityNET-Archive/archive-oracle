@@ -44,11 +44,12 @@ body:
       label: Severity
       description: "Select the severity level of the issue."
       options:
+        - "Please select"
         - "Critical"
         - "High"
         - "Medium"
         - "Low"
-      default: "Please select"
+      default: 0
     validations:
       required: true
 
