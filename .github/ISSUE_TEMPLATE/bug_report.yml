@@ -1,0 +1,84 @@
+name: Bug Report
+description: File a bug report
+title: "[BUG]: "
+labels: [bug]
+assignees: 
+  - assignee1
+  - assignee2
+
+body:
+  - type: markdown
+    attributes:
+      value: "Thank you for taking the time to fill out this bug report."
+
+  - type: input
+    id: title
+    attributes:
+      label: Bug Title
+      description: "Provide a brief, descriptive title for the bug."
+      placeholder: "Enter title here"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: "A detailed description of the issue."
+      placeholder: "Describe the bug in detail..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: "Select the severity level of the bug."
+      options:
+        - Critical
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: reproduce
+    attributes:
+      label: Can you reproduce the bug?
+      description: "Check all applicable options."
+      options:
+        - Yes, always
+        - Yes, sometimes
+        - No
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: "Provide steps to reproduce the issue."
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "The version of the software where the bug was encountered."
+      placeholder: "Enter version number"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: "Any other context or information that could be helpful."
+      placeholder: "Add any other context about the problem here."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: "Thanks for submitting your report. We'll get back to you as soon as we can."
