@@ -35,10 +35,10 @@ body:
       label: Severity
       description: "Select the severity level of the bug."
       options:
-        - Critical
-        - High
-        - Medium
-        - Low
+        - label: Critical
+        - label: High
+        - label: Medium
+        - label: Low
     validations:
       required: true
 
@@ -48,9 +48,9 @@ body:
       label: Can you reproduce the bug?
       description: "Check all applicable options."
       options:
-        - Yes, always
-        - Yes, sometimes
-        - No
+        - label: Yes, always
+        - label: Yes, sometimes
+        - label: No
 
   - type: textarea
     id: steps
