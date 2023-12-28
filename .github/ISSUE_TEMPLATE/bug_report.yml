@@ -34,10 +34,10 @@ body:
       label: Severity
       description: "Select the severity level of the bug."
       options:
-        - label: "Critical"
-        - label: "High"
-        - label: "Medium"
-        - label: "Low"
+        - "Critical"
+        - "High"
+        - "Medium"
+        - "Low"
     validations:
       required: true
 
