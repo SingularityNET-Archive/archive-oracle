@@ -42,17 +42,15 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
+    - type: checkboxes
     id: reproduce
     attributes:
       label: Can you reproduce the bug?
       description: "Check all applicable options."
       options:
-        - label: Yes, always
-        - label: Yes, sometimes
-        - label: No
-    validations:
-      required: true
+        - label: "Yes, always"
+        - label: "Yes, sometimes"
+        - label: "No"
 
   - type: textarea
     id: steps
