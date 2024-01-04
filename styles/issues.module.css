@@ -1,0 +1,65 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 4.5em);
+  margin-top: 4.5em;
+}
+
+.createIssueButton {
+  background-color: #4b2bb5; /* Button background color */
+  color: white; /* Button text color */
+  border: none;
+  padding: 10px 15px;
+  margin: 10px 0;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  text-align: center;
+  display: inline-block;
+}
+
+.createIssueButton:hover {
+  background-color: #3b2094; 
+}
+
+
+.issuesTableContainer {
+  width: 80%; /* Adjust as necessary */
+  max-width: 1000px; /* Adjust for maximum width */
+  margin: 0 auto;
+}
+
+.issuesTable {
+  width: 100%;
+  margin-bottom: 20px; /* Space between tables */
+  border-collapse: collapse;
+}
+
+.issuesTable th, .issuesTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.issuesTable th {
+  background-color: #204a76;
+}
+
+.openIssue {
+  background-color: black;
+}
+
+.openIssueLink {
+  color: rgb(0, 255, 221); /* Color for open issue links */
+}
+
+.closedIssueLink {
+  color: rgb(194, 129, 254); /* Color for closed issue links */
+}
+
+.openIssueLink:hover, .closedIssueLink:hover {
+  text-decoration: underline;
+}
+

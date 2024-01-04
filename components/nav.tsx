@@ -119,6 +119,9 @@ const Nav = () => {
         <Link href='/submit-meeting-summary' className="navitems">
           Submit Meeting Summary
         </Link>
+        <Link href='/issues' className="navitems">
+          Issues
+        </Link>
       </div>
       <div>
         {!session && (
