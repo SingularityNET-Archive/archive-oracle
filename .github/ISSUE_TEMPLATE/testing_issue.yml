@@ -26,6 +26,7 @@ body:
         - label: "Documentation/Help"
         - label: "Security Concern"
         - label: "General Inquiry/Feedback"
+        - label: "Other"
     validations:
       required: true
  
@@ -53,14 +54,26 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: Workgroup
+  - type: dropdown
+    id: workgroup
     attributes:
       label: Workgroup
       description: "Which workgroup does this affect?"
-      placeholder: "All workgroups"
+      options:
+        - "Please select"
+        - "All Workgroups"
+        - "Archive Workgroup"
+        - "Dework PBL"
+        - "Gamers Guild"
+        - "Governance Workgroup"
+        - "Knowledge Base Workgroup"
+        - "Onboarding Workgroup"
+        - "Translation Workgroup"
+        - "Treasury Guild"
+        - "Video Workgroup"
+      default: 0
     validations:
-      required: false
+      required: true
 
   - type: textarea
     id: additional-context
