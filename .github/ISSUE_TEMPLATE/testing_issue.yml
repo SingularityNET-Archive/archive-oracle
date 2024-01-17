@@ -62,7 +62,7 @@ body:
       options:
         - "Please select"
         - "All Workgroups"
-        - "Archive Workgroup"
+        - "Archival Workgroup"
         - "Dework PBL"
         - "Gamers Guild"
         - "Governance Workgroup"
@@ -71,6 +71,7 @@ body:
         - "Translation Workgroup"
         - "Treasury Guild"
         - "Video Workgroup"
+        - "Writers Workgroup"
       default: 0
     validations:
       required: true
