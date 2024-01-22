@@ -107,7 +107,7 @@
   .component {
     margin-top:4.5em;
   }
-  nav {
+  .routes {
     background-color: black;
     display: flex;
     justify-content: space-between;
@@ -117,11 +117,6 @@
     right: 0;
     align-items: center;
     z-index: 9999;
-  }
-  
-  .routes {
-    display: flex;
-    justify-content: space-between;
   }
   
   .navitems {
@@ -137,6 +132,7 @@
     cursor: pointer;
     transition: border-color 0.25s;
   }
+  
   .navLeft{
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -149,4 +145,23 @@
     border-color: #646cff;
     outline: 4px auto -webkit-focus-ring-color;
   }
+
+  @media (max-width: 600px) {
+    .routes {
+      flex-direction: column; 
+      align-items: stretch; 
+    }
+  
+    .navLeft {
+      display: flex;
+      flex-direction: column;
+      width: 100%; 
+    }
+  
+    .navitems {
+      width: 90%; 
+      text-align: center; 
+      margin: 0.2em;
+    }
+  }  
   

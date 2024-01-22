@@ -171,7 +171,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
               value={meetingInfo.date || ""}
               onChange={handleChange}
               className={styles['form-input']}
-              title="Click the icon on the right to select a date"
+              title="Click the icon on the right to select a date. Please select the date the meeting happened"
             />
             </>)}
           </div>

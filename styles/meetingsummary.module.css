@@ -17,6 +17,35 @@
   z-index: 9999;
 }
 
+.mainContent {
+  display: flex;
+  justify-content: space-around;
+  flex-grow: 1;
+  padding: 1rem;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+@media (max-width: 600px) {
+  .navbar {
+    position: relative; /* Change from fixed to relative */
+    width: 100%;
+    margin-top: 210px; /* Adjust margin as needed */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    background-color: black;
+    z-index: 9998; /* Adjust z-index as needed */
+  }
+  .mainContent {
+    display: flex;
+    justify-content: space-around;
+    flex-grow: 1;
+    padding: 1rem;
+    margin-left: 5px;
+    margin-top: -17px;
+  }
+}
+
 .select {
   width: 220px;
   height: 35px;
@@ -34,15 +63,6 @@
 
 .selectGreen option {
   color: white;  /* This will reset the color to the default for options inside the dropdown */
-}
-
-.mainContent {
-  display: flex;
-  justify-content: space-around;
-  flex-grow: 1;
-  padding: 1rem;
-  margin-left: 5px;
-  margin-top: 5px;
 }
 
 .nomainContent {
