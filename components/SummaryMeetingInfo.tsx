@@ -153,7 +153,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
                 value={meetingInfo.name || ""}
                 onChange={handleChange}
                 className={styles['form-input']}
-                title="Only change this if its not a regular weekly meeting"
+                title="Select the type of meeting. If it's a one-off event, please select 'One-off event'"
             >
                 <option value="Weekly">Weekly</option>
                 <option value="Biweekly">Biweekly</option>

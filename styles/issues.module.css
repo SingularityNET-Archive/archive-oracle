@@ -6,6 +6,16 @@
   margin-top: 5em;
 }
 
+@media (max-width: 600px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15em;
+  }
+}
+
 .createIssueButton {
   background-color: #4b2bb5; /* Button background color */
   color: white; /* Button text color */
