@@ -33,23 +33,25 @@ const Home: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      {!loading && (<div>
+      {!loading && (
         <div>
-          <h1>Archive Tool</h1>
-          <h2>A few things to note when editing meeting summaries</h2>
+          <div>
+            <h1>Archive Tool</h1>
+            <h2 className={styles.heading2}>A few things to note when editing meeting summaries</h2>
+          </div>
           <div>
             <ul>
-              <li>When you select your workgroup it will load all the data from the previous meeting</li>
-              <li>{`Please select the date the meeting happened in the "Meeting Date:" dropdown`}</li>
-              <li>{`Any changes you save will be saved to the date you selected in the "Meeting Date:" dropdown`}</li>
-              <li>Please remember to click the save button when you are done</li>
-              <li>Meeting summaries will be reviewed by an Archive member</li>
-              <li>When Archive member approves the data, the GitBook and database will be updated</li>
-              <li>...and finally the Discord message will be sent to the Meeting-Summary channel</li>
+              <li className={styles.listItem}>When you select your workgroup to submit a meeting summary, it will load all the data from the previous meeting</li>
+              <li className={styles.listItem}>{`Please select the date the meeting happened in the "Meeting Date:" dropdown`}</li>
+              <li className={styles.listItem}>{`Any changes you save will be saved to the date you selected in the "Meeting Date:" dropdown`}</li>
+              <li className={styles.listItem}>Please remember to click the save button when you are done</li>
+              <li className={styles.listItem}>Meeting summaries will be reviewed by an Archive member</li>
+              <li className={styles.listItem}>When the Archive member approves the data, the GitBook and database will be updated</li>
+              <li className={styles.listItem}>...and finally the Discord message will be sent to the Meeting-Summary channel</li>
             </ul>
           </div>
         </div>
-      </div>)}
+      )}
     </div>
   );
 };
