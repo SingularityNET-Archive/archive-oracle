@@ -37,7 +37,7 @@ body:
       description: "A detailed description of the issue."
       placeholder: "Describe the issue in detail..."
     validations:
-      required: true
+      required: false
 
   - type: dropdown
     id: severity
