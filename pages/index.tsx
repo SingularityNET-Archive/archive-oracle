@@ -50,6 +50,16 @@ const Home: NextPage = () => {
               <li className={styles.listItem}>...and finally the Discord message will be sent to the Meeting-Summary channel</li>
             </ul>
           </div>
+          <div>
+          <a 
+              href="https://github.com/SingularityNET-Archive/archive-oracle" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={styles.link} // Optional: Add this if you have specific styles for links
+            >
+              Visit the GitHub Repository for this tool
+            </a>
+          </div>
         </div>
       )}
     </div>
