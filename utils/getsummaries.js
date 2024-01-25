@@ -49,7 +49,7 @@ export async function getSummaries(workgroup_id) {
         // Fetch the user details for each summary
         for (const data of summaryData) {
           // Exclude meetings where confirmed == true and all meetings with an earlier date and updated_at date than the last meeting where confirmed == true
-          if (data.confirmed === true || new Date(data.date) < new Date(lastConfirmedDate) || new Date(data.updated_at) < new Date(lastUpdatedAt)) {
+          if (data.confirmed === true || new Date(data.date) < new Date(lastConfirmedDate)) { //Might have to add this back in later - || new Date(data.updated_at) < new Date(lastUpdatedAt)
             continue;
           }
 
