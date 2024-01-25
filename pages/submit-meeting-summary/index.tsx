@@ -237,7 +237,7 @@ useEffect(() => {
                     {workgroups.map((workgroup: any) => (
                       <option key={workgroup.workgroup_id} value={workgroup.workgroup_id}>{workgroup.workgroup}</option>
                     ))}
-                    <option value="add_new">Add new WG</option>
+                    {myVariable.roles?.isAdmin && (<option value="add_new">Add new WG</option>)}
                   </select>
                 </div>
               </>
