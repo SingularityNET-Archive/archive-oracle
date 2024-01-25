@@ -19,12 +19,9 @@ body:
       options:
         - label: "Bug/Defect"
         - label: "Feature Request"
-        - label: "Template Issue"
+        - label: "Template Issue (Is there an issue with the summary template you are using)"
         - label: "Performance Issue"
         - label: "Usability/Interface"
-        - label: "Integration Issue"
-        - label: "Documentation/Help"
-        - label: "Security Concern"
         - label: "General Inquiry/Feedback"
         - label: "Other"
     validations:
