@@ -1,6 +1,23 @@
 import styles from '../styles/typea.module.css';
 import SelectNames from '../components/SelectNames'
 
+const formatDate = (dateString: any) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+};
+
+const parseDate = (dateString: any) => {
+  const parts = dateString.match(/(\d{2}) (\w+) (\d{4})/);
+  if (!parts) return "";
+
+  const day = parts[1];
+  const month = new Date(`${parts[2]} 1 2021`).getMonth() + 1;
+  const year = parts[3];
+
+  return `${year}-${month.toString().padStart(2, '0')}-${day.padStart(2, '0')}`;
+};
+
 const ActionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, type }: any) => (
     <div key={itemIndex} className={styles['action-item']}>
               <div className={styles['agenda-title']}>
@@ -31,12 +48,12 @@ const ActionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, type
                     Due Date
                   </label>
                   <input 
-                  className={styles['form-input']}
-                  type="date"
-                  placeholder="Due Date"
-                  value={item.dueDate || ""}  
-                  onChange={(e) => handleUpdate('dueDate', e.target.value)}
-                />
+                    className={styles['form-input']}
+                    type="date"
+                    placeholder="Due Date"
+                    value={parseDate(item.dueDate || "")}  
+                    onChange={(e) => handleUpdate('dueDate', formatDate(e.target.value))}
+                  />
                 </div>
                 <div className={styles['column-flex']}>
                   <label className={styles['form-label']}>
