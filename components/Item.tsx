@@ -55,7 +55,7 @@ const createItem = (type: any, agendaIndex: any, itemIndex: any, item: any, hand
   if (type === 'leaderboard') { label = (getOrdinal(itemIndex + 1)) + ' place' }
   else if (type === 'discussionPoints') { label = 'Discussion Point ' + (itemIndex + 1)}
   else if (type === 'learningPoints') { label = 'Learning Point ' + (itemIndex + 1)}
-  else if (type === 'issues') { label = 'Issue ' + (itemIndex + 1)}
+  else if (type === 'issues') { label = 'Item ' + (itemIndex + 1)}
   else { label = type + ' ' + (itemIndex + 1)}
   const commonInput = (itemType: any, placeholder: any) => (
       <TextInput
