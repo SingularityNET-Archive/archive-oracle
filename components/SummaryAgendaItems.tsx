@@ -283,7 +283,7 @@ const getHeading = (itemType: any, workgroup: any) => {
             onRemove={removeItem}
           />
           ))}
-          <button className={styles['add-button']} type="button" onClick={() => addItem('issues', agendaIndex)}>Add Issue</button>
+          <button className={styles['add-button']} type="button" onClick={() => addItem('issues', agendaIndex)}>Add Item</button>
         </div>
       </>
     )
