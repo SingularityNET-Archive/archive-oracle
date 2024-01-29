@@ -8,7 +8,7 @@ const formatDate = (dateString: any) => {
 };
 
 const parseDate = (dateString: any) => {
-  const parts = dateString.match(/(\d{2}) (\w+) (\d{4})/);
+  const parts = dateString.match(/(\d{1,2}) (\w+) (\d{4})/);
   if (!parts) return "";
 
   const day = parts[1];
