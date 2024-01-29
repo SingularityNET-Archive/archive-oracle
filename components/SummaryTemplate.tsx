@@ -92,6 +92,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
         status: "carry over", 
         townHallUpdates: "",
         narrative: "",
+        meetingTopics:[""],
         issues: [""],
         actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],  
         decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "affectsOnlyThisWorkgroup" }],

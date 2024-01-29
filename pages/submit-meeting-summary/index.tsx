@@ -79,7 +79,7 @@ const SubmitMeetingSummary: NextPage = () => {
     "Dework PBL": ["discussionPoints", "decisionItems", "actionItems"],
     "Knowledge Base Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
     "Onboarding Workgroup": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
-    "Research and Development Guild": ["issues", "discussionPoints", "decisionItems", "actionItems"],
+    "Research and Development Guild": ["meetingTopics", "discussionPoints", "decisionItems", "actionItems"],
     "Governance Workgroup": ["narrative", "discussionPoints", "decisionItems", "actionItems"]
   };
   

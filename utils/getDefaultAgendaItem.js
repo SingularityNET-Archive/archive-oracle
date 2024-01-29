@@ -5,6 +5,7 @@ export const getDefaultAgendaItem = () => ({
     narrative: "",
     gameRules: "",
     leaderboard: [""],
+    meetingTopics: [""],
     issues: [""],
     actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }],
     decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "" }],

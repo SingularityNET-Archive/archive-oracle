@@ -87,8 +87,11 @@ const getHeading = (itemType: any, workgroup: any) => {
 
     case "discussionPoints":
       if(workgroup === "Onboarding Workgroup") return "In this meeting we discussed";
-      return "Discussion Points"; 
+      return "Discussion Points";
 
+    case "meetingTopics":
+      if(workgroup === "Research and Development Guild") return "Agenda Items";
+      return "Meeting Topics"; 
     // Add cases for other item types as needed
 
     default:
@@ -132,6 +135,29 @@ const getHeading = (itemType: any, workgroup: any) => {
             onRemove={removeItem}
           />
         </div>
+      </>
+    )
+  },
+  {
+    type: "meetingTopics",
+    isEnabled: (template: any) => template?.meetingTopics === 1,
+    render: (item: any, agendaIndex: any) => (
+      <>
+        <h3>{getHeading("meetingTopics", myVariable.workgroup?.preferred_template?.workgroup)}</h3>
+        <div className={styles['discussion-points']}>
+        {item.meetingTopics.map((point: any, pointIndex: any) => (
+              <Item
+                  key={`${agendaIndex}-meetingtopic-${pointIndex}`}
+                  type="meetingTopics"
+                  item={point}
+                  agendaIndex={agendaIndex}
+                  itemIndex={pointIndex}
+                  onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('meetingTopics', agendaIdx, itemIdx, updatedItem)}
+                  onRemove={removeItem}
+              />
+            ))}
+        </div>
+        <button className={styles['add-button']} type="button" onClick={() => addItem('meetingTopics', agendaIndex)}>Add Item</button>
       </>
     )
   },

@@ -126,6 +126,9 @@ export function generateMarkdown(summary, order) {
       case 'learningPoints':
         if (item.learningPoints && item.learningPoints.length > 0) formatItems("Learning Points", item.learningPoints, 'learningPoints');
         break;
+      case 'meetingTopics':
+        if (item.meetingTopics && item.meetingTopics.length > 0) formatItems("Meeting Topics", item.meetingTopics, 'meetingTopics');
+        break;
       case 'issues':
         if (item.issues && item.issues.length > 0) formatItems("Issues", item.issues, 'issues');
         break;

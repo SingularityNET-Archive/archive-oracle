@@ -53,9 +53,10 @@ function getOrdinal(n: any) {
 const createItem = (type: any, agendaIndex: any, itemIndex: any, item: any, handleUpdate: any, onRemove: any) => {
   let label = ''
   if (type === 'leaderboard') { label = (getOrdinal(itemIndex + 1)) + ' place' }
+  else if (type === 'meetingTopics') { label = 'Item ' + (itemIndex + 1)}
   else if (type === 'discussionPoints') { label = 'Discussion Point ' + (itemIndex + 1)}
   else if (type === 'learningPoints') { label = 'Learning Point ' + (itemIndex + 1)}
-  else if (type === 'issues') { label = 'Item ' + (itemIndex + 1)}
+  else if (type === 'issues') { label = 'Issue ' + (itemIndex + 1)}
   else { label = type + ' ' + (itemIndex + 1)}
   const commonInput = (itemType: any, placeholder: any) => (
       <TextInput
@@ -85,7 +86,7 @@ const createItem = (type: any, agendaIndex: any, itemIndex: any, item: any, hand
 const Item = ({ type, item, agendaIndex, itemIndex, onUpdate, onRemove }: any) => {
     // Determine what inputs to render based on item type
     const handleUpdate = (key: any, value: any) => {
-        if (type === 'issues' || type === 'discussionPoints' || type === 'learningPoints' || type === 'leaderboard') {
+        if (type === 'meetingTopics' || type === 'issues' || type === 'discussionPoints' || type === 'learningPoints' || type === 'leaderboard') {
             // For 'issues', since it's an array of strings, update directly
             onUpdate(agendaIndex, itemIndex, value);
         } else {
@@ -115,6 +116,7 @@ const Item = ({ type, item, agendaIndex, itemIndex, onUpdate, onRemove }: any) =
                       type={type} 
                   />;
         case 'issues':
+        case 'meetingTopics':
         case 'leaderboard':
         case 'learningPoints':
         case 'discussionPoints':

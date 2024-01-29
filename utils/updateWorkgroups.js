@@ -24,6 +24,7 @@ export async function updateWorkgroups(workgroupData) {
         "agenda":1,
         "status":1,
         "narrative":0,
+        "meetingTopics":0,
         "issues":0,
         "actionItems":1,
         "decisionItems":1,
