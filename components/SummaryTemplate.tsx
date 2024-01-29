@@ -35,18 +35,18 @@ const filterKeys = (source: any, template: any) => {
 };
 
 function formatTimestampForPdf(timestamp: any) {
-  // Parse the timestamp into a Date object
+  // Create a Date object using the timestamp
   const date = new Date(timestamp);
 
-  // Format the date as "12 December 2023 22:00 UTC"
-  const day = date.getUTCDate();
-  const month = date.toLocaleString('default', { month: 'long', timeZone: 'UTC' });
-  const year = date.getUTCFullYear();
-  const hours = date.getUTCHours().toString().padStart(2, '0');
-  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  date.setHours(date.getHours() + 2);
 
-  return `${day} ${month} ${year} ${hours}:${minutes} UTC`;
+  const day = date.getUTCDate();
+  const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
+  const year = date.getUTCFullYear();
+
+  return `${day} ${month} ${year}`;
 }
+
 
 function formatTimestamp(timestamp: any) {
   // Parse the timestamp into a Date object
