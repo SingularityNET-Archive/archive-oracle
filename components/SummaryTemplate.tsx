@@ -17,9 +17,9 @@ const filterKeys = (source: any, template: any) => {
   Object.keys(template).forEach(key => {
     if (key === "type") {
       result[key] = "Custom"; 
-    } else if (key === "date") {
+    //} else if (key === "date") {
       // Explicitly setting the date to be empty
-      result[key] = "";
+      // result[key] = "";
     } else if (source.hasOwnProperty(key)) {
       // If the key is an object, recursively filter its keys
       if (typeof source[key] === 'object' && !Array.isArray(source[key])) {

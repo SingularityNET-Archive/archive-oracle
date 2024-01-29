@@ -163,7 +163,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           </div>
           <div className={styles['column-flex']}>
             {myVariable.workgroup?.preferred_template?.meetingInfo?.date == 1 && (<>
-            {myVariable.summary?.meetingInfo?.date && (<label className={styles['form-label']}>Meeting Date: </label>)}
+            {myVariable.summary?.meetingInfo?.date && (<label className={styles['form-label']}>Meeting Date: (This is the meeting date the data gets saved to)</label>)}
             {!myVariable.summary?.meetingInfo?.date && (<label className={styles['form-label']}>Meeting Date: </label>)}
             <input
               type="date"
@@ -171,7 +171,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
               value={meetingInfo.date || ""}
               onChange={handleChange}
               className={styles['form-input']}
-              title="Click the icon on the right to select a date. Please select the date the meeting happened"
+              title="Click the icon on the right to select a date"
             />
             </>)}
           </div>
