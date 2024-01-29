@@ -24,7 +24,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     otherMediaLink = '',
     transcriptLink = '',
     mediaLink = '',
-    workingDocs = [{ title: '', link: '' }]
+    workingDocs = []
   } = myVariable?.summary?.meetingInfo || {};
 
   const [meetingInfo, setMeetingInfo] = useState({
