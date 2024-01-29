@@ -74,13 +74,13 @@ const SubmitMeetingSummary: NextPage = () => {
     "Gamers Guild": ["narrative", "decisionItems", "actionItems", "gameRules", "leaderboard"],
     "Writers Workgroup": ["narrative", "decisionItems", "actionItems", "learningPoints"],
     "Video Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
-    "Archival Workgroup": ["actionItems", "decisionItems", "learningPoints"],
-    "Treasury Guild": ["actionItems", "decisionItems", "discussionPoints"],
-    "Dework PBL": ["actionItems", "decisionItems", "discussionPoints"],
-    "Knowledge Base Workgroup": ["actionItems", "decisionItems", "discussionPoints"],
+    "Archival Workgroup": ["decisionItems", "actionItems", "learningPoints"],
+    "Treasury Guild": ["discussionPoints", "decisionItems", "actionItems"],
+    "Dework PBL": ["discussionPoints", "decisionItems", "actionItems"],
+    "Knowledge Base Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
     "Onboarding Workgroup": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
     "Research and Development Guild": ["issues", "discussionPoints", "decisionItems", "actionItems"],
-    "Governance Workgroup": ["narrative", "decisionItems", "actionItems", "DiscussionPoints"]
+    "Governance Workgroup": ["narrative", "discussionPoints", "decisionItems", "actionItems"]
   };
   
 useEffect(() => {
