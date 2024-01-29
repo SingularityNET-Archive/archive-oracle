@@ -109,8 +109,9 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
 
   async function generatePdf(markdown: any) {
     try {
+      //console.log(formData.meetingInfo?.date, myVariable.summary?.date)
       const additionalLines = `# Meeting Summary for ${myVariable.workgroup?.workgroup}\n` +
-                        `Date: ${formatTimestampForPdf(myVariable.summary?.date)}\n\n`+
+                        `Date: ${formatTimestampForPdf(formData.meetingInfo?.date)}\n\n`+
                         `#### Meeting Info\n`;
 
       // Combine additional lines with existing markdown
