@@ -55,7 +55,7 @@ const WorkingDocs = ({ handleChange, addNewDoc, docs, removeDoc, originalDocsCou
                   type="text"
                   name="title"
                   autoComplete="off"
-                  value={doc.title}
+                  value={doc?.title ?? ''}
                   onChange={(e) => handleDocChange(e, index)}
                 />
               </td>
@@ -67,7 +67,7 @@ const WorkingDocs = ({ handleChange, addNewDoc, docs, removeDoc, originalDocsCou
                     type="text"
                     name="link"
                     autoComplete="off"
-                    value={doc.link}
+                    value={doc?.link ?? ''}
                     onChange={(e) => handleDocChange(e, index)}
                   />
                 ) : (
