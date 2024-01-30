@@ -81,7 +81,6 @@ const getHeading = (itemType: any, workgroup: any) => {
   switch(itemType) {
     case "issues":
       if(workgroup === "Onboarding Workgroup") return "To carry over for next meeting";
-      if(workgroup === "Research and Development Guild") return "Agenda Items";
       // Add more specific conditions for "issues" if needed
       return "Issues"; // Default for "issues"
 
@@ -91,11 +90,12 @@ const getHeading = (itemType: any, workgroup: any) => {
 
     case "meetingTopics":
       if(workgroup === "Research and Development Guild") return "Agenda Items";
+      if(workgroup === "Education Workgroup") return "In this meeting we discussed";
       return "Meeting Topics"; 
     // Add cases for other item types as needed
 
     default:
-      return "Default Heading"; 
+      return "Items"; 
   }
 }
 

@@ -81,7 +81,7 @@ const SubmitMeetingSummary: NextPage = () => {
     "Onboarding Workgroup": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
     "Research and Development Guild": ["meetingTopics", "discussionPoints", "decisionItems", "actionItems"],
     "Governance Workgroup": ["narrative", "discussionPoints", "decisionItems", "actionItems"],
-    //"Education Guild": ["meetingTopics", "discussionPoints", "decisionItems", "actionItems"]
+    "Education Workgroup": ["meetingTopics", "discussionPoints", "decisionItems", "actionItems"]
   };
   
 useEffect(() => {
