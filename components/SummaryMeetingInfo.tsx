@@ -180,7 +180,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           {myVariable.workgroup?.preferred_template?.meetingInfo?.host == 1 && (
           <div className={styles.people1}>
             <label className={styles['form-label']}>
-              Host:
+              Facilitator:
             </label>
             <SelectNames 
               key={meetingInfo.host}
