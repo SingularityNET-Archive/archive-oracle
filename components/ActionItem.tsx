@@ -33,48 +33,50 @@ const ActionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, type
                   autoComplete="off"
                 />
               </div>
-              <div className={styles['row-flex-start']}>
-                <div className={styles['action-assignee-column-flex']}>
-                  <label className={styles['form-label']}>
-                    Assignee
-                  </label>
-                  <SelectNames 
-                    onSelect={(selectedNames) => handleUpdate('assignee', selectedNames)}
-                    initialValue={item.assignee}
-                  />
-                </div>
-                <div className={styles['column-flex']}>
-                  <label className={styles['form-label']}>
-                    Due Date
-                  </label>
-                  <input 
-                    className={styles['form-input']}
-                    type="date"
-                    placeholder="Due Date"
-                    value={parseDate(item.dueDate || "")}  
-                    onChange={(e) => handleUpdate('dueDate', formatDate(e.target.value))}
-                  />
-                </div>
-                <div className={styles['column-flex']}>
-                  <label className={styles['form-label']}>
-                    Status
-                  </label>
-                  <select
-                    className={styles['form-select']}
-                    value={item.status} 
-                    onChange={(e) => handleUpdate('status', e.target.value)}
-                  >
-                    <option value="todo">To do</option>
-                    <option value="in progress">In Progress</option>
-                    <option value="done">Done</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </div>
-                {item.text == '' && item.assignee == '' && (
-                  <button className={styles['remove-button']} onClick={() => onRemove(type, agendaIndex, itemIndex)}>
-                    Remove
-                  </button>
-                )}
+              <div className={styles['row-flex-space-between']}>
+                  <div className={styles['row-flex-start']}>
+                    <div className={styles['action-assignee-column-flex']}>
+                      <label className={styles['form-label']}>
+                        Assignee
+                      </label>
+                      <SelectNames 
+                        onSelect={(selectedNames) => handleUpdate('assignee', selectedNames)}
+                        initialValue={item.assignee}
+                      />
+                    </div>
+                    <div className={styles['column-flex']}>
+                      <label className={styles['form-label']}>
+                        Due Date
+                      </label>
+                      <input 
+                        className={styles['form-input']}
+                        type="date"
+                        placeholder="Due Date"
+                        value={parseDate(item.dueDate || "")}  
+                        onChange={(e) => handleUpdate('dueDate', formatDate(e.target.value))}
+                      />
+                    </div>
+                    <div className={styles['column-flex']}>
+                      <label className={styles['form-label']}>
+                        Status
+                      </label>
+                      <select
+                        className={styles['form-select']}
+                        value={item.status} 
+                        onChange={(e) => handleUpdate('status', e.target.value)}
+                      >
+                        <option value="todo">To do</option>
+                        <option value="in progress">In Progress</option>
+                        <option value="done">Done</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </div>  
+                  </div>
+                  <div>
+                    <button className={styles['remove-button']} onClick={() => onRemove(type, agendaIndex, itemIndex)}>
+                      Remove
+                    </button>
+                  </div>
               </div>
             </div>
     );

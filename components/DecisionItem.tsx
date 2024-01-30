@@ -47,25 +47,27 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                     title="Please provide the rationale for making this decision"
                   />
                 </div>
-                <div className={styles['column-flex']}>
-                  <label className={styles['form-label']}>
-                    Opposing arguments (Optional)
-                  </label>
-                  <input 
-                    className={styles['form-input']}
-                    type="text"
-                    placeholder="Opposing"
-                    value={item.opposing || ""} 
-                    onChange={(e) => handleUpdate('opposing', e.target.value)}
-                    autoComplete="off"
-                    title="Please provide any opposing arguments"
-                  />
+                <div className={styles['row-flex-start']}>
+                  <div className={styles['links-column-flex']}>
+                    <label className={styles['form-label']}>
+                      Opposing arguments (Optional)
+                    </label>
+                    <input 
+                      className={styles['form-input']}
+                      type="text"
+                      placeholder="Opposing"
+                      value={item.opposing || ""} 
+                      onChange={(e) => handleUpdate('opposing', e.target.value)}
+                      autoComplete="off"
+                      title="Please provide any opposing arguments"
+                    />
+                  </div>
+                  <div className={styles['column-flex']}>
+                    <button className={styles['remove-button']} onClick={() => onRemove(type, agendaIndex, itemIndex)}>
+                      Remove
+                    </button>
+                  </div>
                 </div>
-                {item.decision == '' && item.rationale == '' && (
-                  <button className={styles['remove-button']} onClick={() => onRemove(type, agendaIndex, itemIndex)}>
-                    Remove
-                  </button>
-                )}
             </div>
     );
 
