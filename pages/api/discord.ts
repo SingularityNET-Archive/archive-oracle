@@ -22,6 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     'Treasury Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Education Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Marketing Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Research and Development Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Ambassador Town Hall': process.env.SNET_DISCORD_WEBHOOK_URL,
   };
     
   
