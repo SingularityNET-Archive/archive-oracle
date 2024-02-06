@@ -149,7 +149,7 @@ function createDiscordEmbeds(rawmarkdown, title, footerText) {
 
 export async function sendDiscordMessage(myVariable, markdown) {
   const workgroup = myVariable.summary.workgroup;
-  const username = myVariable.summary.username;
+  const username = myVariable.summary.meetingInfo.documenter;
   const archivist = myVariable.currentUser;
   const date = myVariable.summary.meetingInfo.date;
   

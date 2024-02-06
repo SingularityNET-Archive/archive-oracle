@@ -20,6 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     'Dework PBL': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Gamers Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Treasury Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Education Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Marketing Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
   };
     
   
