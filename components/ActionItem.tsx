@@ -73,7 +73,7 @@ const ActionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, type
                     </div>  
                   </div>
                   <div>
-                    <button className={styles['remove-button']} onClick={() => onRemove(type, agendaIndex, itemIndex)}>
+                    <button type="button" className={styles['remove-button']} onClick={() => onRemove(type, agendaIndex, itemIndex)}>
                       Remove
                     </button>
                   </div>
