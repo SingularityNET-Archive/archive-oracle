@@ -63,7 +63,7 @@ const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, ty
                     />
                   </div>
                   <div className={styles['column-flex']}>
-                    <button className={styles['remove-button']} onClick={() => onRemove(type, agendaIndex, itemIndex)}>
+                    <button type="button" className={styles['remove-button']} onClick={() => onRemove(type, agendaIndex, itemIndex)}>
                       Remove
                     </button>
                   </div>
