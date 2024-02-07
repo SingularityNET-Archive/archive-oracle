@@ -84,7 +84,8 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
       otherMediaLink: "",
       transcriptLink: "",
       mediaLink: "",
-      workingDocs: [{ title: '', link: '' }]
+      workingDocs: [{ title: '', link: '' }],
+      timestampedVideo: { url: '', intro: '', timestamps: [{ title: '', timestamp: '' }] }
     },  
     agendaItems: [
       { 

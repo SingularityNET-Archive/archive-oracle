@@ -3,6 +3,7 @@ import styles from '../styles/typea.module.css';
 import { useMyVariable } from '../context/MyVariableContext';
 import SelectNames from './SelectNames';
 import WorkingDocs from './WorkingDocs';
+import TimestampedVideo from './TimestampedVideo'; 
 
 type SummaryMeetingInfoProps = {
   workgroup: string;
@@ -24,7 +25,8 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     otherMediaLink = '',
     transcriptLink = '',
     mediaLink = '',
-    workingDocs = []
+    workingDocs = [],
+    timestampedVideo = {}
   } = myVariable?.summary?.meetingInfo || {};
 
   const [meetingInfo, setMeetingInfo] = useState({
@@ -39,7 +41,8 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     otherMediaLink,
     transcriptLink,
     mediaLink,
-    workingDocs
+    workingDocs,
+    timestampedVideo
   });
 
   const [displayedWorkingDocs, setDisplayedWorkingDocs] = useState(workingDocs.length > 0 ? [] : [{ title: '', link: '' }]);
@@ -117,7 +120,8 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       otherMediaLink = '',
       transcriptLink = '',
       mediaLink = '',
-      workingDocs = [{ title: '', link: '' }]
+      workingDocs = [{ title: '', link: '' }],
+      timestampedVideo = { url: '', intro: '', timestamps: [{ title: '', timestamp: '' }] }
     } = myVariable?.summary?.meetingInfo || {};
   
     // Set the local meetingInfo state with the values from myVariable.summary.meetingInfo
@@ -133,10 +137,23 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       otherMediaLink,
       transcriptLink,
       mediaLink,
-      workingDocs
+      workingDocs,
+      timestampedVideo
     });
   }, [myVariable.summary?.meetingInfo]); // Add myVariable.summary.meetingInfo to the dependency array
   
+  const handleVideoDataUpdate = (newVideoData: any) => {
+    setMeetingInfo(prevMeetingInfo => {
+      if (JSON.stringify(prevMeetingInfo.timestampedVideo) === JSON.stringify(newVideoData)) {
+        return prevMeetingInfo; 
+      }
+      return {
+        ...prevMeetingInfo,
+        timestampedVideo: newVideoData,
+      };
+    });
+  };  
+
   return (
     <>
     <div className={styles['form-column-flex']}>
@@ -305,6 +322,12 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
         removeDoc={removeDoc}
         originalDocsCount={workingDocs.length}
         updateMyVariable={updateMyVariable}
+      />
+      )}
+    {myVariable.workgroup?.preferred_template?.meetingInfo?.timestampedVideo == 1 && (
+        <TimestampedVideo
+        onUpdate={handleVideoDataUpdate}
+        initialData={meetingInfo.timestampedVideo}
       />
       )}
     </div>

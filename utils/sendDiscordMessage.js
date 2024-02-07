@@ -148,6 +148,9 @@ function createDiscordEmbeds(rawmarkdown, title, footerText) {
 
 
 export async function sendDiscordMessage(myVariable, markdown) {
+  const embedRegex = /\{% embed url="([^"]+)" %\}/g;
+  markdown = markdown.replace(embedRegex, (match, url) => `[Video Link](${url})`);
+  
   const workgroup = myVariable.summary.workgroup;
   const username = myVariable.summary.meetingInfo.documenter;
   const archivist = myVariable.currentUser;

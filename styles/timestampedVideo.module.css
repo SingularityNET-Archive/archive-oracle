@@ -1,0 +1,81 @@
+/* workingDocsTable.module.css */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0px;
+}
+
+.th, .td {
+  border: 1px solid #ddd;
+  padding-left: 0px;
+  text-align: left;
+}
+
+.centerAligned {
+  text-align: center; 
+}
+
+.thead {
+  border: 1px solid #ddd;
+  background-color: rgb(22, 47, 97);
+}
+
+.input {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: #2b1f1f;
+  color: white;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.link {
+  color: #0645ad;
+  text-decoration: none;
+}
+
+.linkCell {
+  width: 150px; 
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.button:hover {
+  background-color: #419345;
+}
+
+.removeButton {
+    background-color: #982626;
+    color: white;
+    padding: 0.3em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+.removeButton:hover {
+  background-color: #742020;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.1rem;
+  font-size: 0.9rem;
+}

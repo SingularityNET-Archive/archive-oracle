@@ -28,13 +28,13 @@ export function generateMarkdown(summary, order) {
   }
   // Process meetingInfo
   if (summary.meetingInfo) {
-    const { date, name, host, documenter, peoplePresent, purpose, mediaLink, miroBoardLink, transcriptLink, workingDocs } = summary.meetingInfo;
+    const { date, name, host, documenter, peoplePresent, purpose, mediaLink, miroBoardLink, transcriptLink, workingDocs, timestampedVideo } = summary.meetingInfo;
 
     // Add meeting information to markdown
     if (name) markdown += `- Type of meeting: ${name}\n`;
     if (host || documenter || peoplePresent) {
       markdown += `- People present: `;
-      if (host) markdown += `${host} [host], `;
+      if (host) markdown += `${host} [facilitator], `;
       if (documenter) markdown += `${documenter} [documenter], `;
       if (peoplePresent) markdown += `${peoplePresent.split(', ').map(p => p.trim()).join(', ')}`;
       markdown += '\n';
@@ -55,6 +55,38 @@ export function generateMarkdown(summary, order) {
       });
       markdown += `\n`
     }
+
+    if (timestampedVideo && Array.isArray(timestampedVideo.timestamps) && timestampedVideo.timestamps.length > 0) {
+      const { url, intro, timestamps } = timestampedVideo;
+      markdown += `\n#### Timestamped video:\n`;
+      // Embed video URL
+      markdown += `{% embed url="${url}" %}\n\n`;
+    
+      // Add intro text
+      if (intro) {
+        markdown += `${intro}\n\n`;
+      }
+    
+      // Add timestamps
+      timestamps.forEach(({ title, timestamp }) => {
+        // Split timestamp and reverse to process seconds, minutes, and optionally hours
+        const parts = timestamp.split(':').reverse().map(t => parseInt(t, 10));
+        let totalSeconds = 0;
+    
+        // Calculate total seconds based on the presence of hours, minutes, and seconds
+        if (parts.length === 3) { // hh:mm:ss format
+          totalSeconds = parts[0] + parts[1] * 60 + parts[2] * 3600;
+        } else if (parts.length === 2) { // mm:ss format
+          totalSeconds = parts[0] + parts[1] * 60;
+        } else if (parts.length === 1) { // ss format
+          totalSeconds = parts[0];
+        }
+    
+        markdown += `[${timestamp}](${url}\\&t=${totalSeconds}s) ${title}\n`;
+      });
+    
+      markdown += `\n`;
+    }    
   }
 
   function getOrdinal(n) {
