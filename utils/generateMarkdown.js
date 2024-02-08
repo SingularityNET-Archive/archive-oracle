@@ -21,6 +21,7 @@
  */
 
 export function generateMarkdown(summary, order) {
+  
   let markdown = "";
   if (!summary) {
     console.log('No summary provided');
@@ -28,7 +29,7 @@ export function generateMarkdown(summary, order) {
   }
   // Process meetingInfo
   if (summary.meetingInfo) {
-    const { date, name, host, documenter, peoplePresent, purpose, mediaLink, miroBoardLink, transcriptLink, workingDocs, timestampedVideo } = summary.meetingInfo;
+    const { date, name, host, documenter, peoplePresent, purpose, otherMediaLink, meetingVideoLink, mediaLink, miroBoardLink, transcriptLink, workingDocs, timestampedVideo } = summary.meetingInfo;
 
     // Add meeting information to markdown
     if (name) markdown += `- Type of meeting: ${name}\n`;
@@ -40,9 +41,11 @@ export function generateMarkdown(summary, order) {
       markdown += '\n';
     }
     if (purpose) markdown += `- Purpose: ${purpose}\n`;
-    if (mediaLink) markdown += `- Meeting video: ${mediaLink}\n`;
+    if (meetingVideoLink) markdown += `- Meeting video: ${meetingVideoLink}\n`;
+    if (mediaLink) markdown += `- Media link: ${mediaLink}\n`;
     if (miroBoardLink) markdown += `- Miro board: ${miroBoardLink}\n`;
     if (transcriptLink) markdown += `- Transcript: ${transcriptLink}\n`;
+    if (otherMediaLink) markdown += `- Other media: ${otherMediaLink}\n`;
     //markdown += '\n';
 
     // Process workingDocs
@@ -153,16 +156,36 @@ export function generateMarkdown(summary, order) {
         if (item.decisionItems && item.decisionItems.length > 0) formatItems("Decision Items", item.decisionItems, 'decisionItems');
         break;
       case 'discussionPoints':
-        if (item.discussionPoints && item.discussionPoints.length > 0) formatItems("Discussion Points", item.discussionPoints, 'discussionPoints');
+        if (item.discussionPoints && item.discussionPoints.length > 0) {
+          if (summary.workgroup == "Onboarding Workgroup") {
+            formatItems("In this meeting we discussed", item.discussionPoints, 'discussionPoints');
+          } else {
+            formatItems("Discussion Points", item.discussionPoints, 'discussionPoints');
+          }
+        }
         break;
       case 'learningPoints':
         if (item.learningPoints && item.learningPoints.length > 0) formatItems("Learning Points", item.learningPoints, 'learningPoints');
         break;
       case 'meetingTopics':
-        if (item.meetingTopics && item.meetingTopics.length > 0) formatItems("Meeting Topics", item.meetingTopics, 'meetingTopics');
+        if (item.meetingTopics && item.meetingTopics.length > 0) {
+          if (summary.workgroup == "Education Workgroup") {
+            formatItems("In this meeting we discussed", item.meetingTopics, 'meetingTopics');
+          } else if (summary.workgroup == "Research and Development Guild") {
+            formatItems("Agenda Items", item.meetingTopics, 'meetingTopics');
+          } else {
+            formatItems("Meeting Topics", item.meetingTopics, 'meetingTopics');
+          }
+        }  
         break;
       case 'issues':
-        if (item.issues && item.issues.length > 0) formatItems("Issues", item.issues, 'issues');
+        if (item.issues && item.issues.length > 0) {
+          if (summary.workgroup == "Onboarding Workgroup") {
+            formatItems("To carry over for next meeting", item.issues, 'issues');
+          } else {
+            formatItems("Issues", item.issues, 'issues');
+          }
+        }
         break;
       case 'gameRules':
         if (item.gameRules) formatItems("Game Rules", item.gameRules, 'gameRules');

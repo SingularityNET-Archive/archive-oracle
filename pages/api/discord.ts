@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   };
     
   
-  webhookUrl = webhookUrls[workgroup] //remember to change to webhookUrls[workgroup];
+  webhookUrl = webhookUrls[workgroup] //process.env.DISCORD_WEBHOOK_URL; //
 
   const avatarUrl = 'https://github.com/SingularityNET-Archive/archive-oracle/raw/main/public/SNet1.png';
 
