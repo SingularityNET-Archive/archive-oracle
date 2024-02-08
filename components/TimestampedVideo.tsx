@@ -51,8 +51,9 @@ const TimestampedVideo: React.FC<TimestampedVideoProps> = ({ onUpdate, initialDa
   return (
     <div className={styles.container}>
       <div className={styles.field}>
-        <label>Video URL:</label>
+        <label className={styles.label}>Video URL:</label>
         <input
+          className={styles.input}
           type="text"
           name="url"
           value={videoData.url}
@@ -60,17 +61,19 @@ const TimestampedVideo: React.FC<TimestampedVideoProps> = ({ onUpdate, initialDa
         />
       </div>
     <div className={styles.field}>
-        <label>Introduction:</label>
+        <label className={styles.label}>Introduction:</label>
         <textarea
+            className={styles.textarea}
             name="intro"
             value={videoData.intro}
             onChange={(e) => handleChange(e, null)}
         />
     </div>
-      <label>Timestamps:</label>
+      <label className={styles.label}>Timestamps:</label>
       {videoData.timestamps.map((item, index) => (
         <div key={index} className={styles.timestampField}>
           <input
+            className={styles.input}
             type="text"
             name="title"
             placeholder="Title"
@@ -78,6 +81,7 @@ const TimestampedVideo: React.FC<TimestampedVideoProps> = ({ onUpdate, initialDa
             onChange={(e) => handleChange(e, index)}
           />
           <input
+            className={styles.input}
             type="text"
             name="timestamp"
             placeholder="hh:mm:ss"
@@ -86,12 +90,12 @@ const TimestampedVideo: React.FC<TimestampedVideoProps> = ({ onUpdate, initialDa
             pattern="(?:\d{1,2}:)?[0-5]?\d:[0-5]\d|\d{1,2}"
             title="Timestamp format: ss or mm:ss or hh:mm:ss"
           />
-          <button type="button" onClick={() => removeTimestamp(index)}>
+          <button className={styles.removeButton} type="button" onClick={() => removeTimestamp(index)}>
             Remove
           </button>
         </div>
       ))}
-      <button type="button" onClick={addTimestamp}>Add Timestamp</button>
+      <button className={styles.button} type="button" onClick={addTimestamp}>Add Timestamp</button>
     </div>
   );
 };
