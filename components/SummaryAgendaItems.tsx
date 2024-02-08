@@ -61,7 +61,7 @@ const SummaryAgendaItems = ({onUpdate}: any) => {
         const newAgendaItems = JSON.parse(JSON.stringify(prevAgendaItems));
 
         // Check if the type is 'narrative'
-        if (type === 'townHallUpdates' || type === 'narrative' || type === 'gameRules') {
+        if (type === 'townHallUpdates' || type === 'narrative' || type === 'gameRules' || type === 'townHallSummary') {
             if (newAgendaItems[agendaIdx]) {
                 newAgendaItems[agendaIdx][type] = updatedItem[type]; // Directly set the narrative or gameRules string
             }
@@ -239,6 +239,25 @@ const getHeading = (itemType: any, workgroup: any) => {
             agendaIndex={agendaIndex}
             itemIndex={0} 
             onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('gameRules', agendaIdx, itemIdx, updatedItem)}
+            onRemove={removeItem}
+          />
+        </div>
+      </>
+    )
+  },
+  {
+    type: "townHallSummary",
+    isEnabled: (template: any) => template?.townHallSummary === 1,
+    render: (item: any, agendaIndex: any) => (
+      <>
+        <h3>Town Hall Summary</h3>
+        <div className={styles['action-item']}> 
+          <Item
+            type="townHallSummary"
+            item={item.townHallSummary}
+            agendaIndex={agendaIndex}
+            itemIndex={0} 
+            onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('townHallSummary', agendaIdx, itemIdx, updatedItem)}
             onRemove={removeItem}
           />
         </div>

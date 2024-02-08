@@ -29,7 +29,7 @@ export function generateMarkdown(summary, order) {
   }
   // Process meetingInfo
   if (summary.meetingInfo) {
-    const { date, name, host, documenter, peoplePresent, purpose, otherMediaLink, meetingVideoLink, mediaLink, miroBoardLink, transcriptLink, workingDocs, timestampedVideo } = summary.meetingInfo;
+    const { date, name, host, documenter, peoplePresent, purpose, googleSlides, townHallNumber, otherMediaLink, meetingVideoLink, mediaLink, miroBoardLink, transcriptLink, workingDocs, timestampedVideo } = summary.meetingInfo;
 
     // Add meeting information to markdown
     if (name) markdown += `- Type of meeting: ${name}\n`;
@@ -41,6 +41,7 @@ export function generateMarkdown(summary, order) {
       markdown += '\n';
     }
     if (purpose) markdown += `- Purpose: ${purpose}\n`;
+    if (townHallNumber) markdown += `- Town Hall Number: ${townHallNumber}\n`; //townHallNumber
     if (meetingVideoLink) markdown += `- Meeting video: ${meetingVideoLink}\n`;
     if (mediaLink) markdown += `- Media link: ${mediaLink}\n`;
     if (miroBoardLink) markdown += `- Miro board: ${miroBoardLink}\n`;
@@ -49,7 +50,7 @@ export function generateMarkdown(summary, order) {
     //markdown += '\n';
 
     // Process workingDocs
-    if (workingDocs) {
+    if (workingDocs && Array.isArray(workingDocs) && workingDocs.length > 0) {
       markdown += `- Working Docs:\n`;
       workingDocs.forEach(doc => {    
         if (doc.link) {
@@ -89,7 +90,12 @@ export function generateMarkdown(summary, order) {
       });
     
       markdown += `\n`;
-    }    
+    }  
+    
+    if (googleSlides) {
+      markdown += `\n#### Slides:\n`;
+      markdown += `{% embed url="${googleSlides}" %}\n\n`;
+    }
   }
 
   function getOrdinal(n) {
@@ -101,7 +107,7 @@ export function generateMarkdown(summary, order) {
   // Generic function to format items
   const formatItems = (title, items, itemType) => {
     let sectionContent = '';
-    if (itemType === 'townHallUpdates' || itemType === 'narrative' || itemType === 'gameRules') {
+    if (itemType === 'townHallUpdates' || itemType === 'narrative' || itemType === 'gameRules' || itemType === 'townHallSummary') {
       if (items.trim()) {  // Check if narrative or gameRules are not empty
         sectionContent = `${items}\n\n`;
       }
@@ -145,6 +151,9 @@ export function generateMarkdown(summary, order) {
     switch(itemType) {
       case 'townHallUpdates':
         if (item.townHallUpdates) formatItems("Town Hall Updates", item.townHallUpdates, 'townHallUpdates');
+        break;
+      case 'townHallSummary':
+        if (item.townHallSummary) formatItems("Town Hall Summary", item.townHallSummary, 'townHallSummary');
         break;
       case 'narrative':
         if (item.narrative) formatItems("Narrative", item.narrative, 'narrative');

@@ -79,6 +79,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
       documenter:"",
       peoplePresent: "",
       purpose: "",
+      townHallNumber: "",
       meetingVideoLink: "",
       miroBoardLink: "",
       otherMediaLink: "",

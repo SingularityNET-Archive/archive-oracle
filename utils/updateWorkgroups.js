@@ -12,17 +12,21 @@ export async function updateWorkgroups(workgroupData) {
       "documenter":1,
       "peoplePresent":1,
       "purpose":1,
+      "townHallNumber": 0,
+      "googleSlides": 0,
       "meetingVideoLink":1,
-      "miroBoardLink":1,
-      "otherMediaLink":1,
+      "miroBoardLink":0,
+      "otherMediaLink":0,
       "transcriptLink":1,
-      "mediaLink":0
+      "mediaLink":0,
+      "workingDocs": 1,
+      "timestampedVideo": 0
     },
     "agendaItems":
     [
       {
-        "agenda":1,
-        "status":1,
+        "agenda":0,
+        "status":0,
         "narrative":0,
         "meetingTopics":0,
         "issues":0,

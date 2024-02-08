@@ -1,15 +1,5 @@
 import axios from 'axios';
 
-function markdownHeadingsToBold(rawmarkdown) {
-  // This regex will match markdown headings, capturing the text after the hashes.
-  const headingRegex = /(?:^|\n)(#+)([^\n]+)/g;
-
-  return rawmarkdown.replace(headingRegex, (match, hashes, text) => {
-    // Replace the hashes with bold syntax.
-    return `${hashes.replace(/#/g, '').length > 0 ? '\n' : ''}**${text.trim()}**`;
-  });
-}
-
 function parseMarkdownToEmbedFields(rawmarkdown) {
   const fieldsArray = [];
   // Split the raw markdown by lines
@@ -149,7 +139,17 @@ function createDiscordEmbeds(rawmarkdown, title, footerText) {
 
 export async function sendDiscordMessage(myVariable, markdown) {
   const embedRegex = /\{% embed url="([^"]+)" %\}/g;
-  markdown = markdown.replace(embedRegex, (match, url) => `[Video Link](${url})`);
+  const updatedMarkdown = markdown.replace(embedRegex, (match, url) => {
+    // Check if the URL is a YouTube video
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      return `[Watch Video](${url})`; // Replace with a descriptive text for videos
+    } else if (url.includes("google.slides.com") || url.includes("docs.google.com/presentation")) {
+      return `[View Slides](${url})`; // Replace with a descriptive text for slides
+    } else {
+      return `[Link](${url})`; // A generic replacement for other URLs
+    }
+  });
+  markdown = updatedMarkdown;
   
   const workgroup = myVariable.summary.workgroup;
   const username = myVariable.summary.meetingInfo.documenter;

@@ -7,7 +7,8 @@ const TextAreaInput = ({ value, onChange, placeholder, type }: any) => {
   const titles: any = {
     narrative: 'Meeting narrative: Try to make your narrative concise and information-dense, and avoid filler',
     townHallUpdates: 'Write down Weekly Town Hall updates',
-    gameRules: 'Write down Game Rules'
+    gameRules: 'Write down Game Rules',
+    townHallSummary: 'Write down Weekly Town Hall Summary'
   };
 
   // Determine the title based on the type
@@ -123,6 +124,7 @@ const Item = ({ type, item, agendaIndex, itemIndex, onUpdate, onRemove }: any) =
           return createItem(type, agendaIndex, itemIndex, item, handleUpdate, onRemove);
         case 'townHallUpdates':
         case 'narrative':
+        case 'townHallSummary':
         case 'gameRules':
           return <TextAreaInput 
                      type={type} 

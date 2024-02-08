@@ -1,5 +1,10 @@
 /* workingDocsTable.module.css */
-
+.container {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
 .table {
   width: 100%;
   border-collapse: collapse;
