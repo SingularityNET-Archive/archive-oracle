@@ -61,7 +61,7 @@ const TimestampedVideo: React.FC<TimestampedVideoProps> = ({ onUpdate, initialDa
         />
       </div>
     <div className={styles.field}>
-        <label className={styles.label}>Introduction:</label>
+        <label className={styles.label}>Video description:</label>
         <textarea
             className={styles.textarea}
             name="intro"

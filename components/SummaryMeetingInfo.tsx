@@ -20,6 +20,8 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     documenter = '',
     peoplePresent = '',
     purpose = '',
+    townHallNumber = '',
+    googleSlides = '',
     meetingVideoLink = '',
     miroBoardLink = '',
     otherMediaLink = '',
@@ -36,6 +38,8 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     documenter,
     peoplePresent,
     purpose,
+    townHallNumber,
+    googleSlides,
     meetingVideoLink,
     miroBoardLink,
     otherMediaLink,
@@ -115,6 +119,8 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       documenter = '',
       peoplePresent = '',
       purpose = '',
+      townHallNumber = '',
+      googleSlides = '',
       meetingVideoLink = '',
       miroBoardLink = '',
       otherMediaLink = '',
@@ -132,6 +138,8 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       documenter,
       peoplePresent,
       purpose,
+      townHallNumber,
+      googleSlides,
       meetingVideoLink,
       miroBoardLink,
       otherMediaLink,
@@ -247,6 +255,20 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
         title="A sentence on what this group is about. Can be repeated for every summary"
       />
       </>)}
+      {myVariable.workgroup?.preferred_template?.meetingInfo?.townHallNumber == 1 && (<>
+      <label className={styles['form-label']}>
+        Town Hall Number:
+      </label>
+      <input
+        type="text"
+        name="townHallNumber"
+        value={meetingInfo.townHallNumber || ""}
+        onChange={handleChange}
+        className={styles['form-input']}
+        autoComplete="off"
+        title="The number of the town hall meeting"
+      />
+      </>)}
         {myVariable.workgroup?.preferred_template?.meetingInfo?.meetingVideoLink == 1 && (<>
         <label className={styles['form-label']}>
           Meeting video (link):
@@ -330,6 +352,19 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
         initialData={meetingInfo.timestampedVideo}
       />
       )}
+    {myVariable.workgroup?.preferred_template?.meetingInfo?.googleSlides == 1 && (<>
+        <label className={styles['form-label']}>
+          Google Slides (Will be embedded in GitBook):
+        </label>
+        <input
+          type="text"
+          name="googleSlides"
+          value={meetingInfo.googleSlides || ""}
+          onChange={handleChange}
+          className={styles['form-input']}
+          autoComplete="off"
+        />
+      </>)}
     </div>
     </>
   );

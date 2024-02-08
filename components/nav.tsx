@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabaseClient';
 import { Session } from "@supabase/supabase-js";
 import { useMyVariable } from '../context/MyVariableContext';
 import { saveUser } from '../utils/saveUser'
+import { fetchLatestTag } from '../utils/fetchLatestTag';
 
 type RoleData = {
   roles: {
@@ -16,13 +17,19 @@ type RoleData = {
   appRole: string;
 };
 
-
 const Nav = () => {
   const [session, setSession] = useState<Session | null>(null)
   const [roleData, setRoleData] = useState<RoleData | null>(null);
   const { myVariable, setMyVariable } = useMyVariable();
+  const [latestTag, setLatestTag] = useState<string>('');
+  
+  async function getTags() {
+    const tag = await fetchLatestTag();
+    setLatestTag(tag);
+  }
 
   useEffect(() => {
+    getTags();
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setMyVariable(prevState => ({
@@ -123,6 +130,7 @@ const Nav = () => {
           Issues
         </Link>
       </div>
+      <div>{latestTag}</div>
       <div>
         {!session && (
           <button onClick={signInWithDiscord} className="navitems">
