@@ -34,7 +34,7 @@ export function generateMarkdown(summary, order) {
     // Add meeting information to markdown
     if (name) markdown += `- Type of meeting: ${name}\n`;
     if (host || documenter || peoplePresent) {
-      markdown += `- People present: `;
+      markdown += `- Present: `;
       if (host) markdown += `${host} [facilitator], `;
       if (documenter) markdown += `${documenter} [documenter], `;
       if (peoplePresent) markdown += `${peoplePresent.split(', ').map(p => p.trim()).join(', ')}`;
