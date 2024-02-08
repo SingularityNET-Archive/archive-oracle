@@ -2,6 +2,7 @@ export const getDefaultAgendaItem = () => ({
     agenda: "",
     status: "carry over",
     townHallUpdates: "",
+    townHallSummary: "",
     narrative: "",
     gameRules: "",
     leaderboard: [""],
