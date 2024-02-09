@@ -1,0 +1,65 @@
+.container {
+  color: #fff; /* White text color for better readability */
+  background-color: black; /* Assuming your background is black */
+  padding: 20px;
+}
+
+.issuesTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  table-layout: fixed; /* Add this line */
+}
+
+.tableHeader, .tableData {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd; /* Light grey border for some contrast */
+}
+
+.tableHeader {
+  background-color: #333; /* Darker background for headers */
+  color: #fff;
+}
+
+/* Specify column widths */
+.tableHeader:nth-child(1) {
+  width: 30%; /* Adjust based on your preference */
+}
+
+.tableHeader:nth-child(2) {
+  width: 50%; /* Adjust based on your preference */
+}
+
+.tableHeader:nth-child(3) {
+  width: 20%; /* Adjust based on your preference */
+}
+
+.tableRow:hover {
+  background-color: #555; /* Slightly lighter row background on hover */
+}
+
+.missingHeading {
+  color: rgb(194, 129, 254); /* Golden color for headings */
+}
+
+.doneHeading {
+    color: rgb(0, 255, 221); /* Golden color for headings */
+}
+
+.createIssueButton {
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border: none;
+  cursor: pointer;
+}
+
+.createIssueButton:hover {
+  background-color: #45a049;
+}
+
+.issuesTableContainer {
+  overflow-x: auto;
+}
