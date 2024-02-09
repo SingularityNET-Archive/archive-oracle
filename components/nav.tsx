@@ -129,6 +129,9 @@ const Nav = () => {
         <Link href='/issues' className="navitems">
           Issues
         </Link>
+        <Link href='/status-of-summaries' className="navitems">
+          Summaries
+        </Link>
       </div>
       <div>{latestTag}</div>
       <div>
