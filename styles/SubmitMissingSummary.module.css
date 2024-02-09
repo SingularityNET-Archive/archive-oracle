@@ -1,0 +1,20 @@
+.container {
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.formGroup {
+  margin-bottom: 10px;
+}
+
+.submitButton {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background-color: #45a049;
+}
