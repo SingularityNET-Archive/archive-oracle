@@ -110,7 +110,6 @@ const Nav = () => {
       });
     })
     .catch(error => console.error('Error:', error));
-  
   }, [session]);  
 
   async function saveUsername() {
@@ -129,6 +128,9 @@ const Nav = () => {
         <Link href='/issues' className="navitems">
           Issues
         </Link>
+        {roleData?.appRole == "admin" && (<Link href='/status-of-summaries' className="navitems">
+          Summaries
+        </Link>)}
       </div>
       <div>{latestTag}</div>
       <div>

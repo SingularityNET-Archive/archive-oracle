@@ -95,6 +95,24 @@
   font-size: 1rem;
 }
 
+.resetButton {
+  width: 170px;
+  display: block;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  text-align: center;
+  background-color: rgb(18, 105, 198);
+  border: none;
+  cursor: pointer;
+  color: white;
+  z-index: 9999;  
+  font-size: 1rem;
+}
+.resetButton:hover {
+  background-color: rgb(13, 64, 120);
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
 .navButton:focus {
   outline: 4px auto -webkit-focus-ring-color;
 }
