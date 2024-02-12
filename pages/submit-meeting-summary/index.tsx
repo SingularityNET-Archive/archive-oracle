@@ -220,6 +220,17 @@ useEffect(() => {
     });
   };
   
+  const resetSummary = () => {
+    setMyVariable(prevMyVariable => ({
+      ...prevMyVariable, 
+      summary: {
+        ...prevMyVariable.summary, 
+        meetingInfo: {}, 
+        agendaItems: [],
+        tags: {} 
+      }
+    }));
+  };  
 
   return (
     <div className={styles.container}>
@@ -277,6 +288,12 @@ useEffect(() => {
         {selectedWorkgroupId  && (<>
         {myVariable.roles?.isAdmin && (<button className={styles.navButton} onClick={() => setActiveComponent('two')}>Summary</button>)}
         {myVariable.roles?.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Archive Summaries</button>}
+        <button 
+          className={styles.resetButton} 
+          onClick={resetSummary}
+          title="All values will be cleared, so please make sure to select all dropdowns and fill in all fields"
+          >Clear Summary
+          </button>
         </>)}
       </div>
       {myVariable.isLoggedIn && selectedWorkgroupId  && (<div className={styles.mainContent}>
