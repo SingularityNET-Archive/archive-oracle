@@ -268,9 +268,10 @@ useEffect(() => {
                   title="Defaults to latest meeting, only change this when you want to use a previous meeting as template">
                   {meetings.map((meeting: any) => (
                     <option 
+                      style={{ color: meeting.confirmed ? 'lightgreen' : 'white' }}
                       key={`${meeting.meeting_id}-${meeting.updated_at}`} 
                       value={meeting.meeting_id}>
-                        {formatDate(meeting.date)} {meeting.username}
+                        {formatDate(meeting.date)} {meeting.username} {meeting.confirmed ? 'Archived' : ''}
                     </option>
                   ))}
                 </select>
