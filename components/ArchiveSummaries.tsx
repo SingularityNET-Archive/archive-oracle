@@ -22,6 +22,7 @@ const ArchiveSummaries = () => {
       
   useEffect(() => {
     setRenderedMarkdown(formData.meetingSummary);
+    console.log(formData.meetingSummary)
   }, [formData.meetingSummary]);
 
   useEffect(() => {

@@ -114,6 +114,18 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   const currentOrder = myVariable.agendaItemOrder ? myVariable.agendaItemOrder[myVariable.workgroup?.workgroup] : undefined;
 
   async function generatePdf(markdown: any) {
+    const embedRegex = /\{% embed url="([^"]+)" %\}/g;
+    const updatedMarkdown = markdown.replace(embedRegex, (match, url) => {
+      // Check if the URL is a YouTube video
+      if (url.includes("youtube.com") || url.includes("youtu.be")) {
+        return `[Watch Video](${url})`; // Replace with a descriptive text for videos
+      } else if (url.includes("google.slides.com") || url.includes("docs.google.com/presentation")) {
+        return `[View Slides](${url})`; // Replace with a descriptive text for slides
+      } else {
+        return `[Link](${url})`; // A generic replacement for other URLs
+      }
+    });
+    markdown = updatedMarkdown;
     try {
       //console.log(formData.meetingInfo?.date, myVariable.summary?.date)
       const additionalLines = `# Meeting Summary for ${myVariable.workgroup?.workgroup}\n` +

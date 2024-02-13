@@ -127,7 +127,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       transcriptLink = '',
       mediaLink = '',
       workingDocs = [{ title: '', link: '' }],
-      timestampedVideo = { url: '', intro: '', timestamps: [{ title: '', timestamp: '' }] }
+      timestampedVideo = { url: '', intro: '', timestamps: '' }
     } = myVariable?.summary?.meetingInfo || {};
   
     // Set the local meetingInfo state with the values from myVariable.summary.meetingInfo
@@ -354,7 +354,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       )}
     {myVariable.workgroup?.preferred_template?.meetingInfo?.googleSlides == 1 && (<>
         <label className={styles['form-label']}>
-          Google Slides (Will be embedded in GitBook):
+          Google Slides (Optional):
         </label>
         <input
           type="text"

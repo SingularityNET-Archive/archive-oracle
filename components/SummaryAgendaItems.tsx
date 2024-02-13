@@ -250,7 +250,7 @@ const getHeading = (itemType: any, workgroup: any) => {
     isEnabled: (template: any) => template?.townHallSummary === 1,
     render: (item: any, agendaIndex: any) => (
       <>
-        <h3>Town Hall Summary</h3>
+        <h3>Town Hall Summary (Optional)</h3>
         <div className={styles['action-item']}> 
           <Item
             type="townHallSummary"
