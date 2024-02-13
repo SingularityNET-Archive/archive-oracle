@@ -154,10 +154,13 @@ export async function sendDiscordMessage(myVariable, markdown) {
   const workgroup = myVariable.summary.workgroup;
   const username = myVariable.summary.meetingInfo.documenter;
   const archivist = myVariable.currentUser;
-  const date = myVariable.summary.meetingInfo.date;
-  
+  const dateObj = new Date(myVariable.summary.meetingInfo.date);
+  // Format the date to "24 January 2024" format
+  const formattedDate = dateObj.toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'long', year: 'numeric'
+  });
   // Use the new function to create embeds
-  const title = `${workgroup} -> ${date} meeting summary`;
+  const title = `${workgroup} -> ${formattedDate} meeting summary`;
   const footerText = `Summary created by ${username} and archived by ${archivist}`;
   const embeds = createDiscordEmbeds(markdown, title, footerText);
 
