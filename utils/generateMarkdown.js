@@ -42,11 +42,11 @@ export function generateMarkdown(summary, order) {
     }
     if (purpose) markdown += `- Purpose: ${purpose}\n`;
     if (townHallNumber) markdown += `- Town Hall Number: ${townHallNumber}\n`; //townHallNumber
-    if (meetingVideoLink) markdown += `- Meeting video: ${meetingVideoLink}\n`;
-    if (mediaLink) markdown += `- Media link: ${mediaLink}\n`;
-    if (miroBoardLink) markdown += `- Miro board: ${miroBoardLink}\n`;
-    if (transcriptLink) markdown += `- Transcript: ${transcriptLink}\n`;
-    if (otherMediaLink) markdown += `- Other media: ${otherMediaLink}\n`;
+    if (meetingVideoLink) markdown += `- Meeting video: [Link](${meetingVideoLink})\n`;
+    if (mediaLink) markdown += `- Media link: [Link](${mediaLink})\n`;
+    if (miroBoardLink) markdown += `- Miro board: [Link](${miroBoardLink})\n`;
+    if (transcriptLink) markdown += `- Transcript: [Link](${transcriptLink})\n`;
+    if (otherMediaLink) markdown += `- Other media: [Link](${otherMediaLink})\n`;
     //markdown += '\n';
 
     // Process workingDocs
