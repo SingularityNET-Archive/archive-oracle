@@ -20,6 +20,13 @@
  * - Rich markdown formatting for clear and readable output.
  */
 
+function capitalize(text) {
+  return text
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
 export function generateMarkdown(summary, order) {
   
   let markdown = "";
@@ -60,37 +67,32 @@ export function generateMarkdown(summary, order) {
       markdown += `\n`
     }
 
-    if (timestampedVideo && Array.isArray(timestampedVideo.timestamps) && timestampedVideo.timestamps.length > 0) {
-      const { url, intro, timestamps } = timestampedVideo;
+     // Process timestampedVideo if it's a string
+     if (timestampedVideo && typeof timestampedVideo.timestamps === 'string') {
+      const { url, intro } = timestampedVideo;
       markdown += `\n#### Timestamped video:\n`;
-      // Embed video URL
-      markdown += `{% embed url="${url}" %}\n\n`;
-    
-      // Add intro text
-      if (intro) {
-        markdown += `${intro}\n\n`;
-      }
-    
-      // Add timestamps
-      timestamps.forEach(({ title, timestamp }) => {
-        // Split timestamp and reverse to process seconds, minutes, and optionally hours
-        const parts = timestamp.split(':').reverse().map(t => parseInt(t, 10));
-        let totalSeconds = 0;
-    
-        // Calculate total seconds based on the presence of hours, minutes, and seconds
-        if (parts.length === 3) { // hh:mm:ss format
-          totalSeconds = parts[0] + parts[1] * 60 + parts[2] * 3600;
-        } else if (parts.length === 2) { // mm:ss format
-          totalSeconds = parts[0] + parts[1] * 60;
-        } else if (parts.length === 1) { // ss format
-          totalSeconds = parts[0];
+      if (url) markdown += `{% embed url="${url}" %}\n\n`;
+      if (intro) markdown += `${intro}\n\n`;
+
+      // Parse the timestamps string and convert each to a link
+      const lines = timestampedVideo.timestamps.split('\n');
+      lines.forEach(line => {
+        const [time, title] = line.split(/(?<=^\S+)\s/); // Splits at the first space after a non-whitespace sequence
+        if (time && title) {
+          const parts = time.split(':').map(t => parseInt(t, 10));
+          let totalSeconds = 0;
+          if (parts.length === 3) {
+            totalSeconds = parts[2] + parts[1] * 60 + parts[0] * 3600;
+          } else if (parts.length === 2) {
+            totalSeconds = parts[1] + parts[0] * 60;
+          } else if (parts.length === 1) {
+            totalSeconds = parts[0];
+          }
+          markdown += `[${time}](${url}\\&t=${totalSeconds}s) ${capitalize(title)}\n`;
         }
-    
-        markdown += `[${timestamp}](${url}\\&t=${totalSeconds}s) ${title}\n`;
       });
-    
       markdown += `\n`;
-    }  
+    } 
     
     if (googleSlides) {
       markdown += `\n#### Slides:\n`;
