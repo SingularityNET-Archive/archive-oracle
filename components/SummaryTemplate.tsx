@@ -115,7 +115,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
 
   async function generatePdf(markdown: any) {
     const embedRegex = /\{% embed url="([^"]+)" %\}/g;
-    const updatedMarkdown = markdown.replace(embedRegex, (match, url) => {
+    const updatedMarkdown = markdown.replace(embedRegex, (match: any, url: any) => {
       // Check if the URL is a YouTube video
       if (url.includes("youtube.com") || url.includes("youtu.be")) {
         return `[Watch Video](${url})`; // Replace with a descriptive text for videos
