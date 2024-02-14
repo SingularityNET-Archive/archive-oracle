@@ -19,11 +19,12 @@ export default async function handler(req, res) {
   try {
     let { data, error } = await supabase
       .from('meetingsummaries')
-      .select('summary, updated_at, confirmed');
+      .select('summary, updated_at, confirmed')
+      .eq('confirmed', true); 
     
     if (error) throw error;
 
-    // Set CORS headers
+    // Set CORS headers for the actual request
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, api_key');
