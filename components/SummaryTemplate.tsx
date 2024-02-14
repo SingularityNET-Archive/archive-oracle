@@ -7,6 +7,7 @@ import Tags from './Tags'
 import { saveCustomAgenda } from '../utils/saveCustomAgenda';
 import { generateMarkdown } from '../utils/generateMarkdown';
 import axios from "axios";
+import { filterFormData } from '../utils/filterFormData';
 
 type SummaryTemplateProps = {
   updateMeetings: (newMeetingSummary: any) => void;
@@ -109,7 +110,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     type: "Custom"
   };
 
-  const [formData, setFormData] = useState(filterKeys(myVariable.summary || {}, defaultFormData));
+  const [formData, setFormData] = useState(filterFormData(filterKeys(myVariable.summary || {}, defaultFormData)));
   const [tags, setTags] = useState({ topicsCovered: "", emotions: "", other: "", gamesPlayed: "" });
   const currentOrder = myVariable.agendaItemOrder ? myVariable.agendaItemOrder[myVariable.workgroup?.workgroup] : undefined;
 
@@ -168,7 +169,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   
   useEffect(() => {
     // Set the local state whenever myVariable.summary changes
-    setFormData(filterKeys(myVariable.summary || {}, defaultFormData));
+    setFormData((filterKeys(myVariable.summary || {}, defaultFormData)));
     //console.log(myVariable, generateMarkdown(myVariable.summary, currentOrder))
   }, [myVariable.summary]); // Add myVariable.summary to the dependency array
   
@@ -183,6 +184,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
 
   useEffect(() => {
     setFormData((prevState: any) => ({ ...prevState, tags })); 
+    //console.log("formData",formData, myVariable)
   }, [tags]);
 
   const removeEmptyValues = (obj: any) => {
@@ -241,6 +243,8 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
       },
       updated_at: new Date()
     }
+    
+    summary.confirmed = false;
 
     const cleanedFormData = removeEmptyValues({ ...formData, meetingInfo: { ...formData.meetingInfo, workingDocs: filteredWorkingDocs } });
     setLoading(true);
