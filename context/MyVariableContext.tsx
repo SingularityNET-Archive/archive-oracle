@@ -27,6 +27,7 @@ type MyVariable = {
   tags?: any;
   currentUser?: string;
   agendaItemOrder: any;
+  selectedDate: any;
   // other keys go here
 };
 
@@ -42,7 +43,7 @@ interface MyVariableProviderProps {
 }
 
 export const MyVariableProvider: React.FC<MyVariableProviderProps> = ({ children }) => {
-  const [myVariable, setMyVariable] = useState<MyVariable>({ groupInfo: [], projectInfo: undefined, workgroup: undefined, summaries: undefined, summary: undefined, roles: undefined, isLoggedIn: undefined, names: [], tags: {}, currentUser: "", agendaItemOrder: {} });
+  const [myVariable, setMyVariable] = useState<MyVariable>({ groupInfo: [], projectInfo: undefined, workgroup: undefined, summaries: undefined, summary: undefined, roles: undefined, isLoggedIn: undefined, names: [], tags: {}, currentUser: "", agendaItemOrder: {}, selectedDate: undefined });
 
   return (
     <MyVariableContext.Provider value={{ myVariable, setMyVariable }}>

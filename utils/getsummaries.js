@@ -22,9 +22,8 @@ import { supabase } from "../lib/supabaseClient";
 export async function getSummaries(workgroup_id) {
   let summaries = []; // Initialize an array to hold the summaries
   let summary = {};
-  let lastConfirmedDate = null;
-  let lastUpdatedAt = null;
   let lastConfirmedMeeting = null;
+  let confirmedDates = new Set();
 
   async function getMeetingSummaries() {
     try {
@@ -41,17 +40,19 @@ export async function getSummaries(workgroup_id) {
       if (summaryData) {
         // Find the last confirmed meeting
         lastConfirmedMeeting = summaryData.find(data => data.confirmed === true);
-        if (lastConfirmedMeeting) {
-          lastConfirmedDate = lastConfirmedMeeting.date;
-          lastUpdatedAt = lastConfirmedMeeting.updated_at;
-        }
 
+        summaryData.forEach(data => {
+          if (data.confirmed) confirmedDates.add(data.date);
+        });
         // Fetch the user details for each summary
         for (const data of summaryData) {
-          // Exclude meetings where confirmed == true and all meetings with an earlier date and updated_at date than the last meeting where confirmed == true
-          /*if (data.confirmed === true || new Date(data.date) < new Date(lastConfirmedDate)) { //Might have to add this back in later - || new Date(data.updated_at) < new Date(lastUpdatedAt)
+          const isSameDateAsLastConfirmed = lastConfirmedMeeting && new Date(data.date).getTime() === new Date(lastConfirmedMeeting.date).getTime();
+          const isDateWithOtherConfirmed = confirmedDates.has(data.date) && (!lastConfirmedMeeting || (lastConfirmedMeeting && !isSameDateAsLastConfirmed));
+
+          // Skip if it's not the last confirmed and it's a date with another confirmed summary
+          if (data.confirmed && !isSameDateAsLastConfirmed || isDateWithOtherConfirmed) {
             continue;
-          }*/
+          }
 
           const { data: userData, error: userError } = await supabase
             .from('users')

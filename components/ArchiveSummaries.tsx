@@ -56,30 +56,44 @@ const ArchiveSummaries = () => {
     }
   };  
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    if (myVariable.summary.confirmed == false) {
+  
+    // Check if there are any confirmed summaries with the same date
+    const isDuplicateConfirmedSummary = myVariable.summaries.some((summary: any) => {
+      // Convert both dates to Date objects to strip off the time part
+      const summaryDate = new Date(summary.date).toDateString();
+      const formDataDate = new Date(formData.date).toDateString(); 
+      //console.log(summaryDate, formDataDate, summaryDate === formDataDate && summary.confirmed); // For debugging purposes
+      // Compare the date strings
+      return summaryDate === formDataDate && summary.confirmed;
+    });    
+  
+    if (isDuplicateConfirmedSummary) {
+      alert('A confirmed summary for this date already exists.');
+      setLoading(false);
+      return; // Exit the function early
+    }
+  
+    if (!myVariable.summary.confirmed) {
       const data = await updateGitbook(formData);
-      //console.log("returned from util function", formData)
       if (data) {
-        setMyVariable({
-          ...myVariable,
+        setMyVariable(prevState => ({
+          ...prevState,
           summary: {
-            ...myVariable.summary,
+            ...prevState.summary,
             confirmed: true,
           },
-        });
+        }));
       }
-      //console.log(myVariable)
       await sendDiscordMessage(myVariable, renderedMarkdown);
-      //console.log(myVariable, "renderedMarkdown", renderedMarkdown)
     } else {
-      alert('Summary already archived')
+      alert('Summary already archived');
     }
     
     setLoading(false);
-  }
+  }  
   
   return (
     <div>
