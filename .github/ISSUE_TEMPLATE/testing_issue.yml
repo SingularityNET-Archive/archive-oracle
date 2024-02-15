@@ -61,6 +61,7 @@ body:
         - "All Workgroups"
         - "Archival Workgroup"
         - "Dework PBL"
+        - "Education Guild"
         - "Gamers Guild"
         - "Governance Workgroup"
         - "Knowledge Base Workgroup"
@@ -69,6 +70,9 @@ body:
         - "Treasury Guild"
         - "Video Workgroup"
         - "Writers Workgroup"
+        - "Research and Development Guild"
+        - "Ambassadors Town Hall"
+        - "Deep Funding Town Hall"
       default: 0
     validations:
       required: true

@@ -83,8 +83,9 @@ const SubmitMeetingSummary: NextPage = () => {
     "Governance Workgroup": ["narrative", "discussionPoints", "decisionItems", "actionItems"],
     "Education Workgroup": ["meetingTopics", "discussionPoints", "decisionItems", "actionItems"],
     "Marketing Guild": ["discussionPoints", "decisionItems", "actionItems"],
-    "Ambassador Town Hall": ["townHallSummary", "discussionPoints", "decisionItems", "actionItems"],
-    "Deep Funding Town Hall": ["townHallSummary", "discussionPoints", "decisionItems", "actionItems"]
+    "Ambassador Town Hall": ["townHallSummary"],
+    "Deep Funding Town Hall": ["townHallSummary"],
+    "One-off Event": ["Narative"]
   };
   
 useEffect(() => {
