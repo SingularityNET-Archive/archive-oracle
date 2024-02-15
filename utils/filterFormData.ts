@@ -2,6 +2,10 @@
 type AnyObj = { [key: string]: any };
 
 export function filterFormData(data: AnyObj): AnyObj {
+  
+  if (data === null || data === undefined || Object.keys(data).length === 0) {
+    return {}; // Return an empty object or some default value as appropriate
+  }
   if (!data.confirmed) {
     return data; // Return the original data unmodified if not confirmed
   }
