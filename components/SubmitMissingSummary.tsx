@@ -5,50 +5,52 @@ import { saveMissingSummary } from '../utils/saveMissingSummaries';
 function formatDate(dateString: any) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const date = new Date(dateString);
-    // Manually construct the date string to ensure it's in "DD MMMM YYYY" format
     const formattedDate = `${date.getDate()} ${date.toLocaleString('en-US', { month: 'long' })} ${date.getFullYear()}`;
     return formattedDate;
-  }
+}
 
-const SubmitMissingSummary = ({ workgroups, allSummaries }: any) => {
+const SubmitMissingSummary = ({ workgroups, allSummaries, allArchivedSummaries }: any) => {
   const [selectedWorkgroup, setSelectedWorkgroup] = useState<{ workgroup: string; workgroup_id: string; } | null>(null);
   const [meetingDate, setMeetingDate] = useState('');
   
-  //console.log("allSummaries", allSummaries)
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (selectedWorkgroup && meetingDate) {
       const missingSummaryData = {
         workgroup: selectedWorkgroup.workgroup,
         workgroupId: selectedWorkgroup.workgroup_id,
-        meetingDate: formatDate(meetingDate), // Assuming you want the formatted date here
+        meetingDate: formatDate(meetingDate),
         status: "Missing",
         type: "weekly"
       };
+      
+      // Combine allSummaries and allArchivedSummaries, considering all as "Done" for conflict checking
+      const combinedSummaries = [...allSummaries, ...allArchivedSummaries.map((summary: any) => ({...summary, status: "Done"}))];
+      
       const newRow = {
         meetingDate: formatDate(meetingDate),
         workgroup: selectedWorkgroup.workgroup,
         status: "Missing"
       };
 
-      const conflictSummary = allSummaries.find((summary: any) =>
+      const conflictSummary = combinedSummaries.find((summary: any) =>
         summary.meetingDate === newRow.meetingDate && summary.workgroup === newRow.workgroup
       );
   
-      // If a "Done" summary exists for the same meetingDate and workgroup, alert the user
-      if (conflictSummary && conflictSummary.status === "Done") {
-        alert("This meeting is already marked as Done.");
+      // If a summary exists for the same meetingDate and workgroup, alert the user
+      if (conflictSummary) {
+        alert(`This meeting is already marked as ${conflictSummary.status}.`);
         return; // Prevent the submission
       }
       
-      const summariesToUpdate = newRow ? [...allSummaries, newRow] : allSummaries;
+      const summariesToUpdate = [...combinedSummaries, newRow];
   
       try {
-        // First, save the missing summary through your existing utility function
+        // Save the missing summary
         const saveResponse = await saveMissingSummary(missingSummaryData);
         console.log('Save missing summary response:', saveResponse);
   
-        // If the save operation is successful, then update the CSV in GitHub
+        // Update the CSV in GitHub
         const response = await fetch('/api/updateCSV', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -67,15 +69,13 @@ const SubmitMissingSummary = ({ workgroups, allSummaries }: any) => {
           const responseData = await response.json();
           console.log('CSV updated successfully:', responseData);
       
-          // Reset form state here
           setSelectedWorkgroup(null);
           setMeetingDate('');
       } catch (error) {
         console.error('Error:', error);
-        // Handle error, e.g., showing an error message
       }
     }
-  };  
+  };
 
   return (
     <form className={styles.container} onSubmit={handleSubmit}>

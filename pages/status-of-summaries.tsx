@@ -17,6 +17,7 @@ const StatusOfSummaries: NextPage = () => {
   const [data, setData] = useState<SummaryData[]>([]);
   const [workgroups, setWorkgroups] = useState<any[]>([]); 
   const [allSummaries, setAllSummaries] = useState<any[]>([]);
+  const [archivedSummaries, setArchivedSummaries] = useState<SummaryData[]>([]);
 
   async function fetchCsvData() {
     setLoading(true);
@@ -39,8 +40,11 @@ const StatusOfSummaries: NextPage = () => {
   async function fetchWorkgroups() {
     try {
       const databaseWorkgroups = await getWorkgroups();
-      const allSummaries = await getMissingSummaries();
+      const { finalSummaries, allArchivedSummaries } = await getMissingSummaries();
+      const allSummaries = finalSummaries;
       setAllSummaries(allSummaries)
+      setArchivedSummaries(allArchivedSummaries);
+      console.log("allSummaries", allSummaries)
       
       // Assuming databaseWorkgroups should be an array, check and handle accordingly
       if (Array.isArray(databaseWorkgroups)) {
@@ -58,7 +62,7 @@ const StatusOfSummaries: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <SubmitMissingSummary workgroups={workgroups} allSummaries={allSummaries}/>
+      <SubmitMissingSummary workgroups={workgroups} allSummaries={allSummaries} allArchivedSummaries={archivedSummaries}/>
       <h1>Status of Summaries</h1>
       {loading && <p>Loading...</p>}
 
@@ -85,7 +89,7 @@ const StatusOfSummaries: NextPage = () => {
         </table>
 
         {/* Done Summaries Table */}
-        <h2 className={styles.doneHeading}>Done Summaries</h2>
+        <h2 className={styles.doneHeading}>Done Summaries (Needs to be archived)</h2>
         <table className={styles.issuesTable}>
           <thead>
             <tr className={styles.tableRow}>
@@ -96,6 +100,27 @@ const StatusOfSummaries: NextPage = () => {
           </thead>
           <tbody>
             {allSummaries.filter(row => row.status === "Done").map((row, index) => (
+              <tr key={index} className={styles.tableRow}>
+                <td className={styles.tableData}>{row.meetingDate}</td>
+                <td className={styles.tableData}>{row.workgroup}</td>
+                <td className={styles.tableData}>{row.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Archived Summaries Table */}
+        <h2 className={styles.archivedHeading}>Archived Summaries</h2>
+        <table className={styles.issuesTable}>
+          <thead>
+            <tr className={styles.tableRow}>
+              <th className={styles.tableHeader}>Meeting Date</th>
+              <th className={styles.tableHeader}>Workgroup</th>
+              <th className={styles.tableHeader}>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {archivedSummaries.map((row, index) => (
               <tr key={index} className={styles.tableRow}>
                 <td className={styles.tableData}>{row.meetingDate}</td>
                 <td className={styles.tableData}>{row.workgroup}</td>
