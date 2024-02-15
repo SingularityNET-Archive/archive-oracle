@@ -346,13 +346,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
         updateMyVariable={updateMyVariable}
       />
       )}
-    {myVariable.workgroup?.preferred_template?.meetingInfo?.timestampedVideo == 1 && (
-        <TimestampedVideo
-        onUpdate={handleVideoDataUpdate}
-        initialData={meetingInfo.timestampedVideo}
-      />
-      )}
-    {myVariable.workgroup?.preferred_template?.meetingInfo?.googleSlides == 1 && (<>
+      {myVariable.workgroup?.preferred_template?.meetingInfo?.googleSlides == 1 && (<>
         <label className={styles['form-label']}>
           Google Slides (Optional):
         </label>
@@ -365,6 +359,12 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
           autoComplete="off"
         />
       </>)}
+    {myVariable.workgroup?.preferred_template?.meetingInfo?.timestampedVideo == 1 && (
+        <TimestampedVideo
+        onUpdate={handleVideoDataUpdate}
+        initialData={meetingInfo.timestampedVideo}
+      />
+      )}
     </div>
     </>
   );
