@@ -346,18 +346,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
 
   type WorkgroupKey = keyof typeof orderMapping;
 
-  const orderMapping = myVariable?.agendaItemOrder; /*{
-  "Gamers Guild": ["narrative", "decisionItems", "actionItems", "gameRules", "leaderboard"],
-  "Writers Workgroup": ["narrative", "decisionItems", "actionItems", "learningPoints"],
-  "Video Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
-  "Archival Workgroup": ["actionItems", "decisionItems", "learningPoints"],
-  "Treasury Guild": ["actionItems", "decisionItems", "discussionPoints"],
-  "Dework PBL": ["actionItems", "decisionItems", "discussionPoints"],
-  "Knowledge Base Workgroup": ["actionItems", "decisionItems", "discussionPoints"],
-  "Onboarding Workgroup": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
-  "Translation Workgroup": ["discussionPoints", "decisionItems", "actionItems", "issues"],
-  "Governance Workgroup": ["narrative", "decisionItems", "actionItems", "DiscussionPoints"]
-};*/
+  const orderMapping = myVariable?.agendaItemOrder; 
 
   const reorderItemTypesConfig = (orderKey: WorkgroupKey) => {
     const order = orderMapping[orderKey];
