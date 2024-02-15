@@ -432,7 +432,9 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
           {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1 && item.agenda == '' && (<button className={styles['remove-button']} type="button" onClick={() => removeAgendaItem(agendaIndex)}>Remove Agenda</button>)}
         </div>
       ))}
-      {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1 && (<button className={styles['add-button']} type="button" onClick={addAgendaItem}>Add Agenda Item</button>)}
+      {((myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 0 && agendaItems.length == 0) ||
+      (myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1))
+      && (<button className={styles['add-button']} type="button" onClick={addAgendaItem}>Add Agenda Item</button>)}
     </div>
   );
 };
