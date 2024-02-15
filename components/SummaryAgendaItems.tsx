@@ -346,7 +346,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
 
   type WorkgroupKey = keyof typeof orderMapping;
 
-  const orderMapping = myVariable.agendaItemOrder; /*{
+  const orderMapping = myVariable?.agendaItemOrder; /*{
   "Gamers Guild": ["narrative", "decisionItems", "actionItems", "gameRules", "leaderboard"],
   "Writers Workgroup": ["narrative", "decisionItems", "actionItems", "learningPoints"],
   "Video Workgroup": ["discussionPoints", "decisionItems", "actionItems"],

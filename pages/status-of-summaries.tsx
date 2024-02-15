@@ -44,7 +44,7 @@ const StatusOfSummaries: NextPage = () => {
       const allSummaries = finalSummaries;
       setAllSummaries(allSummaries)
       setArchivedSummaries(allArchivedSummaries);
-      console.log("allSummaries", allSummaries)
+      //console.log("allSummaries", allSummaries)
       
       // Assuming databaseWorkgroups should be an array, check and handle accordingly
       if (Array.isArray(databaseWorkgroups)) {
