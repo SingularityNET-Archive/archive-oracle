@@ -43,8 +43,8 @@ export const commitToGithub = async (formData: any, token: string) => {
         existingContent = contentSplit.slice(1).join('##').trim();
       }
     } catch (err) {
-      const startWeek = startOfWeek(dateObj);
-      const endWeek = endOfWeek(dateObj);
+      const startWeek = startOfWeek(dateObj, { weekStartsOn: 1 }); // 1 is for Monday
+      const endWeek = endOfWeek(dateObj, { weekStartsOn: 1 }); // Ensures the week ends on Sunday
       metadata = `---
 description: ${format(startWeek, 'do MMMM yyyy')} to ${format(endWeek, 'do MMMM yyyy')}
 ---
