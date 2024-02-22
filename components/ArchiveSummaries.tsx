@@ -5,6 +5,7 @@ import { generateMarkdown } from '../utils/generateMarkdown';
 import { updateGitbook } from '../utils/updateGitbook';
 import { sendDiscordMessage } from '../utils/sendDiscordMessage';
 import { useMyVariable } from '../context/MyVariableContext';
+import { confirmedStatusUpdate } from '../utils/confirmedStatusUpdate'
 
 const ArchiveSummaries = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -17,6 +18,8 @@ const ArchiveSummaries = () => {
     meeting_id: myVariable.summary?.meeting_id || "",
     confirmed: myVariable.summary?.confirmed || false
   });
+  const [commitToGitBook, setCommitToGitBook] = useState(true);
+  const [sendToDiscord, setSendToDiscord] = useState(true);
   const [renderedMarkdown, setRenderedMarkdown] = useState("");
   const formattedDate = new Date(formData.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       
@@ -49,8 +52,12 @@ const ArchiveSummaries = () => {
   };
   
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, checked } = e.target;
+    if (type === "checkbox") {
+      name === "commitToGitBook" ? setCommitToGitBook(checked) : setSendToDiscord(checked);
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
     if (name === 'meetingSummary') {
       adjustTextareaHeight();
     }
@@ -76,9 +83,20 @@ const ArchiveSummaries = () => {
       return; // Exit the function early
     }
   
-    if (!myVariable.summary.confirmed) {
-      const data = await updateGitbook(formData);
-      if (data) {
+     if (!formData.confirmed) {
+      if (commitToGitBook) {
+        const data = await updateGitbook(formData);
+        if (data) {
+          setMyVariable(prevState => ({
+            ...prevState,
+            summary: {
+              ...prevState.summary,
+              confirmed: true,
+            },
+          }));
+        }
+      } else {
+        await confirmedStatusUpdate(formData);
         setMyVariable(prevState => ({
           ...prevState,
           summary: {
@@ -87,7 +105,10 @@ const ArchiveSummaries = () => {
           },
         }));
       }
-      await sendDiscordMessage(myVariable, renderedMarkdown);
+
+      if (sendToDiscord) {
+        await sendDiscordMessage(myVariable, renderedMarkdown);
+      }
     } else {
       alert('Summary already archived');
     }
@@ -110,7 +131,7 @@ const ArchiveSummaries = () => {
           <div className={styles['row-flex-start']}>
             <div className={styles['form-container']}>  
               <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
-              <label className={styles['form-label']}>
+                <label className={styles['form-label']}>
                   Date:
                 </label>
                 <input
@@ -145,6 +166,26 @@ const ArchiveSummaries = () => {
                 <button type="submit" disabled={loading} className={styles['submit-button']}>
                   {loading ? "Loading..." : "Submit"}
                 </button>
+                <div className={styles['form-checkbox']}>
+                <input
+                  type="checkbox"
+                  id="commitToGitBook"
+                  name="commitToGitBook"
+                  checked={commitToGitBook}
+                  onChange={handleChange}
+                />
+                <label htmlFor="commitToGitBook">Commit to GitBook</label>
+              </div>
+              <div className={styles['form-checkbox']}>
+                <input
+                  type="checkbox"
+                  id="sendToDiscord"
+                  name="sendToDiscord"
+                  checked={sendToDiscord}
+                  onChange={handleChange}
+                />
+                <label htmlFor="sendToDiscord">Send Discord Message</label>
+              </div>
               </form>
             </div>
             <div className={styles['markdown-rendered']}>
