@@ -50,6 +50,7 @@ const Issues: NextPage = () => {
       <a href={newIssueUrl} target="_blank" rel="noopener noreferrer">
         <button className={styles.createIssueButton}>Create New Issue</button>
       </a>
+      <p>For further assistance, contact Lord Kizzy on Discord for help.</p>
       <div className={styles.issuesTableContainer}>
   
         {/* Open Issues Table */}
