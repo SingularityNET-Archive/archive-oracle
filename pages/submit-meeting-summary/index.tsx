@@ -233,6 +233,19 @@ useEffect(() => {
     }));
   };  
 
+  const noSummaryGiven = () => {
+    setMyVariable(prevMyVariable => ({
+      ...prevMyVariable, 
+      summary: {
+        ...prevMyVariable.summary, 
+        meetingInfo: {}, 
+        agendaItems: [],
+        tags: {},
+        noSummaryGiven: true 
+      }
+    }));
+  };  
+
   return (
     <div className={styles.container}>
       <div className={styles.navbar}>
@@ -296,6 +309,12 @@ useEffect(() => {
           title="All values will be cleared, so please make sure to select all dropdowns and fill in all fields"
           >Clear Summary
           </button>
+          {myVariable.roles?.isAdmin && activeComponent == 'four' && (<button 
+          className={styles.resetButton} 
+          onClick={noSummaryGiven}
+          title="All values will be cleared, and markdown changed to 'No Sammary given'"
+          >No Summary Given
+          </button>)}
         </>)}
       </div>
       {myVariable.isLoggedIn && selectedWorkgroupId  && (<div className={styles.mainContent}>

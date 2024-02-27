@@ -25,7 +25,7 @@ const ArchiveSummaries = () => {
       
   useEffect(() => {
     setRenderedMarkdown(formData.meetingSummary);
-    console.log(formData.meetingSummary)
+    //console.log(formData.meetingSummary)
   }, [formData.meetingSummary]);
 
   useEffect(() => {
@@ -52,15 +52,21 @@ const ArchiveSummaries = () => {
   };
   
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
     if (type === "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked;
       name === "commitToGitBook" ? setCommitToGitBook(checked) : setSendToDiscord(checked);
+    } else if (name == 'date' && myVariable.summary.noSummaryGiven == true) {
+      console.log(myVariable, formData, value)
+      setFormData({ ...formData, [name]: value, confirmed: false });
+      setSendToDiscord(false);
     } else {
       setFormData({ ...formData, [name]: value });
     }
     if (name === 'meetingSummary') {
       adjustTextareaHeight();
     }
+    
   };  
 
   async function handleSubmit(e: React.FormEvent) {
@@ -110,7 +116,11 @@ const ArchiveSummaries = () => {
         await sendDiscordMessage(myVariable, renderedMarkdown);
       }
     } else {
-      alert('Summary already archived');
+      if (myVariable.summary.noSummaryGiven == true) {
+        alert('Select a date')
+      } else {
+        alert('Summary already archived');
+      }
     }
     
     setLoading(false);
