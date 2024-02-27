@@ -40,7 +40,8 @@ export async function updateWorkgroups(workgroupData) {
       }
     ],
       "tags":1,
-      "type":"Custom"
+      "type":"Custom",
+      "noSummaryGiven": false
       }
   let updates = {...workgroupData, preferred_template}
 

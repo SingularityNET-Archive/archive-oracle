@@ -227,12 +227,15 @@ export function generateMarkdown(summary, order) {
   // Process tags
   if (summary.tags) {
     const { topicsCovered, references, emotions, other, gamesPlayed } = summary.tags;
-    markdown += `#### Keywords/tags:\n`;
+    if (topicsCovered || emotions || other || gamesPlayed) markdown += `#### Keywords/tags:\n`;
     if (topicsCovered) markdown += `- topics covered: ${topicsCovered}\n`;
     if (emotions) markdown += `- emotions: ${emotions}\n`;
     if (other) markdown += `- other: ${other}\n`;
     if (gamesPlayed) markdown += `- games played: ${gamesPlayed}\n`;
   }
 
+  if (summary.noSummaryGiven == true) {
+    markdown += `No Summary Given \n`;
+  }
   return markdown;
 };

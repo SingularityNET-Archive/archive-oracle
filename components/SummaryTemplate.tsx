@@ -107,7 +107,8 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
       }
     ],
     tags: { topicsCovered: "", emotions: "", other: "", gamesPlayed: "" },
-    type: "Custom"
+    type: "Custom",
+    noSummaryGiven: false
   };
 
   const [formData, setFormData] = useState(filterFormData(filterKeys(myVariable.summary || {}, defaultFormData)));
