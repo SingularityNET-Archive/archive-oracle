@@ -71,7 +71,7 @@ const SubmitMeetingSummary: NextPage = () => {
     setIsLoading(false);
   }
   const orderMapping = {
-    "Gamers Guild": ["narrative", "decisionItems", "actionItems", "gameRules", "leaderboard"],
+    "Gamers Guild": ["narrative", "discussionPoints", "decisionItems", "actionItems", "gameRules", "leaderboard"],
     "Writers Workgroup": ["narrative", "decisionItems", "actionItems", "learningPoints"],
     "Video Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
     "Archival Workgroup": ["decisionItems", "actionItems", "learningPoints"],
