@@ -20,7 +20,7 @@ const Issues: NextPage = () => {
   async function getIssues() {
     setLoading(true);
     const issues = await fetchIssues();
-    console.log(issues)
+    //console.log(issues)
     const open = issues.filter((issue: Issue) => issue.state === 'open');
     const closed = issues.filter((issue: Issue) => issue.state === 'closed');
     setOpenIssues(open);

@@ -1,0 +1,74 @@
+/* admintools.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4.5em;  /* Leaving space for the top fixed navbar */
+  height: calc(100vh - 4.5em);
+  justify-content: center; /* Centers content vertically */
+  align-items: center;     /* Centers content horizontally */
+}
+
+@media (max-width: 600px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 120px;  
+    align-items: center;    
+  }
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.subheading {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.button {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 5px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.column-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-flex-space-between {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Aligns buttons and headings in the center of the column */
+  gap: 0.5rem; /* Adjusts the space between items in the column */
+}
+
+.columnHeading {
+  font-size: 1.25rem; /* Adjust size as needed */
+  margin-bottom: 1rem; /* Adds some space between the heading and the first button */
+}
