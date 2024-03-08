@@ -128,9 +128,15 @@ const Nav = () => {
         <Link href='/issues' className="navitems">
           Issues
         </Link>
-        {roleData?.appRole == "admin" && (<Link href='/status-of-summaries' className="navitems">
-          Summaries
-        </Link>)}
+        {roleData?.appRole == "admin" && (<>
+          <Link href='/status-of-summaries' className="navitems">
+            Summaries
+          </Link>
+          <Link href='/admin-tools' className="navitems">
+            Admin Tools
+          </Link>
+        </>
+        )}
       </div>
       <div>{latestTag}</div>
       <div>

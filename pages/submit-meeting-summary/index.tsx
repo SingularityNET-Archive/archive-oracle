@@ -36,12 +36,13 @@ const SubmitMeetingSummary: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [names, setNames] = useState<Names[]>([])
   const [tags, setTags] = useState({})
+  const [summaryStatus, setSummaryStatus] = useState('populatedSummary');
 
   async function getWorkgroupList() {
     setIsLoading(true);
     const workgroupList: any = await getWorkgroups();
-    const names1 = await getNames(); 
-    const tags1 = await getTags(); 
+    const names1 = await getNames();
+    const tags1 = await getTags();
 
     let newNames = names1.map((value) => ({ value: value.name, label: value.name }));
 
@@ -60,11 +61,11 @@ const SubmitMeetingSummary: NextPage = () => {
     let referenceTags = tags1
       .filter(tag => tag.type === 'references')
       .map(tag => ({ value: tag.tag, label: tag.tag }));
-    
+
     let gamesPlayedTags = tags1
       .filter(tag => tag.type === 'gamesPlayed')
       .map(tag => ({ value: tag.tag, label: tag.tag }));
-     
+
     setWorkgroups(workgroupList);
     setNames(newNames);
     setTags({ other: otherTags, emotions: emotionTags, topicsCovered: topicTags, references: referenceTags, gamesPlayed: gamesPlayedTags });
@@ -87,28 +88,28 @@ const SubmitMeetingSummary: NextPage = () => {
     "Deep Funding Town Hall": ["townHallSummary"],
     "One-off Event": ["Narative"]
   };
-  
-useEffect(() => {
-  async function fetchInitialData(workgroupId: string) {
-    setIsLoading(true);
-    const summaries: any = await getSummaries(workgroupId);
-    setMeetings(summaries)
-    if (summaries && summaries[0]?.type) {
-      setActiveComponent('two');
-    }
+
+  useEffect(() => {
+    async function fetchInitialData(workgroupId: string) {
+      setIsLoading(true);
+      const summaries: any = await getSummaries(workgroupId);
+      setMeetings(summaries)
+      if (summaries && summaries[0]?.type) {
+        setActiveComponent('two');
+      }
       setShowNewWorkgroupInput(false);
-      setSelectedWorkgroupId(workgroupId); 
+      setSelectedWorkgroupId(workgroupId);
       const selectedWorkgroup = workgroups.find(workgroup => workgroup.workgroup_id === workgroupId);
       if (selectedWorkgroup) {
-        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summaries, summary: summaries[0], names, tags, agendaItemOrder: orderMapping});
+        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summaries, summary: summaries[0], names, tags, agendaItemOrder: orderMapping });
       }
       setIsLoading(false);
-  }
+    }
 
-  if (router.query.workgroup && workgroups.length > 0) {
-    fetchInitialData(router.query.workgroup as string);
-  }
-}, [router.query, workgroups]);
+    if (router.query.workgroup && workgroups.length > 0) {
+      fetchInitialData(router.query.workgroup as string);
+    }
+  }, [router.query, workgroups]);
 
   useEffect(() => {
     getWorkgroupList();
@@ -127,7 +128,7 @@ useEffect(() => {
       setShowNewWorkgroupInput(true);
     } else {
       setShowNewWorkgroupInput(false);
-      setSelectedWorkgroupId(selectedWorkgroupId); 
+      setSelectedWorkgroupId(selectedWorkgroupId);
       const selectedWorkgroup = workgroups.find(workgroup => workgroup.workgroup_id === selectedWorkgroupId);
       if (selectedWorkgroup) {
         setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summaries, summary: summaries[0], names, tags });
@@ -137,14 +138,14 @@ useEffect(() => {
       router.push(`/submit-meeting-summary?workgroup=${selectedWorkgroupId}`, undefined, { shallow: true });
     }
     //console.log("myVariable", myVariable );
-  }  
+  }
   async function handleSelectChange2(e: any) {
     const newSelectedMeetingId = e.target.value;
     setSelectedMeetingId(newSelectedMeetingId); // Correctly set the selectedMeetingId
 
     // Find the selected summary using the new selectedMeetingId
     const selectedSummary = meetings.find((meeting: any) => meeting.meeting_id === newSelectedMeetingId);
-    
+
     // If there's a selected summary, update the myVariable state with that summary
     if (selectedSummary) {
       setMyVariable(prevMyVariable => ({
@@ -176,7 +177,7 @@ useEffect(() => {
       setShowNewWorkgroupInput(false);
     }
     setIsLoading(false);
-  };   
+  };
 
   const getComponent = () => {
     switch (activeComponent) {
@@ -184,29 +185,29 @@ useEffect(() => {
       case 'four': return <ArchiveSummaries key={selectedWorkgroupId} />;
       default: return <div>Select a component</div>;
     }
-  }  
+  }
 
   function formatDate(isoString: any) {
     const months = [
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
-  
+
     const date = new Date(isoString);
     const day = date.getDate();
     const monthIndex = date.getMonth();
     const year = date.getFullYear();
-  
+
     return `${day} ${months[monthIndex]} ${year}`;
   }
-  
+
   const updateMeetings = (newMeetingSummary: any) => {
     //console.log("Before update, meetings:", meetings, newMeetingSummary); // Log the current state before update
-  
+
     setMeetings(prevMeetings => {
       let updatedMeetings: any = [...prevMeetings];
       const meetingIndex: any = updatedMeetings.findIndex((meeting: any) => meeting.meeting_id === newMeetingSummary.meeting_id);
-  
+
       if (meetingIndex !== -1) {
         // Replace existing summary
         updatedMeetings[meetingIndex] = newMeetingSummary;
@@ -220,36 +221,64 @@ useEffect(() => {
       return updatedMeetings;
     });
   };
-  
+
   const resetSummary = () => {
     setMyVariable(prevMyVariable => ({
-      ...prevMyVariable, 
+      ...prevMyVariable,
       summary: {
-        ...prevMyVariable.summary, 
-        meetingInfo: {}, 
+        ...prevMyVariable.summary,
+        meetingInfo: {},
         agendaItems: [],
-        tags: {} 
+        tags: {}
       }
     }));
-  };  
+  };
 
   const noSummaryGiven = () => {
     setMyVariable(prevMyVariable => ({
-      ...prevMyVariable, 
+      ...prevMyVariable,
       summary: {
-        ...prevMyVariable.summary, 
-        meetingInfo: {}, 
+        ...prevMyVariable.summary,
+        meetingInfo: {},
         agendaItems: [],
         tags: {},
-        noSummaryGiven: true 
+        noSummaryGiven: true,
+        canceledSummary: false
       }
     }));
-  };  
+  };
+
+  const handleSummaryStatusChange = (e: any) => {
+    const newStatus = e.target.value;
+    setSummaryStatus(newStatus);
+
+    // Update myVariable state based on the selection
+    if (newStatus === 'noSummaryGiven') {
+      noSummaryGiven(); // Your existing function to handle no summary
+    } else if (newStatus === 'canceledSummary') {
+      // Implement logic for canceled summary
+      setMyVariable(prevMyVariable => ({
+        ...prevMyVariable,
+        summary: {
+          ...prevMyVariable.summary,
+          meetingInfo: {},
+          agendaItems: [],
+          tags: {},
+          noSummaryGiven: false,
+          canceledSummary: true
+        }
+      }));
+    } else {
+      // Reset to populated summary (default state or any specific logic)
+      console.log("Populated Summary");
+    }
+  };
+
 
   return (
     <div className={styles.container}>
       <div className={styles.navbar}>
-      {isLoading ? (
+        {isLoading ? (
           <p>Loading...</p>
         ) : (
           <>
@@ -258,8 +287,8 @@ useEffect(() => {
                 <div className={styles['column-flex']}>
                   <label className={styles['form-label']} htmlFor="">Select Workgroup</label>
                   <select
-                    name="" id="" 
-                    className={`${styles.select} ${selectedWorkgroupId === '' ? styles.selectGreen : ''}`} 
+                    name="" id=""
+                    className={`${styles.select} ${selectedWorkgroupId === '' ? styles.selectGreen : ''}`}
                     value={selectedWorkgroupId} onChange={handleSelectChange}
                     title="Select a workgroup">
                     <option value="" disabled>Please select Workgroup</option>
@@ -273,23 +302,23 @@ useEffect(() => {
             )}
             {workgroups.length > 0 && meetings?.length > 0 && (
               <>
-              <div className={styles['column-flex']}>
-                <label className={styles['form-label']} htmlFor="">Select previous meeting data</label>
-                <select
-                  name="" id="" 
-                  className={styles.select} 
-                  value={selectedMeetingId} onChange={handleSelectChange2}
-                  title="Defaults to latest meeting, only change this when you want to use a previous meeting as template">
-                  {meetings.map((meeting: any) => (
-                    <option 
-                      style={{ color: meeting.confirmed ? 'lightgreen' : 'white' }}
-                      key={`${meeting.meeting_id}-${meeting.updated_at}`} 
-                      value={meeting.meeting_id}>
+                <div className={styles['column-flex']}>
+                  <label className={styles['form-label']} htmlFor="">Select previous meeting data</label>
+                  <select
+                    name="" id=""
+                    className={styles.select}
+                    value={selectedMeetingId} onChange={handleSelectChange2}
+                    title="Defaults to latest meeting, only change this when you want to use a previous meeting as template">
+                    {meetings.map((meeting: any) => (
+                      <option
+                        style={{ color: meeting.confirmed ? 'lightgreen' : 'white' }}
+                        key={`${meeting.meeting_id}-${meeting.updated_at}`}
+                        value={meeting.meeting_id}>
                         {formatDate(meeting.date)} {meeting.username} {meeting.confirmed ? 'Archived' : ''}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </>
             )}
             {showNewWorkgroupInput && (
@@ -300,24 +329,28 @@ useEffect(() => {
             )}
           </>
         )}
-        {selectedWorkgroupId  && (<>
-        {myVariable.roles?.isAdmin && (<button className={styles.navButton} onClick={() => setActiveComponent('two')}>Summary</button>)}
-        {myVariable.roles?.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Archive Summaries</button>}
-        <button 
-          className={styles.resetButton} 
-          onClick={resetSummary}
-          title="All values will be cleared, so please make sure to select all dropdowns and fill in all fields"
+        {selectedWorkgroupId && (<>
+          {myVariable.roles?.isAdmin && (<button className={styles.navButton} onClick={() => setActiveComponent('two')}>Summary</button>)}
+          {myVariable.roles?.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Archive Summaries</button>}
+          <button
+            className={styles.resetButton}
+            onClick={resetSummary}
+            title="All values will be cleared, so please make sure to select all dropdowns and fill in all fields"
           >Clear Summary
           </button>
-          {myVariable.roles?.isAdmin && activeComponent == 'four' && (<button 
-          className={styles.resetButton} 
-          onClick={noSummaryGiven}
-          title="All values will be cleared, and markdown changed to 'No Sammary given'"
-          >No Summary Given
-          </button>)}
+          {myVariable.roles?.isAdmin && activeComponent == 'four' && (
+            <select
+              className={styles.select}
+              value={summaryStatus}
+              onChange={handleSummaryStatusChange}>
+              <option value="populatedSummary" selected>Populated Summary</option>
+              <option value="noSummaryGiven">No Summary Given</option>
+              <option value="canceledSummary">Canceled Summary</option>
+            </select>
+          )}
         </>)}
       </div>
-      {myVariable.isLoggedIn && selectedWorkgroupId  && (<div className={styles.mainContent}>
+      {myVariable.isLoggedIn && selectedWorkgroupId && (<div className={styles.mainContent}>
         {getComponent()}
       </div>)}
       {myVariable.isLoggedIn && !selectedWorkgroupId && !isLoading && (<div className={styles.nomainContent}>

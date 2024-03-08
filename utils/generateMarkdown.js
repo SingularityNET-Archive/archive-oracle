@@ -237,5 +237,9 @@ export function generateMarkdown(summary, order) {
   if (summary.noSummaryGiven == true) {
     markdown += `No Summary Given \n`;
   }
+  //canceledSummary
+  if (summary.canceledSummary == true) {
+    markdown += `Meeting was canceled \n`;
+  }
   return markdown;
 };

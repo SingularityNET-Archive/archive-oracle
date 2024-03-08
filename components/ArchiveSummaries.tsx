@@ -56,7 +56,7 @@ const ArchiveSummaries = () => {
     if (type === "checkbox") {
       const checked = (e.target as HTMLInputElement).checked;
       name === "commitToGitBook" ? setCommitToGitBook(checked) : setSendToDiscord(checked);
-    } else if (name == 'date' && myVariable.summary.noSummaryGiven == true) {
+    } else if (name == 'date' && (myVariable.summary?.noSummaryGiven == true || myVariable.summary?.canceledSummary == true)) {
       console.log(myVariable, formData, value)
       setFormData({ ...formData, [name]: value, confirmed: false });
       setSendToDiscord(false);
@@ -116,7 +116,7 @@ const ArchiveSummaries = () => {
         await sendDiscordMessage(myVariable, renderedMarkdown);
       }
     } else {
-      if (myVariable.summary.noSummaryGiven == true) {
+      if (myVariable.summary.noSummaryGiven == true || myVariable.summary.canceledSummary == true) {
         alert('Select a date')
       } else {
         alert('Summary already archived');
