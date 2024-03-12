@@ -239,7 +239,7 @@ export function generateMarkdown(summary, order) {
   }
   //canceledSummary
   if (summary.canceledSummary == true) {
-    markdown += `Meeting was canceled \n`;
+    markdown += `Meeting was cancelled \n`;
   }
   return markdown;
 };

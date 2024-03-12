@@ -75,7 +75,7 @@ const SubmitMeetingSummary: NextPage = () => {
     "Gamers Guild": ["narrative", "discussionPoints", "decisionItems", "actionItems", "gameRules", "leaderboard"],
     "Writers Workgroup": ["narrative", "decisionItems", "actionItems", "learningPoints"],
     "Video Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
-    "Archival Workgroup": ["decisionItems", "actionItems", "learningPoints"],
+    "Archives Workgroup": ["decisionItems", "actionItems", "learningPoints"],
     "Treasury Guild": ["discussionPoints", "decisionItems", "actionItems"],
     "Dework PBL": ["discussionPoints", "decisionItems", "actionItems"],
     "Knowledge Base Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
@@ -345,7 +345,7 @@ const SubmitMeetingSummary: NextPage = () => {
               onChange={handleSummaryStatusChange}>
               <option value="populatedSummary" selected>Populated Summary</option>
               <option value="noSummaryGiven">No Summary Given</option>
-              <option value="canceledSummary">Canceled Summary</option>
+              <option value="canceledSummary">Cancelled Summary</option>
             </select>
           )}
         </>)}
