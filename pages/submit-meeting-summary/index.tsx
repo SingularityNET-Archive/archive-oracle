@@ -105,7 +105,7 @@ const SubmitMeetingSummary: NextPage = () => {
       }
       setIsLoading(false);
     }
-
+    setSummaryStatus('populatedSummary');
     if (router.query.workgroup && workgroups.length > 0) {
       fetchInitialData(router.query.workgroup as string);
     }
@@ -343,7 +343,7 @@ const SubmitMeetingSummary: NextPage = () => {
               className={styles.select}
               value={summaryStatus}
               onChange={handleSummaryStatusChange}>
-              <option value="populatedSummary" selected>Populated Summary</option>
+              <option value="populatedSummary">Populated Summary</option>
               <option value="noSummaryGiven">No Summary Given</option>
               <option value="canceledSummary">Cancelled Summary</option>
             </select>
