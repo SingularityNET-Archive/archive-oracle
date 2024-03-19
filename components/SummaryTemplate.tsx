@@ -251,6 +251,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     setLoading(true);
   
     try {
+      //console.log("test", cleanedFormData)
       const data = await saveCustomAgenda(cleanedFormData);
       if (data !== false) {
         //console.log("Calling updateMeetings with:", summary, data[0].date);
@@ -281,7 +282,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
         setMyVariable(updatedMyVariable);
       } else {
         console.log("Error in saving custom agenda");
-      }    
+      }
     } catch (error) {
       console.error("Error submitting the form:", error);
       alert("There was an error submitting the meeting summary.");

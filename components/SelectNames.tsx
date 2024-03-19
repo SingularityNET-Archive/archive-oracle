@@ -19,6 +19,11 @@ const SelectNames: React.FC<SelectNamesProps> = ({ onSelect, initialValue }) => 
     { value: 'vanilla', label: 'Vanilla' }
   ];
 
+  React.useEffect(() => {
+    let initialOptions = initialValue ? initialValue.split(", ").map(val => ({ label: val, value: val })) : [];
+    setSelectedLabels(initialOptions);
+  }, [initialValue]);
+  
   async function handleInputChange(selected: any) {
     setSelectedLabels(selected);  // Update local state
     let labs: string[] = selected.map((item: any) => item.label);
