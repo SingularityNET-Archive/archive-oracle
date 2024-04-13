@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   let webhookUrl: string | undefined;
   const webhookUrls: { [key: string]: string | undefined } = {
-    'Archival Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'Archives Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Onboarding Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Knowledge Base Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Video Workgroup': process.env.SNET_DISCORD_WEBHOOK_URL,
