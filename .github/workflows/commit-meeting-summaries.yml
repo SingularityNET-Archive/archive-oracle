@@ -27,6 +27,6 @@ jobs:
               "owner": "SingularityNET-Archive",
               "repo": "SingularityNET-Archive",
               "filePath": "Data/meeting-summaries.json",
-              "content": ${{ env.summaries }},
+              "content": "'"${{ env.summaries }}"'",
               "commitMessage": "Update meeting summaries"
             }'
