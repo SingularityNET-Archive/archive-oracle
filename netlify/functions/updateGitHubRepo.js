@@ -12,12 +12,15 @@ export const handler = async (event, context) => {
 
     while (hasMoreSummaries) {
       // Retrieve the next batch of summaries
-      const { data: summaries, error } = await supabase
+      let { data: summaries, error } = await supabase
         .from('meetingsummaries')
         .select('meeting_id, summary')
-        .gt('meeting_id', lastProcessedId || 0)
-        .limit(BATCH_SIZE)
-        .order('meeting_id', { ascending: true });
+        .order('meeting_id', { ascending: true })
+        .limit(BATCH_SIZE);
+
+      if (lastProcessedId) {
+        summaries = summaries.filter(summary => summary.meeting_id > lastProcessedId);
+      }
 
       if (error) {
         console.error('Error retrieving meeting summaries:', error);
@@ -33,7 +36,7 @@ export const handler = async (event, context) => {
       }
 
       // Accumulate the summaries
-      allSummaries = allSummaries.concat(summaries);
+      allSummaries = allSummaries.concat(summaries.map(summary => summary.summary));
       lastProcessedId = summaries[summaries.length - 1].meeting_id;
     }
 
@@ -42,12 +45,28 @@ export const handler = async (event, context) => {
       auth: process.env.GITHUB_TOKEN,
     });
 
+    // Get the current SHA of the file
+    let currentSHA = null;
+    try {
+      const { data: currentFile } = await octokit.repos.getContent({
+        owner: "SingularityNET-Archive",
+        repo: "SingularityNET-Archive",
+        path: "Data/meeting-summaries.json",
+      });
+      currentSHA = currentFile.sha;
+    } catch (error) {
+      if (error.status !== 404) {
+        throw error;
+      }
+    }
+
     const { data } = await octokit.repos.createOrUpdateFileContents({
       owner: "SingularityNET-Archive",
       repo: "SingularityNET-Archive",
       path: "Data/meeting-summaries.json",
       message: "Update meeting summaries",
       content: Buffer.from(JSON.stringify(allSummaries, null, 2)).toString('base64'),
+      sha: currentSHA,
     });
 
     return {
