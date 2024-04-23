@@ -19,7 +19,7 @@ jobs:
           echo "Response from updateGitHubRepo: $response"
 
           # Check if the response indicates success
-          if echo "$response" | grep -q '"message": "Meeting summaries updated successfully"'; then
+          if echo "$response" | grep -q '{"message": "Meeting summaries updated successfully"}'; then
             echo "Meeting summaries updated successfully"
           else
             echo "Error updating meeting summaries"
