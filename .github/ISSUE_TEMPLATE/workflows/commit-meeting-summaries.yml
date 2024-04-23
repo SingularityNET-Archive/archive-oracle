@@ -1,0 +1,33 @@
+# .github/workflows/commit-meeting-summaries.yml
+name: Commit Meeting Summaries
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+
+jobs:
+  commit-meeting-summaries:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Retrieve Meeting Summaries
+        id: retrieve-summaries
+        run: |
+          curl -X POST ${{ secrets.NETLIFY_BASE_URL }}/.netlify/functions/getMeetingSummaries \
+            -H 'Content-Type: application/json' \
+            -d '{}' \
+            -o meeting-summaries.json
+          echo "::set-output name=summaries::$(cat meeting-summaries.json)"
+
+      - name: Commit to GitHub
+        run: |
+          curl -X POST ${{ secrets.NETLIFY_BASE_URL }}/.netlify/functions/commitToGitHub \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "owner": "SingularityNET-Archive",
+              "repo": "SingularityNET-Archive",
+              "filePath": "Data/meeting-summaries.json",
+              "content": ${{ steps.retrieve-summaries.outputs.summaries }},
+              "commitMessage": "Update meeting summaries"
+            }'
