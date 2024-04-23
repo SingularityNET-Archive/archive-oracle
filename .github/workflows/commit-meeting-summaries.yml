@@ -11,39 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install dependencies
-        run: |
-          sudo apt-get install -y jq
-          # Install any other necessary dependencies
-
-      - name: Retrieve Meeting Summaries
-        id: retrieve-summaries
+      - name: Update GitHub Repository
         env:
           NETLIFY_BASE_URL: ${{ secrets.NETLIFY_BASE_URL }}
         run: |
-          # Make a call to your getMeetingSummaries Netlify function
-          response=$(curl -s -X POST -H "Content-Type: application/json" -d '{}' "${NETLIFY_BASE_URL}/.netlify/functions/getMeetingSummaries")
-          echo "Response from getMeetingSummaries: $response"
+          response=$(curl -s -X POST -H "Content-Type: application/json" "${NETLIFY_BASE_URL}/.netlify/functions/updateGitHubRepo")
+          echo "Response from updateGitHubRepo: $response"
 
-          # Check if the response is valid JSON
-          if ! echo "$response" | jq -e . >/dev/null 2>&1; then
-            echo "Error: Invalid JSON response from getMeetingSummaries function"
+          # Check if the response indicates success
+          if echo "$response" | grep -q '"message": "Meeting summaries updated successfully"'; then
+            echo "Meeting summaries updated successfully"
+          else
+            echo "Error updating meeting summaries"
             exit 1
           fi
-
-          summaries=$(echo "$response" | jq -c '.')
-          echo "summaries=$summaries" >> $GITHUB_OUTPUT
-
-      - name: Commit to GitHub
-        env:
-          NETLIFY_BASE_URL: ${{ secrets.NETLIFY_BASE_URL }}
-        run: |
-          curl -X POST "${NETLIFY_BASE_URL}/.netlify/functions/commitToGitHub" \
-            -H 'Content-Type: application/json' \
-            -d '{
-              "owner": "SingularityNET-Archive",
-              "repo": "SingularityNET-Archive",
-              "filePath": "Data/meeting-summaries.json",
-              "content": ${{ steps.retrieve-summaries.outputs.summaries }},
-              "commitMessage": "Update meeting summaries"
-            }'
