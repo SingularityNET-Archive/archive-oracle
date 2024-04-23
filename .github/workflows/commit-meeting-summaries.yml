@@ -12,12 +12,16 @@ jobs:
 
     steps:
       - name: Retrieve Meeting Summaries
+        id: retrieve-summaries
         run: |
           curl -X POST ${{ secrets.NETLIFY_BASE_URL }}/.netlify/functions/getMeetingSummaries \
             -H 'Content-Type: application/json' \
             -d '{}' \
             -o meeting-summaries.json
-          echo "summaries=$(cat meeting-summaries.json)" >> $GITHUB_STATE
+          summaries=$(cat meeting-summaries.json)
+          summaries="${summaries//$'\n'/''}"
+          summaries="${summaries//$'\r'/''}"
+          echo "summaries=$summaries" >> $GITHUB_OUTPUT
 
       - name: Commit to GitHub
         run: |
@@ -27,6 +31,6 @@ jobs:
               "owner": "SingularityNET-Archive",
               "repo": "SingularityNET-Archive",
               "filePath": "Data/meeting-summaries.json",
-              "content": "'"${{ env.summaries }}"'",
+              "content": ${{ toJson(steps.retrieve-summaries.outputs.summaries) }},
               "commitMessage": "Update meeting summaries"
             }'
