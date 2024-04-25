@@ -1,4 +1,4 @@
-// netlify/functions/updateGitHubRepo.js
+// netlify/functions/batchUpdateMeetingSummariesArray.js
 import { supabase } from '../../lib/supabaseClient';
 import { Octokit } from "@octokit/rest";
 
@@ -7,19 +7,19 @@ const BATCH_SIZE = 100;
 export const handler = async (event, context) => {
   try {
     let allSummaries = [];
-    let lastProcessedId = null;
+    let lastProcessedTimestamp = null;
     let hasMoreSummaries = true;
 
     while (hasMoreSummaries) {
       // Retrieve the next batch of summaries
       let { data: summaries, error } = await supabase
         .from('meetingsummaries')
-        .select('meeting_id, summary')
-        .order('meeting_id', { ascending: true })
+        .select('meeting_id, created_at, summary')
+        .order('created_at', { ascending: true })
         .limit(BATCH_SIZE);
 
-      if (lastProcessedId) {
-        summaries = summaries.filter(summary => summary.meeting_id > lastProcessedId);
+      if (lastProcessedTimestamp) {
+        summaries = summaries.filter(summary => summary.created_at > lastProcessedTimestamp);
       }
 
       if (error) {
@@ -37,7 +37,7 @@ export const handler = async (event, context) => {
 
       // Accumulate the summaries
       allSummaries = allSummaries.concat(summaries.map(summary => summary.summary));
-      lastProcessedId = summaries[summaries.length - 1].meeting_id;
+      lastProcessedTimestamp = summaries[summaries.length - 1].created_at;
     }
 
     // Commit all summaries to GitHub in a single file
@@ -51,7 +51,7 @@ export const handler = async (event, context) => {
       const { data: currentFile } = await octokit.repos.getContent({
         owner: "SingularityNET-Archive",
         repo: "SingularityNET-Archive",
-        path: "Data/meeting-summaries.json",
+        path: "Data/Meeting-Summaries/meeting-summaries-array.json",
       });
       currentSHA = currentFile.sha;
     } catch (error) {
@@ -63,7 +63,7 @@ export const handler = async (event, context) => {
     const { data } = await octokit.repos.createOrUpdateFileContents({
       owner: "SingularityNET-Archive",
       repo: "SingularityNET-Archive",
-      path: "Data/meeting-summaries.json",
+      path: "Data/Meeting-Summaries/meeting-summaries-array.json",
       message: "Update meeting summaries",
       content: Buffer.from(JSON.stringify(allSummaries, null, 2)).toString('base64'),
       sha: currentSHA,
