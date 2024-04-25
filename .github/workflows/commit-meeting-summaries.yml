@@ -1,27 +1,36 @@
 # .github/workflows/commit-meeting-summaries.yml
 name: Commit Meeting Summaries
-
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # Run daily at midnight
-
+    - cron: '0 0 * * *' # Run daily at midnight
 jobs:
   commit-meeting-summaries:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Update GitHub Repository
+      - name: Update Meeting Summaries Array
         env:
           NETLIFY_BASE_URL: ${{ secrets.NETLIFY_BASE_URL }}
         run: |
-          response=$(curl -s -X POST -H "Content-Type: application/json" "${NETLIFY_BASE_URL}/.netlify/functions/updateGitHubRepo")
-          echo "Response from updateGitHubRepo: $response"
-
+          response=$(curl -s -X POST -H "Content-Type: application/json" "${NETLIFY_BASE_URL}/.netlify/functions/batchUpdateMeetingSummariesArray")
+          echo "Response from batchUpdateMeetingSummariesArray: $response"
           # Check if the response indicates success
           if echo "$response" | grep -qE '\{"message":\s*"Meeting summaries updated successfully"\}'; then
-            echo "Meeting summaries updated successfully"
+            echo "Meeting summaries array updated successfully"
           else
-            echo "Error updating meeting summaries"
+            echo "Error updating meeting summaries array"
+            exit 1
+          fi
+      - name: Update Meeting Summaries by ID
+        env:
+          NETLIFY_BASE_URL: ${{ secrets.NETLIFY_BASE_URL }}
+        run: |
+          response=$(curl -s -X POST -H "Content-Type: application/json" "${NETLIFY_BASE_URL}/.netlify/functions/batchUpdateMeetingSummariesById")
+          echo "Response from batchUpdateMeetingSummariesById: $response"
+          # Check if the response indicates success
+          if echo "$response" | grep -qE '\{"message":\s*"Meeting summaries updated successfully"\}'; then
+            echo "Meeting summaries by ID updated successfully"
+          else
+            echo "Error updating meeting summaries by ID"
             exit 1
           fi
