@@ -2,22 +2,22 @@
 import { supabase } from '../../lib/supabaseClient';
 import { Octokit } from "@octokit/rest";
 
-const BATCH_SIZE = 200;
-const MAX_CONCURRENT_REQUESTS = 5;
+const BATCH_SIZE = 100;
+const MAX_CONCURRENT_REQUESTS = 10;
 
-async function fetchMeetingSummaries(lastProcessedTimestamp) {
+async function fetchMeetingSummaries(lastProcessedTimestamp, batchNumber) {
   const { data: summaries, error } = await supabase
     .from('meetingsummaries')
     .select('created_at, meeting_id, summary')
     .eq('confirmed', true)
     .order('created_at', { ascending: true })
-    .limit(BATCH_SIZE * MAX_CONCURRENT_REQUESTS)
-    .gt('created_at', lastProcessedTimestamp || '1970-01-01');
+    .limit(BATCH_SIZE)
+    .gt('created_at', lastProcessedTimestamp || '1970-01-01')
+    .range(batchNumber * BATCH_SIZE, (batchNumber + 1) * BATCH_SIZE - 1);
 
   if (error) {
     throw new Error('Failed to retrieve meeting summaries');
   }
-
   return summaries;
 }
 
@@ -74,17 +74,29 @@ async function processAndCommitSummaries() {
   const allSummaries = {};
   let lastProcessedTimestamp = null;
   let hasMoreSummaries = true;
+  let batchNumber = 0;
 
   while (hasMoreSummaries) {
-    const summaries = await fetchMeetingSummaries(lastProcessedTimestamp);
+    const fetchPromises = [];
 
-    if (summaries.length === 0) {
+    for (let i = 0; i < MAX_CONCURRENT_REQUESTS; i++) {
+      fetchPromises.push(fetchMeetingSummaries(lastProcessedTimestamp, batchNumber));
+      batchNumber++;
+    }
+
+    const summariesBatches = await Promise.all(fetchPromises);
+    const flattenedSummaries = summariesBatches.flat();
+
+    if (flattenedSummaries.length === 0) {
       hasMoreSummaries = false;
       break;
     }
 
-    groupSummariesByMeetingId(summaries, allSummaries);
-    lastProcessedTimestamp = summaries[summaries.length - 1].created_at;
+    flattenedSummaries.forEach(summary => {
+      groupSummariesByMeetingId([summary], allSummaries);
+    });
+
+    lastProcessedTimestamp = flattenedSummaries[flattenedSummaries.length - 1].created_at;
   }
 
   await commitSummariesToGitHub(allSummaries);
