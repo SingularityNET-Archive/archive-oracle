@@ -9,6 +9,7 @@ async function fetchMeetingSummaries(lastProcessedTimestamp) {
   const { data: summaries, error } = await supabase
     .from('meetingsummaries')
     .select('created_at, meeting_id, summary')
+    .eq('confirmed', true)
     .order('created_at', { ascending: true })
     .limit(BATCH_SIZE * MAX_CONCURRENT_REQUESTS)
     .gt('created_at', lastProcessedTimestamp || '1970-01-01');
@@ -23,38 +24,50 @@ async function fetchMeetingSummaries(lastProcessedTimestamp) {
 function groupSummariesByMeetingId(summaries, allSummaries) {
   summaries.forEach(summary => {
     const { meeting_id, summary: summaryText } = summary;
-    if (!allSummaries[meeting_id]) {
-      allSummaries[meeting_id] = [];
+    const year = new Date(summaryText.meetingInfo.date).getFullYear();
+
+    if (!allSummaries[year]) {
+      allSummaries[year] = {};
     }
-    allSummaries[meeting_id].push(summaryText);
+
+    if (!allSummaries[year][meeting_id]) {
+      allSummaries[year][meeting_id] = [];
+    }
+
+    allSummaries[year][meeting_id].push(summaryText);
   });
 }
 
 async function commitSummariesToGitHub(allSummaries) {
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-  let currentSHA = null;
-  try {
-    const { data: currentFile } = await octokit.repos.getContent({
+  for (const year in allSummaries) {
+    const yearSummaries = allSummaries[year];
+    const path = `Data/Meeting-Summaries/${year}/meeting-summaries-by-id.json`;
+
+    let currentSHA = null;
+    try {
+      const { data: currentFile } = await octokit.repos.getContent({
+        owner: "SingularityNET-Archive",
+        repo: "SingularityNET-Archive",
+        path,
+      });
+      currentSHA = currentFile.sha;
+    } catch (error) {
+      if (error.status !== 404) {
+        throw error;
+      }
+    }
+
+    await octokit.repos.createOrUpdateFileContents({
       owner: "SingularityNET-Archive",
       repo: "SingularityNET-Archive",
-      path: "Data/Meeting-Summaries/meeting-summaries-by-id.json",
+      path,
+      message: `Update meeting summaries for ${year}`,
+      content: Buffer.from(JSON.stringify(yearSummaries, null, 2)).toString('base64'),
+      sha: currentSHA,
     });
-    currentSHA = currentFile.sha;
-  } catch (error) {
-    if (error.status !== 404) {
-      throw error;
-    }
   }
-
-  await octokit.repos.createOrUpdateFileContents({
-    owner: "SingularityNET-Archive",
-    repo: "SingularityNET-Archive",
-    path: "Data/Meeting-Summaries/meeting-summaries-by-id.json",
-    message: "Update meeting summaries",
-    content: Buffer.from(JSON.stringify(allSummaries, null, 2)).toString('base64'),
-    sha: currentSHA,
-  });
 }
 
 async function processAndCommitSummaries() {
