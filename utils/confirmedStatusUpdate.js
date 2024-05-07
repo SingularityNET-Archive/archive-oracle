@@ -1,4 +1,5 @@
 import { supabase } from "../lib/supabaseClient";
+import { tableNames } from '../config/config';
 
 export async function confirmedStatusUpdate(formData) {
   let updates = {
@@ -7,7 +8,7 @@ export async function confirmedStatusUpdate(formData) {
   }
   
   const { data, error } = await supabase
-    .from('meetingsummaries')
+    .from(tableNames.meetingsummaries)
     .upsert(updates);
 
   if (error) {

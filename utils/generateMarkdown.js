@@ -39,7 +39,7 @@ export function generateMarkdown(summary, order) {
     const { date, name, host, documenter, peoplePresent, purpose, googleSlides, townHallNumber, otherMediaLink, meetingVideoLink, mediaLink, miroBoardLink, transcriptLink, workingDocs, timestampedVideo } = summary.meetingInfo;
 
     // Add meeting information to markdown
-    if (name) markdown += `- Type of meeting: ${name}\n`;
+    if ( name && !summary.canceledSummary && !summary.noSummaryGiven ) markdown += `- Type of meeting: ${name}\n`;
     if (host || documenter || peoplePresent) {
       markdown += `- Present: `;
       if (host) markdown += `${host} [facilitator], `;

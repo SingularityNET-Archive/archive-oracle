@@ -5,7 +5,8 @@ import { generateMarkdown } from '../utils/generateMarkdown';
 import { updateGitbook } from '../utils/updateGitbook';
 import { sendDiscordMessage } from '../utils/sendDiscordMessage';
 import { useMyVariable } from '../context/MyVariableContext';
-import { confirmedStatusUpdate } from '../utils/confirmedStatusUpdate'
+import { confirmedStatusUpdate } from '../utils/confirmedStatusUpdate';
+import { saveCustomAgenda } from '../utils/saveCustomAgenda';
 
 const ArchiveSummaries = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -25,7 +26,7 @@ const ArchiveSummaries = () => {
       
   useEffect(() => {
     setRenderedMarkdown(formData.meetingSummary);
-    //console.log(formData.meetingSummary)
+    console.log(formData.meetingSummary, myVariable.summary)
   }, [formData.meetingSummary]);
 
   useEffect(() => {
@@ -72,7 +73,10 @@ const ArchiveSummaries = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-  
+    if (myVariable.summary?.noSummaryGiven == true || myVariable.summary?.canceledSummary == true) {
+      const data: any = await saveCustomAgenda(myVariable.summary);
+      console.log(data);
+    }
     // Check if there are any confirmed summaries with the same date
     const isDuplicateConfirmedSummary = myVariable.summaries.some((summary: any) => {
       // Convert both dates to Date objects to strip off the time part
