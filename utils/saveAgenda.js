@@ -1,4 +1,5 @@
 import { supabase } from "../lib/supabaseClient";
+import { tableNames } from '../config/config';
 
 export async function saveAgenda(agendaData) {
   let updates = {
@@ -10,7 +11,7 @@ export async function saveAgenda(agendaData) {
   }
   
   const { data, error } = await supabase
-    .from('meetingsummaries')
+    .from(tableNames.meetingsummaries)
     .upsert(updates, { onConflict: ['name', 'date', 'workgroup_id', 'user_id'] });
 
   if (error) {

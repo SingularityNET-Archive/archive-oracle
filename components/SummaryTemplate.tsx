@@ -87,8 +87,8 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
       otherMediaLink: "",
       transcriptLink: "",
       mediaLink: "",
-      workingDocs: [{ title: '', link: '' }],
-      timestampedVideo: { url: '', intro: '', timestamps: [{ title: '', timestamp: '' }] }
+      workingDocs: [{ title: "", link: "" }],
+      timestampedVideo: { url: "", intro: "", timestamps: [{ title: "", timestamp: "" }] }
     },  
     agendaItems: [
       { 
@@ -108,7 +108,8 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     ],
     tags: { topicsCovered: "", emotions: "", other: "", gamesPlayed: "" },
     type: "Custom",
-    noSummaryGiven: false
+    noSummaryGiven: false,
+    canceledSummary: false
   };
 
   const [formData, setFormData] = useState(filterFormData(filterKeys(myVariable.summary || {}, defaultFormData)));
@@ -247,7 +248,12 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     
     summary.confirmed = false;
 
-    const cleanedFormData = removeEmptyValues({ ...formData, meetingInfo: { ...formData.meetingInfo, workingDocs: filteredWorkingDocs } });
+    const cleanedFormData = removeEmptyValues({ 
+      ...formData, 
+      meetingInfo: { ...formData.meetingInfo, workingDocs: filteredWorkingDocs },
+      noSummaryGiven: false,
+      canceledSummary: false 
+    });
     setLoading(true);
   
     try {

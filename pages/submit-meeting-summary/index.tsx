@@ -242,7 +242,10 @@ const SubmitMeetingSummary: NextPage = () => {
       ...prevMyVariable,
       summary: {
         ...prevMyVariable.summary,
-        meetingInfo: {},
+        meetingInfo: { 
+          name:"Weekly",
+          date: prevMyVariable.summary.meetingInfo.date
+        },
         agendaItems: [],
         tags: {},
         noSummaryGiven: true,
@@ -264,7 +267,10 @@ const SubmitMeetingSummary: NextPage = () => {
         ...prevMyVariable,
         summary: {
           ...prevMyVariable.summary,
-          meetingInfo: {},
+          meetingInfo: { 
+            name:"Weekly",
+            date: prevMyVariable.summary.meetingInfo.date
+          },
           agendaItems: [],
           tags: {},
           noSummaryGiven: false,
