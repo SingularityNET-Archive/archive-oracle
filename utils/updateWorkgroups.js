@@ -41,7 +41,8 @@ export async function updateWorkgroups(workgroupData) {
     ],
       "tags":1,
       "type":"Custom",
-      "noSummaryGiven": false
+      "noSummaryGiven": false,
+      "canceledSummary": false
       }
   let updates = {...workgroupData, preferred_template}
 
