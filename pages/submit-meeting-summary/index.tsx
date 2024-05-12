@@ -87,7 +87,7 @@ const SubmitMeetingSummary: NextPage = () => {
     "Ambassador Town Hall": ["townHallSummary"],
     "Deep Funding Town Hall": ["townHallSummary"],
     "One-off Event": ["Narative"],
-    "Ethics Workgroup": ["narrative", "decisionItems", "actionItems"]
+    "AI Ethics WG": ["narrative", "decisionItems", "actionItems"]
   };
 
   useEffect(() => {
