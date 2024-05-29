@@ -41,6 +41,7 @@ const Home: NextPage = () => {
           </div>
           <div>
             <ul>
+              <li className={styles.listItem}>When you hover over input fields it will give you a tip on what is needed or how it works</li>
               <li className={styles.listItem}>When you select your workgroup to submit a meeting summary, it will load all the data from the previous meeting</li>
               <li className={styles.listItem}>{`Please select the date the meeting happened in the "Meeting Date:" dropdown`}</li>
               <li className={styles.listItem}>{`Any changes you save will be saved to the date you selected in the "Meeting Date:" dropdown`}</li>
