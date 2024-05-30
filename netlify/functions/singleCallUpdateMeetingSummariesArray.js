@@ -31,7 +31,7 @@ export const handler = async (event, context) => {
 
     for (const year in summariesByYear) {
       const yearSummaries = summariesByYear[year];
-      const path = `Data/Meeting-Summaries/${year}/meeting-summaries-array.json`;
+      const path = `Data/Snet-Ambassador-Program/Meeting-Summaries/${year}/meeting-summaries-array.json`;
 
       // Get the current SHA of the file
       let currentSHA = null;

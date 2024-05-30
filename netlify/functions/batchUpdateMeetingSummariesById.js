@@ -43,7 +43,7 @@ async function commitSummariesToGitHub(allSummaries) {
 
   for (const year in allSummaries) {
     const yearSummaries = allSummaries[year];
-    const path = `Data/Meeting-Summaries/${year}/meeting-summaries-by-id.json`;
+    const path = `Data/Snet-Ambassador-Program/Meeting-Summaries/${year}/meeting-summaries-by-id.json`;
 
     let currentSHA = null;
     try {
