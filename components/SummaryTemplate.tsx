@@ -78,6 +78,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
       date:"",
       host:"",
       documenter:"",
+      translator: "",
       peoplePresent: "",
       purpose: "",
       townHallNumber: "",

@@ -18,6 +18,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     date = '',
     host = '',
     documenter = '',
+    translator = '',
     peoplePresent = '',
     purpose = '',
     townHallNumber = '',
@@ -36,6 +37,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     date,
     host,
     documenter,
+    translator,
     peoplePresent,
     purpose,
     townHallNumber,
@@ -117,6 +119,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       date = '',
       host = '',
       documenter = '',
+      translator = '',
       peoplePresent = '',
       purpose = '',
       townHallNumber = '',
@@ -136,6 +139,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       date,
       host,
       documenter,
+      translator,
       peoplePresent,
       purpose,
       townHallNumber,
@@ -222,6 +226,17 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
               key={meetingInfo.documenter}
               onSelect={(selectedNames: any) => handleSelection('documenter', selectedNames)} 
               initialValue={meetingInfo.documenter || ""} 
+            />
+          </div>)}
+          {myVariable.workgroup?.preferred_template?.meetingInfo?.translator == 1 && (
+          <div className={styles.people3}>
+            <label className={styles['form-label']}>
+              Translator:
+            </label>
+            <SelectNames 
+              key={meetingInfo.translator}
+              onSelect={(selectedNames: any) => handleSelection('translator', selectedNames)} 
+              initialValue={meetingInfo.translator || ""} 
             />
           </div>)}  
         </div>

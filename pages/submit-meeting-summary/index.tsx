@@ -77,6 +77,7 @@ const SubmitMeetingSummary: NextPage = () => {
     "Video Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
     "Archives Workgroup": ["decisionItems", "actionItems", "learningPoints"],
     "Treasury Guild": ["discussionPoints", "decisionItems", "actionItems"],
+    "Treasury Policy WG": ["discussionPoints", "decisionItems", "actionItems"],
     "Dework PBL": ["discussionPoints", "decisionItems", "actionItems"],
     "Knowledge Base Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
     "Onboarding Workgroup": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
@@ -87,7 +88,10 @@ const SubmitMeetingSummary: NextPage = () => {
     "Ambassador Town Hall": ["townHallSummary"],
     "Deep Funding Town Hall": ["townHallSummary"],
     "One-off Event": ["Narative"],
-    "AI Ethics WG": ["narrative", "decisionItems", "actionItems"]
+    "AI Ethics WG": ["narrative", "decisionItems", "actionItems"],
+    "Africa Guild": ["narrative", "decisionItems", "actionItems"],
+    "Strategy Guild": ["narrative", "decisionItems", "actionItems"],
+    "LatAm Guild": ["narrative", "decisionItems", "actionItems"],
   };
 
   useEffect(() => {
