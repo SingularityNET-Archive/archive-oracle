@@ -44,6 +44,11 @@ const SubmitMeetingSummary: NextPage = () => {
     const names1 = await getNames();
     const tags1 = await getTags();
 
+    // Sort workgroups alphabetically by workgroup name
+    const sortedWorkgroups = workgroupList.sort((a: Workgroup, b: Workgroup) => 
+      a.workgroup.localeCompare(b.workgroup)
+    );
+
     let newNames = names1.map((value) => ({ value: value.name, label: value.name }));
 
     let otherTags = tags1
@@ -66,7 +71,7 @@ const SubmitMeetingSummary: NextPage = () => {
       .filter(tag => tag.type === 'gamesPlayed')
       .map(tag => ({ value: tag.tag, label: tag.tag }));
 
-    setWorkgroups(workgroupList);
+    setWorkgroups(sortedWorkgroups);
     setNames(newNames);
     setTags({ other: otherTags, emotions: emotionTags, topicsCovered: topicTags, references: referenceTags, gamesPlayed: gamesPlayedTags });
     setIsLoading(false);
