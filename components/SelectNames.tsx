@@ -10,7 +10,7 @@ interface SelectNamesProps {
 }
 
 const SelectNames: React.FC<SelectNamesProps> = ({ onSelect, initialValue }) => {
-  let initialOptions = initialValue ? initialValue.split(", ").map((val: any) => ({ label: val, value: val })) : [];
+  const initialOptions = initialValue ? initialValue.split(",").map(val => ({ label: val.trim(), value: val.trim() })) : [];
   const [selectedLabels, setSelectedLabels] = React.useState(initialOptions);
   const { myVariable } = useMyVariable();
   const options = myVariable.names ||  [
@@ -20,7 +20,7 @@ const SelectNames: React.FC<SelectNamesProps> = ({ onSelect, initialValue }) => 
   ];
 
   React.useEffect(() => {
-    let initialOptions = initialValue ? initialValue.split(", ").map(val => ({ label: val, value: val })) : [];
+    const initialOptions = initialValue ? initialValue.split(",").map(val => ({ label: val.trim(), value: val.trim() })) : [];
     setSelectedLabels(initialOptions);
   }, [initialValue]);
   
@@ -31,12 +31,24 @@ const SelectNames: React.FC<SelectNamesProps> = ({ onSelect, initialValue }) => 
     onSelect(labs.join(", ")); // Update parent component's state
   }
   
+  const handlePaste = (event: React.ClipboardEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const pastedText = event.clipboardData.getData('text');
+    const pastedNames = pastedText.split(',').map(name => name.trim()).filter(Boolean);
+    const newOptions = pastedNames.map(name => ({ label: name, value: name }));
+    setSelectedLabels(prevLabels => [...prevLabels, ...newOptions]);
+    handleInputChange([...selectedLabels, ...newOptions]);
+  };
+
   return (
-    <div title="When you type, hit enter to add item and start typing again to add another or select from the dropdown">
+    <div 
+      title="When you type, hit enter to add item and start typing again to add another or select from the dropdown. You can also paste a comma-separated list of names."
+      onPaste={handlePaste}
+    >
        <CreatableSelect
           isMulti
           options={options}
-          value={selectedLabels} // Make it a controlled component
+          value={selectedLabels}
           onChange={(selected) => {
             handleInputChange(selected || []);
           }}
