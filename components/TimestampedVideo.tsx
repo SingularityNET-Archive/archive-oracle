@@ -17,14 +17,25 @@ const TimestampedVideo: React.FC<TimestampedVideoProps> = ({ onUpdate, initialDa
     timestamps: initialData?.timestamps || '',
   });
 
+  useEffect(() => {
+    // Update videoData when initialData changes
+    setVideoData({
+      url: initialData?.url || '',
+      intro: initialData?.intro || '',
+      timestamps: initialData?.timestamps || '',
+    });
+  }, [initialData]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setVideoData({ ...videoData, [name]: value });
+    setVideoData((prevVideoData: any) => {
+      const updatedVideoData = { ...prevVideoData, [name]: value };
+      if (prevVideoData[name] !== value) {
+        setTimeout(() => onUpdate(updatedVideoData), 0); // Delay the onUpdate call
+      }
+      return updatedVideoData;
+    });
   };
-
-  useEffect(() => {
-    onUpdate(videoData); // Call onUpdate with the current state of videoData
-  }, [videoData, onUpdate]); // Add videoData and onUpdate to the dependency array
 
   return (
     <div className={styles.container}>
