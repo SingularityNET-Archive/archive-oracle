@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styles from '../styles/typea.module.css'; 
 import { useMyVariable } from '../context/MyVariableContext';
 import SelectNames from './SelectNames';
@@ -154,7 +154,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     });
   }, [myVariable.summary?.meetingInfo]); // Add myVariable.summary.meetingInfo to the dependency array
   
-  const handleVideoDataUpdate = (newVideoData: any) => {
+  const handleVideoDataUpdate = useCallback((newVideoData: any) => {
     setMeetingInfo(prevMeetingInfo => {
       if (JSON.stringify(prevMeetingInfo.timestampedVideo) === JSON.stringify(newVideoData)) {
         return prevMeetingInfo; 
@@ -164,7 +164,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
         timestampedVideo: newVideoData,
       };
     });
-  };  
+  }, []);  
 
   return (
     <>
