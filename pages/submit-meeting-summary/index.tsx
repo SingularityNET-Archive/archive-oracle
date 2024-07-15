@@ -83,6 +83,7 @@ const SubmitMeetingSummary: NextPage = () => {
     "Archives Workgroup": ["decisionItems", "actionItems", "learningPoints"],
     "Treasury Guild": ["discussionPoints", "decisionItems", "actionItems"],
     "Treasury Policy WG": ["discussionPoints", "decisionItems", "actionItems"],
+    "Treasury Automation WG": ["discussionPoints", "decisionItems", "actionItems"],
     "Dework PBL": ["discussionPoints", "decisionItems", "actionItems"],
     "Knowledge Base Workgroup": ["discussionPoints", "decisionItems", "actionItems"],
     "Onboarding Workgroup": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
@@ -97,7 +98,7 @@ const SubmitMeetingSummary: NextPage = () => {
     "Africa Guild": ["narrative", "decisionItems", "actionItems"],
     "Strategy Guild": ["narrative", "decisionItems", "actionItems"],
     "LatAm Guild": ["narrative", "decisionItems", "actionItems"],
-  };
+  }; // When you add a new Workgroup you need to update this ordermapping and the Discord API with the new workgroup
 
   useEffect(() => {
     async function fetchInitialData(workgroupId: string) {
