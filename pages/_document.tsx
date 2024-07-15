@@ -10,7 +10,8 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <meta name="google" content="notranslate" />  
+          <meta name="google" content="notranslate" /> 
+          <link rel="icon" type="image/png" sizes="300x300" href="/favicon.png" /> 
         </Head>
         <body>
           <Main />
