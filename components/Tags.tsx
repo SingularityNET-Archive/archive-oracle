@@ -76,7 +76,7 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
           </div>
         </div>
       </div>
-      <div className={styles['links-column-flex']}>
+      {!(myVariable.workgroup?.workgroup == 'WG Sync Call') && (<div className={styles['links-column-flex']}>
             <div>
               <label className={styles['form-label']}>
                 Other / General
@@ -89,7 +89,7 @@ const Tags: React.FC<TagsProps> = ({ tags, setTags }) => {
                 type="other" 
               />
             </div>
-        </div>
+        </div>)}
     </div>
   );
 };
