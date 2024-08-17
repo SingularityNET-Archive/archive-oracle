@@ -186,6 +186,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
             >
                 <option value="Weekly">Weekly</option>
                 <option value="Biweekly">Biweekly</option>
+                <option value="Monthly">Monthly</option>
                 <option value="One-off event">One-off event</option>
             </select>
             </>)}

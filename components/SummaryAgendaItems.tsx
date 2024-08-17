@@ -63,7 +63,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
       const newAgendaItems = JSON.parse(JSON.stringify(prevAgendaItems));
 
       // Check if the type is 'narrative'
-      if (type === 'townHallUpdates' || type === 'narrative' || type === 'gameRules' || type === 'townHallSummary') {
+      if (type === 'townHallUpdates' || type === 'narrative' || type === 'gameRules' || type === 'townHallSummary' || type === 'discussion') {
         if (newAgendaItems[agendaIdx]) {
           newAgendaItems[agendaIdx][type] = updatedItem[type]; // Directly set the narrative or gameRules string
         }
@@ -81,8 +81,10 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
 
   const getHeading = (itemType: any, workgroup: any) => {
     switch (itemType) {
+      
       case "issues":
         if (workgroup === "Onboarding Workgroup") return "To carry over for next meeting";
+        if (workgroup === "WG Sync Call") return "To carry over for next meeting";
         // Add more specific conditions for "issues" if needed
         return "Issues"; // Default for "issues"
 
@@ -93,6 +95,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
       case "meetingTopics":
         if (workgroup === "Research and Development Guild") return "Agenda Items";
         if (workgroup === "Education Workgroup") return "In this meeting we discussed";
+        if (workgroup === "WG Sync Call") return "Agenda Items";
         return "Meeting Topics";
       // Add cases for other item types as needed
 
@@ -134,6 +137,25 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               agendaIndex={agendaIndex}
               itemIndex={0}
               onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('narrative', agendaIdx, itemIdx, updatedItem)}
+              onRemove={removeItem}
+            />
+          </div>
+        </>
+      )
+    },
+    {
+      type: "discussion",
+      isEnabled: (template: any) => template?.discussion === 1,
+      render: (item: any, agendaIndex: any) => (
+        <>
+          <h3>Discussion</h3>
+          <div className={styles['action-item']}>
+            <Item
+              type="discussion"
+              item={item.discussion}
+              agendaIndex={agendaIndex}
+              itemIndex={0}
+              onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('discussion', agendaIdx, itemIdx, updatedItem)}
               onRemove={removeItem}
             />
           </div>

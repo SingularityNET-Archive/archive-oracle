@@ -110,7 +110,7 @@ export function generateMarkdown(summary, order) {
   // Generic function to format items
   const formatItems = (title, items, itemType) => {
     let sectionContent = '';
-    if (itemType === 'townHallUpdates' || itemType === 'narrative' || itemType === 'gameRules' || itemType === 'townHallSummary') {
+    if (itemType === 'townHallUpdates' || itemType === 'narrative' || itemType === 'gameRules' || itemType === 'townHallSummary' || itemType === 'discussion') {
       if (items.trim()) {  // Check if narrative or gameRules are not empty
         sectionContent = `${items}\n\n`;
       }
@@ -161,6 +161,9 @@ export function generateMarkdown(summary, order) {
       case 'narrative':
         if (item.narrative) formatItems("Narrative", item.narrative, 'narrative');
         break;
+      case 'discussion':
+        if (item.discussion) formatItems("Discussion", item.discussion, 'discussion');
+        break;
       case 'actionItems':
         if (item.actionItems && item.actionItems.length > 0) formatItems("Action Items", item.actionItems, 'actionItems');
         break;
@@ -185,6 +188,8 @@ export function generateMarkdown(summary, order) {
             formatItems("In this meeting we discussed", item.meetingTopics, 'meetingTopics');
           } else if (summary.workgroup == "Research and Development Guild") {
             formatItems("Agenda Items", item.meetingTopics, 'meetingTopics');
+          } else if (summary.workgroup == "WG Sync Call") {
+            formatItems("Agenda Items", item.meetingTopics, 'meetingTopics');
           } else {
             formatItems("Meeting Topics", item.meetingTopics, 'meetingTopics');
           }
@@ -193,6 +198,8 @@ export function generateMarkdown(summary, order) {
       case 'issues':
         if (item.issues && item.issues.length > 0) {
           if (summary.workgroup == "Onboarding Workgroup") {
+            formatItems("To carry over for next meeting", item.issues, 'issues');
+          } else if (summary.workgroup == "WG Sync Call") {
             formatItems("To carry over for next meeting", item.issues, 'issues');
           } else {
             formatItems("Issues", item.issues, 'issues');

@@ -98,6 +98,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
         townHallUpdates: "",
         townHallSummary: "",
         narrative: "",
+        discussion: "",
         gameRules: "",
         meetingTopics:[""],
         issues: [""],

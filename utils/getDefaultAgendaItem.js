@@ -4,6 +4,7 @@ export const getDefaultAgendaItem = () => ({
     townHallUpdates: "",
     townHallSummary: "",
     narrative: "",
+    discussion: "",
     gameRules: "",
     leaderboard: [""],
     meetingTopics: [""],
