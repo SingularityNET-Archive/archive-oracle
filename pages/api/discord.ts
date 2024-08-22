@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     'AI Ethics WG': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Treasury Policy WG': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Treasury Automation WG': process.env.SNET_DISCORD_WEBHOOK_URL,
-    'Africa Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'African Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Strategy Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
     'LatAm Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
     'WG Sync Call': process.env.SNET_DISCORD_WEBHOOK_URL
