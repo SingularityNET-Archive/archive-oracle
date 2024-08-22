@@ -95,7 +95,7 @@ const SubmitMeetingSummary: NextPage = () => {
     "Deep Funding Town Hall": ["townHallSummary"],
     "One-off Event": ["Narative"],
     "AI Ethics WG": ["narrative", "decisionItems", "actionItems"],
-    "Africa Guild": ["narrative", "decisionItems", "actionItems"],
+    "African Guild": ["narrative", "decisionItems", "actionItems"],
     "Strategy Guild": ["narrative", "decisionItems", "actionItems"],
     "LatAm Guild": ["narrative", "decisionItems", "actionItems"],
     "WG Sync Call": ["meetingTopics", "discussion", "decisionItems", "actionItems", "issues"],
