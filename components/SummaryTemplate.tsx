@@ -69,6 +69,7 @@ function formatTimestamp(timestamp: any) {
 const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { myVariable, setMyVariable } = useMyVariable();
+  const [creatingDoc, setCreatingDoc] = useState<boolean>(false);
   const today = new Date().toISOString().split('T')[0];
     
   const defaultFormData = {
@@ -120,9 +121,11 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   const currentOrder = myVariable.agendaItemOrder ? myVariable.agendaItemOrder[myVariable.workgroup?.workgroup] : undefined;
 
   async function handleCreateGoogleDoc() {
+    setCreatingDoc(true); // Set creatingDoc to true when the button is clicked
+  
     try {
       const markdown = generateMarkdown(myVariable.summary, currentOrder);
-      console.log("markdown", markdown)
+      //console.log("markdown", markdown);
       const response = await axios.post('/api/createGoogleDoc', {
         markdown,
         workgroup: myVariable.workgroup?.workgroup,
@@ -132,8 +135,10 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     } catch (error) {
       console.error('Error creating Google Doc:', error);
       alert('There was an error creating the Google Doc.');
+    } finally {
+      setCreatingDoc(false); // Set creatingDoc to false after completion
     }
-  }
+  }  
   
   useEffect(() => {
     // Set the local state whenever myVariable.summary changes
@@ -286,8 +291,13 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
           type="button"
           onClick={handleCreateGoogleDoc}
           className={styles['export-button']}
+          disabled={creatingDoc}
         >
-          Create Google Doc
+          {creatingDoc ? (
+            <span className={styles['flashing-text']}>Creating Google Doc...</span>
+          ) : (
+            "Create Google Doc"
+          )}
         </button>
       </form>
       </div>)}
