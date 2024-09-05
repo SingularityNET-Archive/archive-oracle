@@ -299,6 +299,9 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
             "Create Google Doc"
           )}
         </button>
+        <p className={styles['popup-info']}>
+          (The document will open in a new tab if popups are enabled for this site)
+        </p>
       </form>
       </div>)}
     </>
