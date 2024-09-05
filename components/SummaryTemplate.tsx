@@ -1,3 +1,4 @@
+// ../components/SummaryTemplate.tsx
 import { useState, useEffect } from "react";
 import styles from '../styles/typea.module.css'; 
 import { useMyVariable } from '../context/MyVariableContext';
@@ -118,56 +119,19 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   const [tags, setTags] = useState({ topicsCovered: "", emotions: "", other: "", gamesPlayed: "" });
   const currentOrder = myVariable.agendaItemOrder ? myVariable.agendaItemOrder[myVariable.workgroup?.workgroup] : undefined;
 
-  async function generatePdf(markdown: any) {
-    const embedRegex = /\{% embed url="([^"]+)" %\}/g;
-    const updatedMarkdown = markdown.replace(embedRegex, (match: any, url: any) => {
-      // Check if the URL is a YouTube video
-      if (url.includes("youtube.com") || url.includes("youtu.be")) {
-        return `[Watch Video](${url})`; // Replace with a descriptive text for videos
-      } else if (url.includes("google.slides.com") || url.includes("docs.google.com/presentation")) {
-        return `[View Slides](${url})`; // Replace with a descriptive text for slides
-      } else {
-        return `[Link](${url})`; // A generic replacement for other URLs
-      }
-    });
-    markdown = updatedMarkdown;
+  async function handleCreateGoogleDoc() {
     try {
-      //console.log(formData.meetingInfo?.date, myVariable.summary?.date)
-      const additionalLines = `# Meeting Summary for ${myVariable.workgroup?.workgroup}\n` +
-                        `Date: ${formatTimestampForPdf(formData.meetingInfo?.date)}\n\n`+
-                        `#### Meeting Info\n`;
-
-      // Combine additional lines with existing markdown
-      const combinedMarkdown = additionalLines + markdown;
-  
-      const response = await axios.post('/api/convertToPdf', { markdown: combinedMarkdown }, {
-        responseType: 'blob', // Important to handle the PDF binary data
+      const markdown = generateMarkdown(myVariable.summary, currentOrder);
+      console.log("markdown", markdown)
+      const response = await axios.post('/api/createGoogleDoc', {
+        markdown,
+        workgroup: myVariable.workgroup?.workgroup,
+        date: formatTimestampForPdf(formData.meetingInfo?.date)
       });
-  
-      // Creating a Blob URL from the response data
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      //window.open(url, '_blank');  // If you want to open the PDF in a new tab
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'Meeting-Summary.pdf'); // or any other filename
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (error: any) {
-      console.error('Error:', error);
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error(error.response.data);
-        console.error(error.response.status);
-        console.error(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error('Error', error.message);
-      }
+      window.open(response.data.link, '_blank');
+    } catch (error) {
+      console.error('Error creating Google Doc:', error);
+      alert('There was an error creating the Google Doc.');
     }
   }
   
@@ -320,10 +284,10 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
         {myVariable.summary?.updated_at && (<p>{`(last saved ${formatTimestamp(myVariable.summary?.updated_at)})`}</p>)}
         <button
           type="button"
-          onClick={() => generatePdf(generateMarkdown(myVariable.summary, currentOrder))}
+          onClick={handleCreateGoogleDoc}
           className={styles['export-button']}
         >
-          Export to PDF
+          Create Google Doc
         </button>
       </form>
       </div>)}
