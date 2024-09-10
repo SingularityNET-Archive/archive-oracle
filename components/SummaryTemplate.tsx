@@ -292,6 +292,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
           onClick={handleCreateGoogleDoc}
           className={styles['export-button']}
           disabled={creatingDoc}
+          title="If you need to make the doc comment only, you'll have to create a copy of the doc."
         >
           {creatingDoc ? (
             <span className={styles['flashing-text']}>Creating Google Doc...</span>
