@@ -1,3 +1,4 @@
+// ../components/nav.tsx
 import Link from 'next/link';
 import axios from 'axios';
 import { useState, useEffect } from "react";
@@ -6,6 +7,7 @@ import { Session } from "@supabase/supabase-js";
 import { useMyVariable } from '../context/MyVariableContext';
 import { saveUser } from '../utils/saveUser'
 import { fetchLatestTag } from '../utils/fetchLatestTag';
+import styles from '../styles/nav.module.css';
 
 type RoleData = {
   roles: {
@@ -117,22 +119,22 @@ const Nav = () => {
   }
 
   return (
-    <nav className="routes">
-      <div className="navLeft">
-        <Link href="/" className="navitems">
+    <nav className={styles.routes}>
+      <div className={styles.navLeft}>
+        <Link href="/" className={styles.navitems}>
           Home
         </Link>
-        <Link href='/submit-meeting-summary' className="navitems">
+        <Link href='/submit-meeting-summary' className={styles.navitems}>
           Submit Meeting Summary
         </Link>
-        <Link href='/issues' className="navitems">
+        <Link href='/issues' className={styles.navitems}>
           Issues
         </Link>
         {roleData?.appRole == "admin" && (<>
-          <Link href='/status-of-summaries' className="navitems">
+          <Link href='/status-of-summaries' className={styles.navitems}>
             Summaries
           </Link>
-          <Link href='/admin-tools' className="navitems">
+          <Link href='/admin-tools' className={styles.navitems}>
             Admin Tools
           </Link>
         </>
@@ -141,11 +143,11 @@ const Nav = () => {
       <div>{latestTag}</div>
       <div>
         {!session && (
-          <button onClick={signInWithDiscord} className="navitems">
+          <button onClick={signInWithDiscord} className={styles.navitems}>
             Sign In with Discord
           </button>)}
         {session && (
-          <button onClick={signout} className="navitems">
+          <button onClick={signout} className={styles.navitems}>
             Sign Out
           </button>)}
       </div>

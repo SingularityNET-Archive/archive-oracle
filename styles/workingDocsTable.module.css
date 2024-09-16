@@ -7,7 +7,7 @@
 }
 
 .th, .td {
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   padding-left: 0px;
   text-align: left;
 }
@@ -17,15 +17,15 @@
 }
 
 .thead {
-  border: 1px solid #ddd;
-  background-color: rgb(22, 47, 97);
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
 }
 
 .input {
   padding: 6px 12px;
   border: 1px solid #ccc;
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: black;
   border-radius: 4px;
   width: 100%;
 }
@@ -44,7 +44,7 @@
 }
 
 .button {
-  background-color: #08617a;
+  background-color: #0d89cb;
   color: white;
   padding: 10px 15px;
   border: none;
@@ -57,11 +57,11 @@
 }
 
 .button:hover {
-  background-color: #0d89cb;
+  background-color: #08617a;
 }
 
 .removeButton {
-  background-color: #982626;
+  background-color: black;
   color: white;
   padding: 0.3em;
   border: none;
@@ -73,13 +73,15 @@
 }
 
 .removeButton:hover {
-  background-color: #742020;
+  background-color: #601c1c;
 }
 
 .label {
   display: block;
   margin-top: 0.5rem;
   font-size: 1.3rem;
+  font-weight: bold;
+  color: #333;
 }
 
 /* New styles for the remove button column */

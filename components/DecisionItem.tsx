@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import styles from '../styles/typea.module.css';
+import styles from '../styles/decisionitems.module.css';
 
 const DecisionItem = ({ item, itemIndex, handleUpdate, onRemove, agendaIndex, type }: any) => {
   const decisionRef = useRef<HTMLTextAreaElement>(null);
