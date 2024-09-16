@@ -1,73 +1,82 @@
 /* Base styles */
 .form-column-flex {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.row-flex-start,
+.row-flex-space-between {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.column-flex,
+.links-column-flex {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Form field styles */
+.form-label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0.1rem;
+  margin-top: 0.5rem;
+  color: black; /* Changed to a darker blue for better contrast in light mode */
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.form-input {
+  resize: vertical;
+  min-height: 30px;
+}
+
+/* People section styles */
+.people1,
+.people2,
+.people3 {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .row-flex-start,
   .row-flex-space-between {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    width: 100%;
-  }
-  
-  .column-flex,
-  .links-column-flex {
-    display: flex;
     flex-direction: column;
-    flex: 1;
-    min-width: 200px;
   }
-  
-  /* Form field styles */
-  .form-label {
-    font-size: 0.9rem;
-    margin-bottom: 0.1rem;
-    margin-top: 0.5rem;
-    color: #b1d5fc; /* Light blue color for labels */
-  }
-  
-  .form-input,
-  .form-select {
-    width: 100%;
-    padding: 0.6rem;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    background-color: black;
-    color: white;
-    font-size: 1rem;
-  }
-  
-  .form-input {
-    resize: vertical;
-    min-height: 30px;
-  }
-  
-  /* People section styles */
+
+  .column-flex,
+  .links-column-flex,
   .people1,
   .people2,
   .people3 {
-    flex: 1;
-    min-width: 200px;
+    width: 100%;
   }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .row-flex-start,
-    .row-flex-space-between {
-      flex-direction: column;
-    }
-  
-    .column-flex,
-    .links-column-flex,
-    .people1,
-    .people2,
-    .people3 {
-      width: 100%;
-    }
-  }
+}

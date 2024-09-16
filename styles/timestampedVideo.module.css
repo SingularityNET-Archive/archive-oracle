@@ -1,10 +1,12 @@
-/* workingDocsTable.module.css */
+/* timestampedVideo.module */
 .container {
-  border: 1px solid #ccc;
+  border: 1px solid #e0e0e0;
   border-radius: 4px;
   padding: 10px;
   margin-bottom: 10px;
+  background-color: #ffffff;
 }
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -12,8 +14,8 @@
 }
 
 .th, .td {
-  border: 1px solid #ddd;
-  padding-left: 0px;
+  border: 1px solid #e0e0e0;
+  padding: 8px;
   text-align: left;
 }
 
@@ -22,23 +24,24 @@
 }
 
 .thead {
-  border: 1px solid #ddd;
-  background-color: rgb(22, 47, 97);
+  border: 1px solid #e0e0e0;
+  background-color: #f5f5f5;
+  color: #333;
 }
 
 .input {
   padding: 6px 12px;
   border: 1px solid #ccc;
-  background-color: #2b1f1f;
-  color: white;
+  background-color: #ffffff;
+  color: #333;
   border-radius: 4px;
 }
 
 .textarea {
   padding: 6px 12px;
   border: 1px solid #ccc;
-  background-color: #2b1f1f;
-  color: white;
+  background-color: #ffffff;
+  color: #333;
   border-radius: 4px;
   width: 80%;
   height: 80px;
@@ -72,25 +75,26 @@
 }
 
 .button:hover {
-  background-color: #419345;
+  background-color: #45a049;
 }
 
 .removeButton {
-    background-color: #982626;
-    color: white;
-    padding: 0.3em;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
+  background-color: #f44336;
+  color: white;
+  padding: 0.3em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
 .removeButton:hover {
-  background-color: #742020;
+  background-color: #d32f2f;
 }
 
 .label {
   display: block;
   margin-bottom: 0.1rem;
   font-size: 0.9rem;
+  color: #333;
 }

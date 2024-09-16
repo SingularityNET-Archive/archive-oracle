@@ -1,19 +1,35 @@
-.column-flex {
+.action-item {
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background-color: white;
+  border: 1px solid #d0d0d0;
+}
+
+.agenda-title {
   display: flex;
   flex-direction: column;
+}
+
+.row-flex-space-between {
+  display: flex;
+  justify-content: space-between;
 }
 
 .row-flex-start {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: flex-start;
 }
 
-.links-column-flex {
+.action-assignee-column-flex {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  margin-right: 12px;
+}
+
+.column-flex {
+  display: flex;
+  flex-direction: column;
 }
 
 .form-label {
@@ -25,15 +41,20 @@
 }
 
 .form-input,
-.form-textarea {
+.form-select {
   padding: 0.6rem;
   border-radius: 4px;
-  margin-bottom: 0rem;
+  margin-bottom: 1rem;
   margin-right: 1em;
   background-color: white;
   color: #333;
-  overflow-y: hidden;
   border: 1px solid #ccc;
+}
+
+.form-input {
+  min-height: 30px;
+  overflow-y: hidden;
+  resize: none;
 }
 
 .remove-button {
@@ -41,26 +62,11 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-right: 1em;
   background-color: black;
   color: white;
   cursor: pointer;
 }
 
 .remove-button:hover {
-  background-color: #6a2020;
-}
-
-.item-container {
-  margin-bottom: 1rem;
-}
-
-.action-item,
-.decision-item {
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px;
-  background-color: #f8f9fa;
-  border: 1px solid #e0e0e0;
+  background-color: #671d1d;
 }

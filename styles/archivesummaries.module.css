@@ -32,6 +32,7 @@
   display: block;
   margin-bottom: 0.1rem;
   font-size: 0.9rem;
+  color: #333333; /* Updated for light mode */
 }
 
 .form-input {
@@ -39,8 +40,9 @@
   padding: 0.6rem;
   border-radius: 4px;
   margin-bottom: 1rem;
-  background-color: black;
-  color: white;
+  background-color: #ffffff; /* Updated for light mode */
+  color: #333333; /* Updated for light mode */
+  border: 1px solid #cccccc; /* Added for light mode */
 }
 
 .meeting-summary-textarea {
@@ -48,15 +50,15 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-bottom: 1rem;
-  background-color: black;
-  color: white;
+  background-color: #ffffff; /* Updated for light mode */
+  color: #333333; /* Updated for light mode */
   min-height: 300px;
   width: 700px;
   resize: vertical;
 }
 
 .submit-button {
-  background-color: #007bff;
+  background-color: #0d89cb;
   color: white;
   padding: 0.5rem 1rem;
   border: none;
@@ -80,10 +82,12 @@
 .markdown-rendered {
   margin-top: 30px;
   max-width: 700px;
+  color: #333333; /* Updated for light mode */
 }
 
 .markdown-rendered-heading {
   margin-top: 8rem;
+  color: #222222; /* Updated for light mode */
 }
 
 .markdown-rendered ul,
@@ -104,7 +108,7 @@
   align-items: center;
   font-size: 3rem;
   animation: fade-in-out 2s ease-in-out infinite;
-  color: aquamarine;
+  color: #007bff; /* Updated for light mode */
 }
 
 @keyframes fade-in-out {

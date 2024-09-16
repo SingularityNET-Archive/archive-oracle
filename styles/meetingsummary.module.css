@@ -8,13 +8,14 @@
 .navbar {
   width: 100%;
   margin-top: -17px;
-  display: flex; /* Added */
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content:flex-start;
+  justify-content: flex-start;
   position: fixed;
-  background-color: black;
+  background-color: #f8f9fa;
   z-index: 9999;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .mainContent {
@@ -25,6 +26,7 @@
   margin-left: 5px;
   margin-top: 5px;
 }
+
 @media (max-width: 900px) {
   .container {
     margin-top: 0;
@@ -62,20 +64,22 @@
 .select {
   width: 220px;
   height: 35px;
-  padding: 0.2Zem;
+  padding: 0.2em;
   margin: 0.5em;
-  background-color: black;
-  color: white;
+  background-color: #ffffff;
+  color: #333333;
   z-index: 9999;  
   font-size: 1rem;
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
 }
 
 .selectGreen {
-  color: aqua;
+  color: #008080;
 }
 
 .selectGreen option {
-  color: white;  /* This will reset the color to the default for options inside the dropdown */
+  color: #333333;
 }
 
 .nomainContent {
@@ -92,6 +96,7 @@
   padding: 1rem;
   margin-left: 200px;
   margin-top: 0px;
+  color: #333333;
 }
 
 .navButton {
@@ -103,9 +108,10 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
-  color: white;
+  color: #333333;
   z-index: 9999;  
   font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
 .resetButton {
@@ -114,36 +120,32 @@
   padding: 0.5rem;
   margin: 0.5rem 0;
   text-align: center;
-  background-color: rgb(18, 105, 198);
+  background-color: #0d89cb;
   border: none;
   cursor: pointer;
   color: white;
   z-index: 9999;  
   font-size: 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
+
 .resetButton:hover {
-  background-color: rgb(13, 64, 120);
-  outline: 4px auto -webkit-focus-ring-color;
+  background-color: #0e5c87;
 }
 
-.navButton:focus {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
+.navButton:focus,
 .navButton:hover {
-  outline: 4px auto -webkit-focus-ring-color;
+  background-color: #e9ecef;
+  outline: none;
 }
 
 .navButton.active {
-  background-color: #362d50;
+  background-color: #e9ecef;
+  font-weight: bold;
 }
 
-.register {
-  width: 170px;
-  padding: 0.1em;
-  margin: 0.5em;
-}
-
+.register,
 .registerbutton {
   width: 170px;
   padding: 0.1em;
@@ -154,6 +156,7 @@
   display: block;
   margin-bottom: -0.4rem;
   font-size: 0.9rem;
+  color: #333333;
 }
 
 .column-flex {

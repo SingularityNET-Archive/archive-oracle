@@ -45,43 +45,44 @@ const SelectNames: React.FC<SelectNamesProps> = ({ onSelect, initialValue }) => 
       title="When you type, hit enter to add item and start typing again to add another or select from the dropdown. You can also paste a comma-separated list of names."
       onPaste={handlePaste}
     >
-       <CreatableSelect
-          isMulti
-          options={options}
-          value={selectedLabels}
-          onChange={(selected) => {
-            handleInputChange(selected || []);
-          }}
-          styles={{
-            control: (baseStyles, state) => ({
-              ...baseStyles,
-              borderColor: state.isFocused ? 'grey' : 'white',
-              backgroundColor: 'black',
-              color: 'white',
-            }),
-            option: (baseStyles, { isFocused, isSelected }) => ({
-              ...baseStyles,
-              backgroundColor: isSelected ? 'darkblue' : isFocused ? 'darkgray' : 'black',
-              color: 'white',
-            }),
-            multiValue: (baseStyles) => ({
-              ...baseStyles,
-              backgroundColor: 'darkblue',
-            }),
-            multiValueLabel: (baseStyles) => ({
-              ...baseStyles,
-              color: 'white',
-            }),
-            input: (baseStyles) => ({
-              ...baseStyles,
-              color: 'white',
-            }),
-            menu: (baseStyles) => ({
-              ...baseStyles,
-              backgroundColor: 'black',
-            }),
-          }}
-        />
+      <CreatableSelect
+        isMulti
+        options={options}
+        value={selectedLabels}
+        onChange={(selected) => {
+          handleInputChange(selected || []);
+        }}
+        styles={{
+          control: (baseStyles, state) => ({
+            ...baseStyles,
+            borderColor: state.isFocused ? '#007bff' : '#ced4da',
+            backgroundColor: 'white',
+            color: 'black',
+          }),
+          option: (baseStyles, { isFocused, isSelected }) => ({
+            ...baseStyles,
+            backgroundColor: isSelected ? '#007bff' : isFocused ? '#f8f9fa' : 'white',
+            color: isSelected ? 'white' : 'black',
+          }),
+          multiValue: (baseStyles) => ({
+            ...baseStyles,
+            backgroundColor: '#e9ecef',
+          }),
+          multiValueLabel: (baseStyles) => ({
+            ...baseStyles,
+            color: 'black',
+          }),
+          input: (baseStyles) => ({
+            ...baseStyles,
+            color: 'black',
+          }),
+          menu: (baseStyles) => ({
+            ...baseStyles,
+            backgroundColor: 'white',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          }),
+        }}
+      />
     </div>
   );
 };
