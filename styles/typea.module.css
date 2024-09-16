@@ -43,7 +43,6 @@
 .form-column-flex {
   display: flex;
   flex-direction: column;
-  margin-right: 50px;
 }
 
 .links-column-flex {
@@ -80,14 +79,25 @@
   font-size: 0.9rem;
 }
 
+.form-input{
+  min-height: 30px;
+}
+
 .form-input,
 .form-textarea {
   padding: 0.6rem;
-  border: 1px solid #ccc;
   border-radius: 4px;
   margin-bottom: 1rem; 
   margin-right: 1em;
-  background-color: #2b1f1f;
+  background-color: black;
+  color: white;
+  overflow-y: hidden;
+}
+
+.form-textarea {
+  min-height: 120px;
+  min-width: 500px;
+  background-color: black;
   color: white;
 }
 
@@ -97,14 +107,7 @@
   border-radius: 4px;
   margin-bottom: 1rem; 
   margin-right: 1em;
-  background-color: #2b1f1f;
-  color: white;
-}
-
-.form-textarea {
-  min-height: 120px;
-  min-width: 500px;
-  background-color: #2b1f1f;
+  background-color: black;
   color: white;
 }
 
@@ -130,7 +133,7 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 15px;
-  margin: 10px;
+  margin-top: 10px;
   margin-bottom: 25px;
   background-color: rgb(22, 47, 97);
 }
@@ -177,7 +180,7 @@
   border-radius: 4px;
   margin-bottom: 1rem; 
   margin-left: 1em;
-  background-color: rgb(1, 121, 61);
+  background-color: rgb(6, 97, 113);
   color: white;
   cursor: pointer;
 }
@@ -220,7 +223,7 @@
   border-radius: 4px;
   margin-bottom: 1rem; 
   margin-right: 1em;
-  background-color: #2b1f1f;
+  background-color: black;
   color: white;
   min-height: 300px;
   width: 700px;

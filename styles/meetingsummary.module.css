@@ -1,8 +1,8 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin-top: 4.5em;  /* Leaving space for the top fixed navbar */
-  height: calc(100vh - 4.5em);
+  margin-top: 4.5em;
+  min-height: calc(100vh - 4.5em);
 }
 
 .navbar {
@@ -25,24 +25,37 @@
   margin-left: 5px;
   margin-top: 5px;
 }
-@media (max-width: 600px) {
-  .navbar {
-    position: relative; /* Change from fixed to relative */
-    width: 100%;
-    margin-top: 210px; /* Adjust margin as needed */
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    background-color: black;
-    z-index: 9998; /* Adjust z-index as needed */
+@media (max-width: 900px) {
+  .container {
+    margin-top: 0;
   }
+
+  .navbar {
+    position: static;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+  }
+
   .mainContent {
-    display: flex;
-    justify-content: space-around;
-    flex-grow: 1;
-    padding: 1rem;
-    margin-left: 5px;
-    margin-top: -17px;
+    margin-top: 1rem;
+  }
+
+  .select,
+  .navButton,
+  .resetButton {
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .column-flex {
+    width: 100%;
+    align-items: center;
+  }
+
+  .form-label {
+    text-align: center;
   }
 }
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
-import styles from '../styles/typea.module.css';
+import styles from '../styles/agendaitems.module.css';
 import Item from './Item';
 import { getDefaultAgendaItem } from '../utils/getDefaultAgendaItem';
 import { filterFormData } from '../utils/filterFormData';
@@ -410,7 +410,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
                     Agenda Title
                   </label>
                   <input
-                    className={styles['form-input']}
+                    className={styles['form-select']}
                     type="text"
                     placeholder="Agenda Item"
                     value={item.agenda}

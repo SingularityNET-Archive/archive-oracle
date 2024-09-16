@@ -1,0 +1,79 @@
+/* Agenda Items Styles */
+.agenda-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  background-color: rgb(22, 47, 97);
+}
+
+.agenda-title {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 4;
+}
+
+.action-item,
+.decision-item,
+.discussion-points {
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background-color: black;
+}
+
+.remove-button,
+.add-button {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  color: white;
+  cursor: pointer;
+}
+
+.remove-button {
+  background-color: #680202;
+  margin-right: 1em;
+}
+
+.add-button {
+  background-color: rgb(6, 97, 113);
+  margin-left: 1em;
+}
+
+/* Form Styles */
+.form-label {
+  display: block;
+  margin-bottom: 0.1rem;
+  font-size: 0.9rem;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  padding: 0.6rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  margin-right: 1em;
+  background-color: black;
+  color: white;
+}
+
+.form-select {
+  border: 1px solid #ccc;
+}
+
+/* Layout Styles */
+.row-flex-start {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.column-flex {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,6 +1,6 @@
 // ../components/SummaryTemplate.tsx
 import { useState, useEffect } from "react";
-import styles from '../styles/typea.module.css'; 
+import styles from '../styles/summarytemplate.module.css'; 
 import { useMyVariable } from '../context/MyVariableContext';
 import SummaryMeetingInfo from './SummaryMeetingInfo'
 import SummaryAgendaItems from './SummaryAgendaItems'
@@ -283,24 +283,23 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
         {formData.meetingInfo.name && (<SummaryMeetingInfo workgroup={formData.workgroup} onUpdate={(info: any) => setFormData({...formData, meetingInfo: info})} />)}
         <SummaryAgendaItems onUpdate={(items: any) => setFormData({...formData, agendaItems: items})} />
         <Tags tags={tags} setTags={setTags} />
-        <button type="submit" disabled={loading} className={styles['submit-button']}>
+        <button type="submit" disabled={loading} className={styles.submitButton}>
           {loading ? "Loading..." : "Save"}
         </button>
         {myVariable.summary?.updated_at && (<p>{`(last saved ${formatTimestamp(myVariable.summary?.updated_at)})`}</p>)}
         <button
           type="button"
           onClick={handleCreateGoogleDoc}
-          className={styles['export-button']}
+          className={styles.exportButton}
           disabled={creatingDoc}
-          title="If you need to make the doc comment only, you'll have to create a copy of the doc."
         >
           {creatingDoc ? (
-            <span className={styles['flashing-text']}>Creating Google Doc...</span>
+            <span className={styles.flashingText}>Creating Google Doc...</span>
           ) : (
             "Create Google Doc"
           )}
         </button>
-        <p className={styles['popup-info']}>
+        <p className={styles.popupInfo}>
           (The document will open in a new tab if popups are enabled for this site)
         </p>
       </form>

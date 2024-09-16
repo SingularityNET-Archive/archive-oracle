@@ -1,8 +1,11 @@
-import styles from '../styles/typea.module.css';
+import { useRef, useEffect } from 'react';
+import styles from '../styles/items.module.css';
 import ActionItem from '../components/ActionItem';
 import DecisionItem from '../components/DecisionItem';
 
 const TextAreaInput = ({ value, onChange, placeholder, type }: any) => {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
   // Define titles for different types
   const titles: any = {
     narrative: 'Meeting narrative: Try to make your narrative concise and information-dense, and avoid filler',
@@ -12,16 +15,30 @@ const TextAreaInput = ({ value, onChange, placeholder, type }: any) => {
     discussion: 'Discussion: Note the main points raised. Try to make your narrative concise and information-dense, and avoid filler',
   };
 
-  // Determine the title based on the type
   const title = titles[type] || 'Meeting narrative: Try to make your narrative concise and information-dense, and avoid filler';
+
+  const adjustTextareaHeight = (textarea: HTMLTextAreaElement | null) => {
+    if (textarea) {
+      textarea.style.height = 'auto'; // Reset height
+      textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight(textAreaRef.current);
+  }, [value]);
 
   return (
     <div className={styles['column-flex']}>
         <textarea
+            ref={textAreaRef}
             className={styles['form-textarea']}
             placeholder={placeholder}
             value={value}
-            onChange={(e) => onChange(type, e.target.value)}
+            onChange={(e) => {
+              onChange(type, e.target.value);
+              adjustTextareaHeight(textAreaRef.current);
+            }}
             autoComplete="off"
             title={title}
         />
@@ -30,36 +47,55 @@ const TextAreaInput = ({ value, onChange, placeholder, type }: any) => {
 };
 
 // Generic input component for text fields
-const TextInput: any = ({ label, placeholder, value, onChange, type, itemIndex }: any) => (
-  <div className={styles['links-column-flex']}>
+const TextInput: any = ({ label, placeholder, value, onChange, type, itemIndex }: any) => {
+  const textInputRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustTextareaHeight = (textarea: HTMLTextAreaElement | null) => {
+    if (textarea) {
+      textarea.style.height = 'auto'; // Reset height
+      textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight(textInputRef.current);
+  }, [value]);
+
+  return (
+    <div className={styles['links-column-flex']}>
       <label className={styles['form-label']}>
           {label}
       </label>
-      <input
+      <textarea
+          ref={textInputRef}
           className={styles['form-input']}
-          type="text"
           placeholder={placeholder}
           value={value}
-          onChange={onChange}
+          onChange={(e) => {
+            onChange(e);
+            adjustTextareaHeight(textInputRef.current);
+          }}
           autoComplete="off"
       />
-  </div>
-);
+    </div>
+  );
+};
 
 function getOrdinal(n: any) {
   const ordinals = ["th", "st", "nd", "rd"];
   const v = n % 100;
   return n + (ordinals[(v - 20) % 10] || ordinals[v] || ordinals[0]);
 }
-// Higher-order function to create common item structure
+
 const createItem = (type: any, agendaIndex: any, itemIndex: any, item: any, handleUpdate: any, onRemove: any) => {
-  let label = ''
-  if (type === 'leaderboard') { label = (getOrdinal(itemIndex + 1)) + ' place' }
-  else if (type === 'meetingTopics') { label = 'Item ' + (itemIndex + 1)}
-  else if (type === 'discussionPoints') { label = 'Discussion Point ' + (itemIndex + 1)}
-  else if (type === 'learningPoints') { label = 'Learning Point ' + (itemIndex + 1)}
-  else if (type === 'issues') { label = 'Issue ' + (itemIndex + 1)}
-  else { label = type + ' ' + (itemIndex + 1)}
+  let label = '';
+  if (type === 'leaderboard') { label = (getOrdinal(itemIndex + 1)) + ' place'; }
+  else if (type === 'meetingTopics') { label = 'Item ' + (itemIndex + 1); }
+  else if (type === 'discussionPoints') { label = 'Discussion Point ' + (itemIndex + 1); }
+  else if (type === 'learningPoints') { label = 'Learning Point ' + (itemIndex + 1); }
+  else if (type === 'issues') { label = 'Issue ' + (itemIndex + 1); }
+  else { label = type + ' ' + (itemIndex + 1); }
+
   const commonInput = (itemType: any, placeholder: any) => (
       <TextInput
           label={label}
@@ -76,7 +112,6 @@ const createItem = (type: any, agendaIndex: any, itemIndex: any, item: any, hand
       </button>
   );
 
-
   return (
       <div className={styles['row-flex-start']}>
           {commonInput(type, `${type.charAt(0).toUpperCase() + type.slice(1)}`)}
@@ -86,13 +121,10 @@ const createItem = (type: any, agendaIndex: any, itemIndex: any, item: any, hand
 };
 
 const Item = ({ type, item, agendaIndex, itemIndex, onUpdate, onRemove }: any) => {
-    // Determine what inputs to render based on item type
     const handleUpdate = (key: any, value: any) => {
         if (type === 'meetingTopics' || type === 'issues' || type === 'discussionPoints' || type === 'learningPoints' || type === 'leaderboard') {
-            // For 'issues', since it's an array of strings, update directly
             onUpdate(agendaIndex, itemIndex, value);
         } else {
-            // For other types, use the existing logic
             onUpdate(agendaIndex, itemIndex, { ...item, [key]: value });
         }
     };
