@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
-import styles from '../styles/typea.module.css'; 
+import styles from '../styles/archivesummaries.module.css'; 
 import { generateMarkdown } from '../utils/generateMarkdown';
 import { updateGitbook } from '../utils/updateGitbook';
 import { sendDiscordMessage } from '../utils/sendDiscordMessage';
@@ -131,7 +131,7 @@ const ArchiveSummaries = () => {
   }  
   
   return (
-    <div>
+    <div className={styles['main-container']}>
       {loading && (
         <>
         <div className={styles['loading']}>
