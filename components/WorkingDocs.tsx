@@ -74,8 +74,8 @@ const WorkingDocs = ({ handleChange, addNewDoc, docs, removeDoc, originalDocsCou
                   <a href={formatUrl(doc.link)} target="_blank" rel="noopener noreferrer">Link</a>
                 )}
               </td>
-              <td className={`${styles.td} ${styles.centerAligned}`}>
-                <button className={styles.removeButton} type="button" onClick={() => handleDocRemove(index)}>Remove</button>
+              <td className={`${styles.td} ${styles.centerAligned} ${styles.removeButtonColumn}`}>
+                <button className={styles.removeButton} type="button" onClick={() => handleDocRemove(index)}>X</button>
               </td>
             </tr>
           ))}

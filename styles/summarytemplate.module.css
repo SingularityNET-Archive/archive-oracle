@@ -1,0 +1,67 @@
+.form-container {
+  max-width: 1000px;
+  padding: 2rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.gitbookForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.submitButton,
+.exportButton {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 2em;
+  font-weight: bold;
+  width: 100%; /* Make buttons full width */
+}
+
+.submitButton {
+  height: 4em;
+  font-size: larger;
+}
+
+.submitButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 4.5em);
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  animation: fadeInOut 2s ease-in-out infinite;
+  color: aquamarine;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.flashingText {
+  animation: flash 1s infinite;
+}
+
+@keyframes flash {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.popupInfo {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}

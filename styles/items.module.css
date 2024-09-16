@@ -1,0 +1,58 @@
+.column-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-flex-start {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.links-column-flex {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.1rem;
+  font-size: 0.9rem;
+}
+
+.form-input,
+.form-textarea {
+  padding: 0.6rem;
+  border-radius: 4px;
+  margin-bottom: 0rem;
+  margin-right: 1em;
+  background-color: black;
+  color: white;
+  overflow-y: hidden;
+}
+
+.remove-button {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-right: 1em;
+  background-color: #680202;
+  color: white;
+  cursor: pointer;
+}
+
+.item-container {
+  margin-bottom: 1rem;
+}
+
+.action-item,
+.decision-item {
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background-color: black;
+}
