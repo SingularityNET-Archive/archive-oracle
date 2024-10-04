@@ -99,8 +99,11 @@ const SubmitMeetingSummary: NextPage = () => {
     "Strategy Guild": ["narrative", "decisionItems", "actionItems"],
     "LatAm Guild": ["narrative", "decisionItems", "actionItems"],
     "WG Sync Call": ["meetingTopics", "discussion", "decisionItems", "actionItems", "issues"],
-  }; // When you add a new Workgroup you need to update this ordermapping and the Discord API with the new workgroup
-  //If you add a new AgendaItem type, you need to update the following components: Item.tsx, SummaryTemplate.tsx and AgendaItem.tsx and 
+    "AI Sandbox": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
+  }; 
+  // When you add a new Workgroup you need to update this ordermapping and the Discord API with the new workgroup
+  // Also check generateMarkdown and SummaryAgendaItems for potential updates
+  // If you add a new AgendaItem type, you need to update the following components: Item.tsx, SummaryTemplate.tsx and AgendaItem.tsx and 
   // the database template. You also need to update the generateMarkdown.js and getDefaultAgendaItem.js utils functions 
 
   useEffect(() => {

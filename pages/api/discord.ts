@@ -32,7 +32,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     'African Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
     'Strategy Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
     'LatAm Guild': process.env.SNET_DISCORD_WEBHOOK_URL,
-    'WG Sync Call': process.env.SNET_DISCORD_WEBHOOK_URL
+    'WG Sync Call': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'AI Sandbox': process.env.SNET_DISCORD_WEBHOOK_URL
   };
     
   
