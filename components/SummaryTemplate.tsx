@@ -197,7 +197,6 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   };  
   
   async function handleSubmit(e: any) {
-    e.preventDefault();
     if (!formData.meetingInfo.date) {
       alert("Please select the meeting date.");
       return;
@@ -279,11 +278,11 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     )}
     {!loading && (<div className={styles['form-container']}>
       <h2>{formData.workgroup} {formData.meetingInfo.date}</h2>
-      <form onSubmit={handleSubmit} className={styles['gitbook-form']}>
+      <div className={styles['gitbook-form']}>
         {formData.meetingInfo.name && (<SummaryMeetingInfo workgroup={formData.workgroup} onUpdate={(info: any) => setFormData({...formData, meetingInfo: info})} />)}
         <SummaryAgendaItems onUpdate={(items: any) => setFormData({...formData, agendaItems: items})} />
         <Tags tags={tags} setTags={setTags} />
-        <button type="submit" disabled={loading} className={styles.submitButton}>
+        <button onClick={handleSubmit} type="button" disabled={loading} className={styles.submitButton}>
           {loading ? "Loading..." : "Save"}
         </button>
         {myVariable.summary?.updated_at && (<p>{`(last saved ${formatTimestamp(myVariable.summary?.updated_at)})`}</p>)}
@@ -302,7 +301,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
         <p className={styles.popupInfo}>
           (The document will open in a new tab if popups are enabled for this site)
         </p>
-      </form>
+      </div>
       </div>)}
     </>
   );

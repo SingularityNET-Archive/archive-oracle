@@ -84,12 +84,14 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
       
       case "issues":
         if (workgroup === "Onboarding Workgroup") return "To carry over for next meeting";
+        if (workgroup === "AI Sandbox") return "To carry over for next meeting";
         if (workgroup === "WG Sync Call") return "To carry over for next meeting";
         // Add more specific conditions for "issues" if needed
         return "Issues"; // Default for "issues"
 
       case "discussionPoints":
         if (workgroup === "Onboarding Workgroup") return "In this meeting we discussed";
+        if (workgroup === "AI Sandbox") return "In this meeting we discussed";
         return "Discussion Points";
 
       case "meetingTopics":
