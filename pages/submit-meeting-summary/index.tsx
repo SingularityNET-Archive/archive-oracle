@@ -280,6 +280,7 @@ const SubmitMeetingSummary: NextPage = () => {
       noSummaryGiven(); // Your existing function to handle no summary
     } else if (newStatus === 'canceledSummary') {
       // Implement logic for canceled summary
+      //console.log("Canceled Summary", myVariable);
       setMyVariable(prevMyVariable => ({
         ...prevMyVariable,
         summary: {
@@ -364,7 +365,7 @@ const SubmitMeetingSummary: NextPage = () => {
             title="All values will be cleared, so please make sure to select all dropdowns and fill in all fields"
           >Clear Summary
           </button>
-          {myVariable.roles?.isAdmin && activeComponent == 'four' && (
+          {myVariable.roles?.isAdmin && (
             <select
               className={styles.select}
               value={summaryStatus}
