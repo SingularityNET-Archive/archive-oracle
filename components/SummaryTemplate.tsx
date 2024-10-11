@@ -73,7 +73,6 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   const [creatingDoc, setCreatingDoc] = useState<boolean>(false);
   const today = new Date().toISOString().split('T')[0];
   const [selectedQuarter, setSelectedQuarter] = useState('');
-  const [creatingQuarterlyDoc, setCreatingQuarterlyDoc] = useState(false);
   const quarterOptions = getQuarterOptions();
     
   const defaultFormData = {
@@ -125,7 +124,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   const currentOrder = myVariable.agendaItemOrder ? myVariable.agendaItemOrder[myVariable.workgroup?.workgroup] : undefined;
 
   async function handleCreateQuarterlyDoc() {
-    setCreatingQuarterlyDoc(true);
+    setCreatingDoc(true);
 
     try {
       const [quarter, year] = selectedQuarter.split(' ');
@@ -143,7 +142,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
       console.error('Error creating Quarterly Google Doc:', error);
       alert('There was an error creating the Quarterly Google Doc.');
     } finally {
-      setCreatingQuarterlyDoc(false);
+      setCreatingDoc(false);
     }
   }
 
@@ -349,10 +348,10 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
           type="button"
           onClick={handleCreateQuarterlyDoc}
           className={styles.exportButton}
-          disabled={creatingQuarterlyDoc || !selectedQuarter}
+          disabled={creatingDoc || !selectedQuarter}
         >
-          {creatingQuarterlyDoc ? (
-            <span className={styles.flashingText}>Creating Quarterly Doc...</span>
+          {creatingDoc ? (
+            <span className={styles.flashingText}>Creating Google Doc...</span>
           ) : (
             "Create Quarterly Google Doc"
           )}
