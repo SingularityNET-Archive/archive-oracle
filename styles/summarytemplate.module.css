@@ -73,3 +73,30 @@
   font-size: 0.9rem;
   color: #555;
 }
+
+.quarterly-report-section {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quarterSelect {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+  background-color: white;
+  cursor: pointer;
+}
+
+.quarterly-report-section .exportButton {
+  margin-top: 0;
+}
+
+.quarterly-report-section .exportButton:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
