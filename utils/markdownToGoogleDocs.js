@@ -2,30 +2,6 @@ export function parseMarkdown(markdown, workgroup, date) {
   const requests = [];
   let currentIndex = 1;
 
-  // Add header text
-  const headerText = `Meeting Summary for ${workgroup}\nDate: ${date}\n\n`;
-  requests.push({
-    insertText: {
-      location: { index: currentIndex },
-      text: headerText,
-    },
-  });
-  currentIndex += headerText.length;
-
-  // Apply heading style to the title
-  requests.push({
-    updateParagraphStyle: {
-      range: {
-        startIndex: 1,
-        endIndex: headerText.indexOf('\n') + 1,
-      },
-      paragraphStyle: {
-        namedStyleType: 'HEADING_1',
-      },
-      fields: 'namedStyleType',
-    },
-  });
-
   const lines = markdown.split('\n');
   let listLevel = 0; // Keeping this for possible indentation handling
 

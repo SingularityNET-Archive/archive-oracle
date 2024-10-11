@@ -9,6 +9,7 @@ import { saveCustomAgenda } from '../utils/saveCustomAgenda';
 import { generateMarkdown } from '../utils/generateMarkdown';
 import axios from "axios";
 import { filterFormData } from '../utils/filterFormData';
+import { getQuarterOptions, generateQuarterlyReport } from '../utils/quarterlyReportGenerator';
 
 type SummaryTemplateProps = {
   updateMeetings: (newMeetingSummary: any) => void;
@@ -71,6 +72,9 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   const { myVariable, setMyVariable } = useMyVariable();
   const [creatingDoc, setCreatingDoc] = useState<boolean>(false);
   const today = new Date().toISOString().split('T')[0];
+  const [selectedQuarter, setSelectedQuarter] = useState('');
+  const [creatingQuarterlyDoc, setCreatingQuarterlyDoc] = useState(false);
+  const quarterOptions = getQuarterOptions();
     
   const defaultFormData = {
     workgroup: "",
@@ -120,11 +124,38 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   const [tags, setTags] = useState({ topicsCovered: "", emotions: "", other: "", gamesPlayed: "" });
   const currentOrder = myVariable.agendaItemOrder ? myVariable.agendaItemOrder[myVariable.workgroup?.workgroup] : undefined;
 
+  async function handleCreateQuarterlyDoc() {
+    setCreatingQuarterlyDoc(true);
+
+    try {
+      const [quarter, year] = selectedQuarter.split(' ');
+      const quarterNumber = parseInt(quarter.slice(1));
+      const markdown = await generateQuarterlyReport(myVariable.workgroup.workgroup_id, parseInt(year), quarterNumber, currentOrder);
+      //console.log(markdown);
+      const response = await axios.post('/api/createGoogleDoc', {
+        markdown,
+        workgroup: myVariable.workgroup.workgroup,
+        date: selectedQuarter
+      });
+
+      window.open(response.data.link, '_blank');
+    } catch (error) {
+      console.error('Error creating Quarterly Google Doc:', error);
+      alert('There was an error creating the Quarterly Google Doc.');
+    } finally {
+      setCreatingQuarterlyDoc(false);
+    }
+  }
+
   async function handleCreateGoogleDoc() {
     setCreatingDoc(true); // Set creatingDoc to true when the button is clicked
   
     try {
-      const markdown = generateMarkdown(myVariable.summary, currentOrder);
+      let markdown = generateMarkdown(myVariable.summary, currentOrder);
+
+      // Add a heading to the first line of the markdown
+      const heading = `# Meeting Summary for ${formData.workgroup}\nDate: ${formatTimestampForPdf(formData.meetingInfo?.date)}`;
+      markdown = `${heading}\n\n${markdown}`;
       //console.log("markdown", markdown);
       const response = await axios.post('/api/createGoogleDoc', {
         markdown,
@@ -301,6 +332,32 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
         <p className={styles.popupInfo}>
           (The document will open in a new tab if popups are enabled for this site)
         </p>
+        <div className={styles['quarterly-report-section']}>
+        <select
+          value={selectedQuarter}
+          onChange={(e) => setSelectedQuarter(e.target.value)}
+          className={styles.quarterSelect}
+        >
+          <option value="">Select Quarter</option>
+          {quarterOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          onClick={handleCreateQuarterlyDoc}
+          className={styles.exportButton}
+          disabled={creatingQuarterlyDoc || !selectedQuarter}
+        >
+          {creatingQuarterlyDoc ? (
+            <span className={styles.flashingText}>Creating Quarterly Doc...</span>
+          ) : (
+            "Create Quarterly Google Doc"
+          )}
+        </button>
+      </div>
       </div>
       </div>)}
     </>
