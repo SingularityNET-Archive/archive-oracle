@@ -3,6 +3,26 @@ import { google } from 'googleapis';
 import { JWT } from 'google-auth-library';
 import { parseMarkdown } from '../../utils/markdownToGoogleDocs';
 
+async function createFolderIfNotExists(drive, name, parentId) {
+  const query = `name='${name}' and mimeType='application/vnd.google-apps.folder' and '${parentId}' in parents`;
+  const response = await drive.files.list({ q: query, fields: 'files(id, name)' });
+  
+  if (response.data.files.length > 0) {
+    return response.data.files[0].id;
+  } else {
+    const fileMetadata = {
+      name: name,
+      mimeType: 'application/vnd.google-apps.folder',
+      parents: [parentId]
+    };
+    const folder = await drive.files.create({
+      resource: fileMetadata,
+      fields: 'id'
+    });
+    return folder.data.id;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -22,12 +42,31 @@ export default async function handler(req, res) {
     const drive = google.drive({ version: 'v3', auth: jwtClient });
     const docs = google.docs({ version: 'v1', auth: jwtClient });
 
-    const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
+    const baseFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
+
+    // Create folder structure
+    let year, month, parentFolderId;
+
+    if (date.includes('Q')) {
+      // Handle quarterly date format (e.g., "Q3 2024")
+      year = date.split(' ')[1];
+      const workgroupFolderId = await createFolderIfNotExists(drive, workgroup, baseFolderId);
+      parentFolderId = await createFolderIfNotExists(drive, year, workgroupFolderId);
+    } else {
+      // Handle regular date format
+      const dateObj = new Date(date);
+      year = dateObj.getFullYear().toString();
+      month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+
+      const workgroupFolderId = await createFolderIfNotExists(drive, workgroup, baseFolderId);
+      const yearFolderId = await createFolderIfNotExists(drive, year, workgroupFolderId);
+      parentFolderId = await createFolderIfNotExists(drive, month, yearFolderId);
+    }
 
     const fileMetadata = {
       name: `Meeting Summary - ${workgroup} - ${date}`,
       mimeType: 'application/vnd.google-apps.document',
-      parents: [folderId]
+      parents: [parentFolderId]
     };
     const file = await drive.files.create({
       resource: fileMetadata,
