@@ -1,4 +1,13 @@
+// Function to remove '**' bold markers from markdown text
+function removeBoldMarkers(markdown) {
+  return markdown.replace(/\*\*(.*?)\*\*/g, '$1');
+}
+
+// Modified parseMarkdown function
 export function parseMarkdown(markdown, workgroup, date) {
+  // Remove bold markers before processing
+  markdown = removeBoldMarkers(markdown);
+
   const requests = [];
   let currentIndex = 1;
 
@@ -105,27 +114,7 @@ export function parseMarkdown(markdown, workgroup, date) {
       });
     }
 
-    // Apply bold formatting
-    let boldStart = -1;
-    for (let i = 0; i < text.length; i++) {
-      if (text.substring(i, i + 2) === '**') {
-        if (boldStart === -1) {
-          boldStart = i;
-        } else {
-          requests.push({
-            updateTextStyle: {
-              range: {
-                startIndex: currentIndex - text.length + boldStart + 2,
-                endIndex: currentIndex - text.length + i,
-              },
-              textStyle: { bold: true },
-              fields: 'bold',
-            },
-          });
-          boldStart = -1;
-        }
-      }
-    }
+    // Bold formatting is no longer needed as we removed the markers
   });
 
   return requests;
