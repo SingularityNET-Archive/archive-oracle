@@ -39,27 +39,27 @@ export function generateMarkdown(summary, order) {
     const { date, name, host, documenter, translator, peoplePresent, purpose, googleSlides, townHallNumber, otherMediaLink, meetingVideoLink, mediaLink, miroBoardLink, transcriptLink, workingDocs, timestampedVideo } = summary.meetingInfo;
 
     // Add meeting information to markdown
-    if ( name && !summary.canceledSummary && !summary.noSummaryGiven ) markdown += `- Type of meeting: ${name}\n`;
+    if ( name && !summary.canceledSummary && !summary.noSummaryGiven ) markdown += `- **Type of meeting:** ${name}\n`;
     if (host || documenter || translator || peoplePresent) {
-      markdown += `- Present: `;
-      if (host) markdown += `${host} [facilitator], `;
-      if (documenter) markdown += `${documenter} [documenter], `;
-      if (translator) markdown += `${translator} [translator], `;
+      markdown += `- **Present:** `;
+      if (host) markdown += `${host} [**facilitator**], `;
+      if (documenter) markdown += `${documenter} [**documenter**], `;
+      if (translator) markdown += `${translator} [**translator**], `;
       if (peoplePresent) markdown += `${peoplePresent.split(', ').map(p => p.trim()).join(', ')}`;
       markdown += '\n';
     }
-    if (purpose) markdown += `- Purpose: ${purpose}\n`;
-    if (townHallNumber) markdown += `- Town Hall Number: ${townHallNumber}\n`; //townHallNumber
-    if (meetingVideoLink) markdown += `- Meeting video: [Link](${meetingVideoLink})\n`;
-    if (mediaLink) markdown += `- Media link: [Link](${mediaLink})\n`;
-    if (miroBoardLink) markdown += `- Miro board: [Link](${miroBoardLink})\n`;
-    if (transcriptLink) markdown += `- Transcript: [Link](${transcriptLink})\n`;
-    if (otherMediaLink) markdown += `- Other media: [Link](${otherMediaLink})\n`;
+    if (purpose) markdown += `- **Purpose:** ${purpose}\n`;
+    if (townHallNumber) markdown += `- **Town Hall Number:** ${townHallNumber}\n`; //townHallNumber
+    if (meetingVideoLink) markdown += `- **Meeting video:** [Link](${meetingVideoLink})\n`;
+    if (mediaLink) markdown += `- **Media link:** [Link](${mediaLink})\n`;
+    if (miroBoardLink) markdown += `- **Miro board:** [Link](${miroBoardLink})\n`;
+    if (transcriptLink) markdown += `- **Transcript:** [Link](${transcriptLink})\n`;
+    if (otherMediaLink) markdown += `- **Other media:** [Link](${otherMediaLink})\n`;
     //markdown += '\n';
 
     // Process workingDocs
     if (workingDocs && Array.isArray(workingDocs) && workingDocs.length > 0) {
-      markdown += `- Working Docs:\n`;
+      markdown += `- **Working Docs:**\n`;
       workingDocs.forEach(doc => {    
         if (doc.link) {
           markdown += `  - [${doc.title}](${doc.link})\n`;
@@ -120,19 +120,19 @@ export function generateMarkdown(summary, order) {
         switch (itemType) {
           case 'actionItems':
             if (item.text) {
-              line = `- [action] ${item.text}`;
-              if (item.assignee) line += ` [assignee] ${item.assignee}`;
-              if (item.dueDate) line += ` [due] ${item.dueDate}`;
-              if (item.status) line += ` [status] ${item.status}`;
+              line = `- [**action**] ${item.text}`;
+              if (item.assignee) line += ` [**assignee**] ${item.assignee}`;
+              if (item.dueDate) line += ` [**due**] ${item.dueDate}`;
+              if (item.status) line += ` [**status**] ${item.status}`;
               line += '\n';
             }
             break;
           case 'decisionItems':
             if (item.decision) {
               line = `- ${item.decision}\n`;
-              if (item.rationale) line += `  - [rationale] ${item.rationale}\n`;
-              if (item.opposing) line += `  - [opposing] ${item.opposing}\n`;
-              if (item.effect) line += `  - [effect] ${item.effect}\n`;
+              if (item.rationale) line += `  - [**rationale**] ${item.rationale}\n`;
+              if (item.opposing) line += `  - [**opposing**] ${item.opposing}\n`;
+              if (item.effect) line += `  - [**effect**] ${item.effect}\n`;
             }
             break;
           case 'leaderboard':
@@ -236,10 +236,10 @@ export function generateMarkdown(summary, order) {
   if (summary.tags) {
     const { topicsCovered, references, emotions, other, gamesPlayed } = summary.tags;
     if (topicsCovered || emotions || other || gamesPlayed) markdown += `#### Keywords/tags:\n`;
-    if (topicsCovered) markdown += `- topics covered: ${topicsCovered}\n`;
-    if (emotions) markdown += `- emotions: ${emotions}\n`;
-    if (other) markdown += `- other: ${other}\n`;
-    if (gamesPlayed) markdown += `- games played: ${gamesPlayed}\n`;
+    if (topicsCovered) markdown += `- **topics covered:** ${topicsCovered}\n`;
+    if (emotions) markdown += `- **emotions:** ${emotions}\n`;
+    if (other) markdown += `- **other:** ${other}\n`;
+    if (gamesPlayed) markdown += `- **games played:** ${gamesPlayed}\n`;
   }
 
   if (summary.noSummaryGiven == true) {
