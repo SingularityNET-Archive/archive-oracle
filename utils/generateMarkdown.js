@@ -172,7 +172,7 @@ export function generateMarkdown(summary, order) {
         break;
       case 'discussionPoints':
         if (item.discussionPoints && item.discussionPoints.length > 0) {
-          if (summary.workgroup == "Onboarding Workgroup" || summary.workgroup == "AI Sandbox") {
+          if (summary.workgroup == "Onboarding Workgroup" || summary.workgroup == "AI Sandbox/Think-tank") {
             formatItems("In this meeting we discussed", item.discussionPoints, 'discussionPoints');
           } else {
             formatItems("Discussion Points", item.discussionPoints, 'discussionPoints');
@@ -197,7 +197,7 @@ export function generateMarkdown(summary, order) {
         break;
       case 'issues':
         if (item.issues && item.issues.length > 0) {
-          if (summary.workgroup == "Onboarding Workgroup" || summary.workgroup == "AI Sandbox") {
+          if (summary.workgroup == "Onboarding Workgroup" || summary.workgroup == "AI Sandbox/Think-tank") {
             formatItems("To carry over for next meeting", item.issues, 'issues');
           } else if (summary.workgroup == "WG Sync Call") {
             formatItems("To carry over for next meeting", item.issues, 'issues');

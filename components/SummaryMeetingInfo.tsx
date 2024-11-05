@@ -5,6 +5,7 @@ import { useMyVariable } from '../context/MyVariableContext';
 import SelectNames from './SelectNames';
 import WorkingDocs from './WorkingDocs';
 import TimestampedVideo from './TimestampedVideo'; 
+import { MeetingTypeSelect } from '../components/meeting/MeetingTypeSelect';
 
 type SummaryMeetingInfoProps = {
   workgroup: string;
@@ -174,7 +175,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       };
     });
   }, []);  
-
+  console.log("myVariable", myVariable);
   return (
     <>
     <div className={styles['form-column-flex']}>
@@ -182,23 +183,13 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       <div className={styles['form-column-flex']}>
         <div className={styles['row-flex-space-between']}>
             <div className={styles['column-flex']}>
-              {myVariable.workgroup?.preferred_template?.meetingInfo?.name == 1 && (<>
-              <label className={styles['form-label']}>
-                Type of meeting:
-              </label>
-              <select
-                  name="name"
-                  value={meetingInfo.name || ""}
-                  onChange={handleChange}
-                  className={styles['form-select']}
-                  title="Select the type of meeting. If it's a one-off event, please select 'One-off event'"
-              >
-                  <option value="Weekly">Weekly</option>
-                  <option value="Biweekly">Biweekly</option>
-                  <option value="Monthly">Monthly</option>
-                  <option value="One-off event">One-off event</option>
-              </select>
-              </>)}
+            {myVariable.workgroup?.preferred_template?.meetingInfo?.name == 1 && (
+                  <MeetingTypeSelect
+                    workgroup={workgroup}
+                    value={meetingInfo.name}
+                    onChange={handleChange}
+                  />
+                )}
             </div>
             <div className={styles['column-flex']}>
               {myVariable.workgroup?.preferred_template?.meetingInfo?.date == 1 && (<>
