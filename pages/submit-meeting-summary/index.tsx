@@ -99,7 +99,7 @@ const SubmitMeetingSummary: NextPage = () => {
     "Strategy Guild": ["narrative", "decisionItems", "actionItems"],
     "LatAm Guild": ["narrative", "decisionItems", "actionItems"],
     "WG Sync Call": ["meetingTopics", "discussion", "decisionItems", "actionItems", "issues"],
-    "AI Sandbox": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
+    "AI Sandbox/Think-tank": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
     "GitHub PBL WG": ["discussionPoints", "decisionItems", "actionItems"]
   }; 
   // When you add a new Workgroup you need to update this ordermapping and the Discord API with the new workgroup
