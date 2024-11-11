@@ -7,7 +7,9 @@ export async function getNames() {
       try {
         const { data, error, status } = await supabase
         .from('names')
-        .select('name');
+        .select('name')
+        .eq('approved', true)
+        .order('name', { ascending: true });
         
         if (error && status !== 406) throw error
         if (data) {
