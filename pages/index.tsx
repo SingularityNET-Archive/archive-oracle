@@ -46,6 +46,7 @@ const Home: NextPage = () => {
               <li className={styles.listItem}>{`Please select the date the meeting happened in the "Meeting Date:" dropdown`}</li>
               <li className={styles.listItem}>{`Any changes you save will be saved to the date you selected in the "Meeting Date:" dropdown`}</li>
               <li className={styles.listItem}>Please remember to click the save button when you are done</li>
+              <li className={styles.listItem}>Bottom left of the save button you will find the date and time the summary was last saved</li>
               <li className={styles.listItem}>Meeting summaries will be reviewed by an Archive member</li>
               <li className={styles.listItem}>When the Archive member approves the data, the GitBook and database will be updated</li>
               <li className={styles.listItem}>...and finally the Discord message will be sent to the Meeting-Summary channel</li>
