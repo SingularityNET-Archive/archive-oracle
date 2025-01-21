@@ -175,7 +175,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       };
     });
   }, []);  
-  console.log("myVariable", myVariable);
+  //console.log("myVariable", myVariable);
   return (
     <>
     <div className={styles['form-column-flex']}>

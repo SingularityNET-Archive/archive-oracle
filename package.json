@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@huggingface/inference": "^1.8.0",
     "@octokit/rest": "^20.0.1",
     "@supabase/supabase-js": "^2.26.0",
     "@types/node": "20.3.1",
@@ -23,7 +22,6 @@
     "google-auth-library": "^9.14.1",
     "googleapis": "^144.0.0",
     "next": "^14.2.8",
-    "openai": "^4.24.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-markdown": "^9.0.0",
