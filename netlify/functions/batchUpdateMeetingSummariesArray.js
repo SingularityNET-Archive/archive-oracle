@@ -109,8 +109,8 @@ async function processAndCommitSummaries() {
     const flattenedSummaries = summariesBatches.flat();
 
     if (flattenedSummaries.length === 0) {
-      hasMoreSummaries = false;
-      break;
+      //hasMoreSummaries = false;
+      //break;
     }
 
     groupSummariesByYear(flattenedSummaries, allSummaries);
