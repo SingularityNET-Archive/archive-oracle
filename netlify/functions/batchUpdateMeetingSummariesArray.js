@@ -5,6 +5,28 @@ import { Octokit } from "@octokit/rest";
 const BATCH_SIZE = 100;
 const MAX_CONCURRENT_REQUESTS = 10;
 
+function sanitizeObject(item) {
+  if (typeof item === 'string') {
+    // Replace anything outside ASCII printable chars (0x20–0x7E) with '-'
+    return item.replace(/[^a-zA-Z0-9.,:;!?"'()\-\s]/g, '-');
+  }
+
+  if (Array.isArray(item)) {
+    return item.map(element => sanitizeObject(element));
+  }
+
+  if (item && typeof item === 'object') {
+    const newObj = {};
+    for (const key in item) {
+      newObj[key] = sanitizeObject(item[key]);
+    }
+    return newObj;
+  }
+
+  // For numbers, booleans, null, etc., return as is
+  return item;
+}
+
 async function fetchMeetingSummaries(lastProcessedTimestamp, batchNumber) {
   const { data: summaries, error } = await supabase
     .from('meetingsummaries')
@@ -31,7 +53,10 @@ function groupSummariesByYear(summaries, allSummaries) {
       allSummaries[year] = [];
     }
 
-    allSummaries[year].push(summaryText);
+    // Sanitize the summary object
+    const sanitizedSummary = sanitizeObject(summaryText);
+
+    allSummaries[year].push(sanitizedSummary);
   });
 }
 

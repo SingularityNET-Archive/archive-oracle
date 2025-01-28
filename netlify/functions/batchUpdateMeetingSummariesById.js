@@ -5,6 +5,29 @@ import { Octokit } from "@octokit/rest";
 const BATCH_SIZE = 100;
 const MAX_CONCURRENT_REQUESTS = 10;
 
+function sanitizeObject(item) {
+  if (typeof item === 'string') {
+    // Replace anything outside ASCII printable chars (0x20-0x7E) with '-'
+    return item.replace(/[^a-zA-Z0-9.,:;!?"'()\-\s]/g, '-');
+  } 
+  
+  if (Array.isArray(item)) {
+    return item.map(element => sanitizeObject(element));
+  }
+  
+  if (item && typeof item === 'object') {
+    const newObj = {};
+    for (const key in item) {
+      newObj[key] = sanitizeObject(item[key]);
+    }
+    return newObj;
+  }
+
+  // for numbers, booleans, null, etc just return item.
+  return item;
+}
+
+
 async function fetchMeetingSummaries(lastProcessedTimestamp, batchNumber) {
   const { data: summaries, error } = await supabase
     .from('meetingsummaries')
@@ -26,17 +49,21 @@ function groupSummariesByMeetingId(summaries, allSummaries) {
     const { meeting_id, summary: summaryText } = summary;
     const year = new Date(summaryText.meetingInfo.date).getFullYear();
 
+    // Make sure the buckets exist
     if (!allSummaries[year]) {
       allSummaries[year] = {};
     }
-
     if (!allSummaries[year][meeting_id]) {
       allSummaries[year][meeting_id] = [];
     }
 
-    allSummaries[year][meeting_id].push(summaryText);
+    // Sanitize the entire summary object (assuming summaryText could be an object)
+    const sanitizedSummary = sanitizeObject(summaryText);
+
+    allSummaries[year][meeting_id].push(sanitizedSummary);
   });
 }
+
 
 async function commitSummariesToGitHub(allSummaries) {
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
