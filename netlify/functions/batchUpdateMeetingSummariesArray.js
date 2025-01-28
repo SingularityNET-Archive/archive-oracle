@@ -7,8 +7,8 @@ const MAX_CONCURRENT_REQUESTS = 10;
 
 function sanitizeObject(item) {
   if (typeof item === 'string') {
-    // Replace anything outside ASCII printable chars (0x20–0x7E) with '-'
-    return item.replace(/[^a-zA-Z0-9.,:;!?"'()\-\s]/g, '-');
+    // Only replace en dash (U+2013) or em dash (U+2014) with ASCII hyphen '-'
+    return item.replace(/[\u2013\u2014]/g, '-');
   }
 
   if (Array.isArray(item)) {
@@ -109,8 +109,8 @@ async function processAndCommitSummaries() {
     const flattenedSummaries = summariesBatches.flat();
 
     if (flattenedSummaries.length === 0) {
-      //hasMoreSummaries = false;
-      //break;
+      hasMoreSummaries = false;
+      break;
     }
 
     groupSummariesByYear(flattenedSummaries, allSummaries);
