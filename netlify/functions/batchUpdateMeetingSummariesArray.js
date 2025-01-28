@@ -8,7 +8,13 @@ const MAX_CONCURRENT_REQUESTS = 10;
 function sanitizeObject(item) {
   if (typeof item === 'string') {
     // Only replace en dash (U+2013) or em dash (U+2014) with ASCII hyphen '-'
-    return item.replace(/[\u2013\u2014]/g, '-');
+    // Replace curly single quotes ’ and ‘ with straight ASCII apostrophe '
+    // Replace curly double quotes ” and “ with straight ASCII quote "
+    return item
+      .replace(/[\u2013\u2014]/g, '-')
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201C\u201D]/g, '"')
+      .trim();
   }
 
   if (Array.isArray(item)) {
