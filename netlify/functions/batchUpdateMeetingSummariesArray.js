@@ -7,24 +7,21 @@ const MAX_CONCURRENT_REQUESTS = 10;
 
 function sanitizeObject(item) {
   if (typeof item === 'string') {
-    // 1. Remove line breaks
-    // 2. Replace fancy dashes with '-'
-    // 3. Replace curly single quotes ’ and ‘ with straight apostrophe '
-    // 4. Replace curly double quotes ” and “ with straight ASCII quote "
-    // 5. Escape any new " characters to \" for valid JSON
+    
     return item
-      .replace(/\r?\n/g, ' ')
-      .replace(/[\u2013\u2014]/g, '-')
-      .replace(/[\u2018\u2019]/g, "'")
-      .replace(/[\u201C\u201D]/g, '"')
-      .replace(/"/g, '\\"')
+      .replace(/\r?\n/g, ' ') // Remove newlines
+      .replace(/[\u2013\u2014\u2015]/g, '-') // Handle en dash, em dash, and horizontal bar
+      .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'") // Handle various single quotes
+      .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"') // Handle various double quotes
+      .replace(/[\u2026]/g, '...') // Handle ellipsis
+      .replace(/[\u00A0]/g, ' ') // Replace non-breaking space with regular space
       .trim();
   }
-
+  
   if (Array.isArray(item)) {
     return item.map(element => sanitizeObject(element));
   }
-
+  
   if (item && typeof item === 'object') {
     const newObj = {};
     for (const key in item) {
@@ -33,7 +30,7 @@ function sanitizeObject(item) {
     return newObj;
   }
 
-  // For numbers, booleans, null, etc., return as is
+  // for numbers, booleans, null, etc just return item.
   return item;
 }
 
