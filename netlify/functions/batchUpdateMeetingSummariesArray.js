@@ -26,7 +26,9 @@ function sanitizeObject(item) {
   if (item && typeof item === 'object') {
     const newObj = {};
     for (const key in item) {
-      newObj[key] = sanitizeObject(item[key]);
+      // Rename "name" key to "typeOfMeeting"
+      const newKey = key === 'name' ? 'typeOfMeeting' : key;
+      newObj[newKey] = sanitizeObject(item[key]);
     }
     return newObj;
   }
