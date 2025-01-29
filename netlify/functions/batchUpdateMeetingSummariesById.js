@@ -13,6 +13,7 @@ function sanitizeObject(item) {
       .replace(/[\u2013\u2014\u2015]/g, '-') // Handle en dash, em dash, and horizontal bar
       .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'") // Handle various single quotes
       .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"') // Handle various double quotes
+      .replace(/"/g, "'") // Replace double quotes with single quotes
       .replace(/[\u2026]/g, '...') // Handle ellipsis
       .replace(/[\u00A0]/g, ' ') // Replace non-breaking space with regular space
       .trim();
