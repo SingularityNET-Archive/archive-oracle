@@ -1,2 +1,14 @@
+# netlify.toml
+
+[build]
+  command = "npm run build"   # or "yarn build"
+  # For Next.js, the publish directory should normally be ".next"
+  publish = ".next"
+
 [functions]
+  # Your existing config
   node_bundler = "esbuild"
+
+[[plugins]]
+  # Use the official Netlify Next.js plugin
+  package = "@netlify/plugin-nextjs"
