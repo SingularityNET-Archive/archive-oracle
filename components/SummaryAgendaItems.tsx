@@ -6,111 +6,137 @@ import { getDefaultAgendaItem } from '../utils/getDefaultAgendaItem';
 import { filterFormData } from '../utils/filterFormData';
 
 const SummaryAgendaItems = ({ onUpdate }: any) => {
-  const { myVariable, setMyVariable } = useMyVariable();
-  const formData = filterFormData(myVariable?.summary);
-  const initialAgendaItems = formData.agendaItems?.map((item: any) => ({
-    ...getDefaultAgendaItem(),
-    ...item
-  })) || [getDefaultAgendaItem()];
+  const { myVariable } = useMyVariable();
 
-  const [agendaItems, setAgendaItems] = useState(initialAgendaItems);
+  // Track current `meeting_id` in local state so we only
+  // re‐initialize agenda items when the ID changes.
+  const [localMeetingId, setLocalMeetingId] = useState(myVariable.summary?.meeting_id || null);
 
-  useEffect(() => {
-    onUpdate(agendaItems);
-    //console.log("agendaItems", agendaItems)
-  }, [agendaItems]);
+  // Run `filterFormData` once for our initial agenda items:
+  const initialFilteredData = myVariable.summary
+    ? filterFormData(myVariable.summary)
+    : {};
 
-  useEffect(() => {
-    const agendaItemsFromVariable = formData.agendaItems?.map((item: any) => ({
+  const [agendaItems, setAgendaItems] = useState(
+    initialFilteredData.agendaItems?.map((item: any) => ({
       ...getDefaultAgendaItem(),
       ...item
-    })) || [getDefaultAgendaItem()];
+    })) || [getDefaultAgendaItem()]
+  );
 
-    setAgendaItems(agendaItemsFromVariable);
-  }, [myVariable.summary?.agendaItems]);
+  /**
+   * If the meeting_id in context changes (meaning user selected
+   * a new summary or the backend assigned a new ID),
+   * then we re-run `filterFormData` and re‐init local state.
+   */
+  useEffect(() => {
+    const currentId = myVariable.summary?.meeting_id;
+    if (currentId && currentId !== localMeetingId) {
+      const newFiltered = filterFormData(myVariable.summary);
+      const newAgendaItems = newFiltered.agendaItems?.map((item: any) => ({
+        ...getDefaultAgendaItem(),
+        ...item
+      })) || [getDefaultAgendaItem()];
 
-  const addAgendaItem = () => {
-    setAgendaItems([...agendaItems, { agenda: "", status: "carry over", townHallUpdates: "", narrative: "", gameRules: "", leaderboard: [""], issues: [""], actionItems: [{ text: "", assignee: "", dueDate: "", status: "todo" }], decisionItems: [{ decision: "", rationale: "", opposing: "", effect: "" }], discussionPoints: [""], learningPoints: [""] }]);
-  };
-
-  const removeAgendaItem = (index: number) => {
-    const newAgendaItems = [...agendaItems];
-    newAgendaItems.splice(index, 1);
-    setAgendaItems(newAgendaItems);
-  };
-
-  const addItem = (type: string, agendaIndex: number) => {
-    const newAgendaItems: any = [...agendaItems];
-    if (type === 'actionItems') {
-      newAgendaItems[agendaIndex][type].push({ text: "", assignee: "", dueDate: "", status: "todo" });
-    } else if (type === 'decisionItems') {
-      newAgendaItems[agendaIndex][type].push({ decision: "", rationale: "", opposing: "", effect: "" });
-    } else {
-      newAgendaItems[agendaIndex][type].push("");
+      setAgendaItems(newAgendaItems);
+      setLocalMeetingId(currentId);
     }
-    setAgendaItems(newAgendaItems);
+  }, [myVariable.summary?.meeting_id, localMeetingId]);
+
+  /**
+   * Notify the parent component (`SummaryTemplate`) whenever
+   * local `agendaItems` change.
+   */
+  useEffect(() => {
+    onUpdate(agendaItems);
+  }, [agendaItems, onUpdate]);
+
+  // Utility to add an entire new "agenda item" section
+  const addAgendaItem = () => {
+    setAgendaItems((prev) => [
+      ...prev,
+      { ...getDefaultAgendaItem() }
+    ]);
   };
 
-
-  const removeItem = (type: string, agendaIndex: number, itemIndex: number) => {
-    const newAgendaItems: any = [...agendaItems];
-    newAgendaItems[agendaIndex][type].splice(itemIndex, 1);
-    setAgendaItems(newAgendaItems);
-  };
-
-  const handleItemUpdate = (type: any, agendaIdx: any, itemIdx: any, updatedItem: any) => {
-    setAgendaItems((prevAgendaItems: any) => {
-      const newAgendaItems = JSON.parse(JSON.stringify(prevAgendaItems));
-
-      // Check if the type is 'narrative'
-      if (type === 'townHallUpdates' || type === 'narrative' || type === 'gameRules' || type === 'townHallSummary' || type === 'discussion') {
-        if (newAgendaItems[agendaIdx]) {
-          newAgendaItems[agendaIdx][type] = updatedItem[type]; // Directly set the narrative or gameRules string
-        }
-      } else {
-        // Handle other types as before
-        if (newAgendaItems[agendaIdx] && newAgendaItems[agendaIdx][type]) {
-          newAgendaItems[agendaIdx][type][itemIdx] = updatedItem;
-        }
-      }
-
-      return newAgendaItems;
+  // Remove one entire "agenda item" section
+  const removeAgendaItem = (index: number) => {
+    setAgendaItems((prev) => {
+      const updated = [...prev];
+      updated.splice(index, 1);
+      return updated;
     });
   };
 
+  // Add a sub‐item (actionItems, discussionPoints, etc.)
+  const addItem = (type: string, agendaIndex: number) => {
+    setAgendaItems((prev) => {
+      const updated = [...prev];
+      if (type === 'actionItems') {
+        updated[agendaIndex][type].push({
+          text: "",
+          assignee: "",
+          dueDate: "",
+          status: "todo"
+        });
+      } else if (type === 'decisionItems') {
+        updated[agendaIndex][type].push({
+          decision: "",
+          rationale: "",
+          opposing: "",
+          effect: ""
+        });
+      } else {
+        // e.g. discussionPoints, issues, meetingTopics, leaderboard
+        updated[agendaIndex][type].push("");
+      }
+      return updated;
+    });
+  };
 
-  const getHeading = (itemType: any, workgroup: any) => {
-    switch (itemType) {
-      // Only check this section when changing or adding new workgroup
-      case "issues":
-        if (workgroup === "Onboarding Workgroup") return "To carry over for next meeting";
-        if (workgroup === "AI Sandbox/Think-tank") return "To carry over for next meeting";
-        if (workgroup === "WG Sync Call") return "To carry over for next meeting";
-        // Add more specific conditions for "issues" if needed
-        return "Issues"; // Default for "issues"
+  // Remove a sub‐item
+  const removeItem = (type: string, agendaIndex: number, itemIndex: number) => {
+    setAgendaItems((prev) => {
+      const updated = [...prev];
+      updated[agendaIndex][type].splice(itemIndex, 1);
+      return updated;
+    });
+  };
 
-      case "discussionPoints":
-        if (workgroup === "Onboarding Workgroup") return "In this meeting we discussed";
-        if (workgroup === "AI Sandbox/Think-tank") return "In this meeting we discussed";
-        return "Discussion Points";
+  // Update a sub‐item (like one actionItem, or one discussionPoint, etc.)
+  const handleItemUpdate = (
+    type: string,
+    agendaIdx: number,
+    itemIdx: number,
+    updatedItem: any
+  ) => {
+    setAgendaItems((prev) => {
+      const cloned = JSON.parse(JSON.stringify(prev));
 
-      case "meetingTopics":
-        if (workgroup === "Research and Development Guild") return "Agenda Items";
-        if (workgroup === "Education Workgroup") return "In this meeting we discussed";
-        if (workgroup === "WG Sync Call") return "Agenda Items";
-        return "Meeting Topics";
-      // Add cases for other item types as needed
+      // Some fields (narrative, discussion, etc.) are single text fields
+      // stored directly rather than in an array.
+      if (
+        type === 'townHallUpdates' ||
+        type === 'narrative' ||
+        type === 'gameRules' ||
+        type === 'townHallSummary' ||
+        type === 'discussion'
+      ) {
+        cloned[agendaIdx][type] = updatedItem[type];
+      } else {
+        // Arrays: discussionPoints, actionItems, etc.
+        cloned[agendaIdx][type][itemIdx] = updatedItem;
+      }
+      return cloned;
+    });
+  };
 
-      default:
-        return "Items";
-    }
-  }
-
+  // You have your "template" logic to show/hide sections:
   const itemTypesConfig = [
     {
       type: "townHallUpdates",
-      isEnabled: (template: any) => template?.townHallUpdates === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.townHallUpdates === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
           <h3>Town Hall Updates from this meeting</h3>
           <div className={styles['action-item']}>
@@ -119,7 +145,9 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={item.townHallUpdates}
               agendaIndex={agendaIndex}
               itemIndex={0}
-              onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('townHallUpdates', agendaIdx, itemIdx, updatedItem)}
+              onUpdate={(aIdx, iIdx, updated) =>
+                handleItemUpdate("townHallUpdates", aIdx, iIdx, updated)
+              }
               onRemove={removeItem}
             />
           </div>
@@ -128,8 +156,8 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
     },
     {
       type: "narrative",
-      isEnabled: (template: any) => template?.narrative === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.narrative === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
           <h3>Narrative</h3>
           <div className={styles['action-item']}>
@@ -138,7 +166,9 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={item.narrative}
               agendaIndex={agendaIndex}
               itemIndex={0}
-              onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('narrative', agendaIdx, itemIdx, updatedItem)}
+              onUpdate={(aIdx, iIdx, updated) =>
+                handleItemUpdate("narrative", aIdx, iIdx, updated)
+              }
               onRemove={removeItem}
             />
           </div>
@@ -147,8 +177,8 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
     },
     {
       type: "discussion",
-      isEnabled: (template: any) => template?.discussion === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.discussion === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
           <h3>Discussion</h3>
           <div className={styles['action-item']}>
@@ -157,7 +187,9 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={item.discussion}
               agendaIndex={agendaIndex}
               itemIndex={0}
-              onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('discussion', agendaIdx, itemIdx, updatedItem)}
+              onUpdate={(aIdx, iIdx, updated) =>
+                handleItemUpdate("discussion", aIdx, iIdx, updated)
+              }
               onRemove={removeItem}
             />
           </div>
@@ -166,96 +198,128 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
     },
     {
       type: "meetingTopics",
-      isEnabled: (template: any) => template?.meetingTopics === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.meetingTopics === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
-          <h3>{getHeading("meetingTopics", myVariable.workgroup?.preferred_template?.workgroup)}</h3>
+          <h3>Meeting Topics</h3>
           <div className={styles['discussion-points']}>
-            {item.meetingTopics.map((point: any, pointIndex: any) => (
+            {item.meetingTopics.map((topic: any, idx: number) => (
               <Item
-                key={`${agendaIndex}-meetingtopic-${pointIndex}`}
+                key={`${agendaIndex}-meetingtopic-${idx}`}
                 type="meetingTopics"
-                item={point}
+                item={topic}
                 agendaIndex={agendaIndex}
-                itemIndex={pointIndex}
-                onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('meetingTopics', agendaIdx, itemIdx, updatedItem)}
+                itemIndex={idx}
+                onUpdate={(aIdx, iIdx, updated) =>
+                  handleItemUpdate("meetingTopics", aIdx, iIdx, updated)
+                }
                 onRemove={removeItem}
               />
             ))}
           </div>
-          <button className={styles['add-button']} type="button" onClick={() => addItem('meetingTopics', agendaIndex)}>Add Item</button>
+          <button
+            className={styles['add-button']}
+            type="button"
+            onClick={() => addItem('meetingTopics', agendaIndex)}
+          >
+            Add Item
+          </button>
         </>
       )
     },
     {
       type: "discussionPoints",
-      isEnabled: (template: any) => template?.discussionPoints === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.discussionPoints === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
-          <h3>{getHeading("discussionPoints", myVariable.workgroup?.preferred_template?.workgroup)}</h3>
+          <h3>Discussion Points</h3>
           <div className={styles['discussion-points']}>
-            {item.discussionPoints.map((point: any, pointIndex: any) => (
+            {item.discussionPoints?.map((pt: any, idx: number) => (
               <Item
-                key={`${agendaIndex}-discussion-${pointIndex}`}
+                key={`${agendaIndex}-discussion-${idx}`}
                 type="discussionPoints"
-                item={point}
+                item={pt}
                 agendaIndex={agendaIndex}
-                itemIndex={pointIndex}
-                onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('discussionPoints', agendaIdx, itemIdx, updatedItem)}
+                itemIndex={idx}
+                onUpdate={(aIdx, iIdx, updated) =>
+                  handleItemUpdate("discussionPoints", aIdx, iIdx, updated)
+                }
                 onRemove={removeItem}
               />
             ))}
           </div>
-          <button className={styles['add-button']} type="button" onClick={() => addItem('discussionPoints', agendaIndex)}>Add Discussion Point</button>
+          <button
+            className={styles['add-button']}
+            type="button"
+            onClick={() => addItem('discussionPoints', agendaIndex)}
+          >
+            Add Discussion Point
+          </button>
         </>
       )
     },
     {
       type: "actionItems",
-      isEnabled: (template: any) => template?.actionItems === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.actionItems === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
           <h3>Action items</h3>
-          {item?.actionItems?.map((action: any, actionIndex: any) => (
+          {item.actionItems?.map((action: any, actionIdx: number) => (
             <Item
-              key={`${agendaIndex}-action-${actionIndex}`}
+              key={`${agendaIndex}-action-${actionIdx}`}
               type="actionItems"
               item={action}
               agendaIndex={agendaIndex}
-              itemIndex={actionIndex}
-              onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('actionItems', agendaIdx, itemIdx, updatedItem)}
+              itemIndex={actionIdx}
+              onUpdate={(aIdx, iIdx, updated) =>
+                handleItemUpdate("actionItems", aIdx, iIdx, updated)
+              }
               onRemove={removeItem}
             />
           ))}
-          <button className={styles['add-button']} type="button" onClick={() => addItem('actionItems', agendaIndex)}>Add Action</button>
+          <button
+            className={styles['add-button']}
+            type="button"
+            onClick={() => addItem('actionItems', agendaIndex)}
+          >
+            Add Action
+          </button>
         </>
       )
     },
     {
       type: "decisionItems",
-      isEnabled: (template: any) => template?.decisionItems === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.decisionItems === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
           <h3>Decisions</h3>
-          {item?.decisionItems?.map((decision: any, decisionIndex: any) => (
+          {item.decisionItems?.map((dec: any, decIdx: number) => (
             <Item
-              key={`${agendaIndex}-decision-${decisionIndex}`}
+              key={`${agendaIndex}-decision-${decIdx}`}
               type="decisionItems"
-              item={decision}
+              item={dec}
               agendaIndex={agendaIndex}
-              itemIndex={decisionIndex}
-              onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('decisionItems', agendaIdx, itemIdx, updatedItem)}
+              itemIndex={decIdx}
+              onUpdate={(aIdx, iIdx, updated) =>
+                handleItemUpdate("decisionItems", aIdx, iIdx, updated)
+              }
               onRemove={removeItem}
             />
           ))}
-          <button className={styles['add-button']} type="button" onClick={() => addItem('decisionItems', agendaIndex)}>Add Decision</button>
+          <button
+            className={styles['add-button']}
+            type="button"
+            onClick={() => addItem('decisionItems', agendaIndex)}
+          >
+            Add Decision
+          </button>
         </>
       )
     },
     {
       type: "gameRules",
-      isEnabled: (template: any) => template?.gameRules === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.gameRules === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
           <h3>Game Rules</h3>
           <div className={styles['action-item']}>
@@ -264,7 +328,9 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={item.gameRules}
               agendaIndex={agendaIndex}
               itemIndex={0}
-              onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('gameRules', agendaIdx, itemIdx, updatedItem)}
+              onUpdate={(aIdx, iIdx, updated) =>
+                handleItemUpdate("gameRules", aIdx, iIdx, updated)
+              }
               onRemove={removeItem}
             />
           </div>
@@ -273,8 +339,8 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
     },
     {
       type: "townHallSummary",
-      isEnabled: (template: any) => template?.townHallSummary === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.townHallSummary === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
           <h3>Town Hall Summary (Optional)</h3>
           <div className={styles['action-item']}>
@@ -283,7 +349,9 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={item.townHallSummary}
               agendaIndex={agendaIndex}
               itemIndex={0}
-              onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('townHallSummary', agendaIdx, itemIdx, updatedItem)}
+              onUpdate={(aIdx, iIdx, updated) =>
+                handleItemUpdate("townHallSummary", aIdx, iIdx, updated)
+              }
               onRemove={removeItem}
             />
           </div>
@@ -292,125 +360,138 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
     },
     {
       type: "leaderboard",
-      isEnabled: (template: any) => template?.leaderboard === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.leaderboard === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
           <h3>Leaderboard</h3>
           <div className={styles['discussion-points']}>
-            {item.leaderboard.map((point: any, pointIndex: any) => (
+            {item.leaderboard.map((lb: any, lbIdx: number) => (
               <Item
-                key={`${agendaIndex}-leaderboard-${pointIndex}`}
+                key={`${agendaIndex}-leaderboard-${lbIdx}`}
                 type="leaderboard"
-                item={point}
+                item={lb}
                 agendaIndex={agendaIndex}
-                itemIndex={pointIndex}
-                onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('leaderboard', agendaIdx, itemIdx, updatedItem)}
+                itemIndex={lbIdx}
+                onUpdate={(aIdx, iIdx, updated) =>
+                  handleItemUpdate("leaderboard", aIdx, iIdx, updated)
+                }
                 onRemove={removeItem}
               />
             ))}
           </div>
-          <button className={styles['add-button']} type="button" onClick={() => addItem('leaderboard', agendaIndex)}>Add Gamer</button>
+          <button
+            className={styles['add-button']}
+            type="button"
+            onClick={() => addItem('leaderboard', agendaIndex)}
+          >
+            Add Gamer
+          </button>
         </>
       )
     },
     {
       type: "learningPoints",
-      isEnabled: (template: any) => template?.learningPoints === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.learningPoints === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
           <h3>Learning Points</h3>
           <div className={styles['discussion-points']}>
-            {item.learningPoints.map((point: any, pointIndex: any) => (
+            {item.learningPoints.map((lp: any, lpIdx: number) => (
               <Item
-                key={`${agendaIndex}-learning-${pointIndex}`}
+                key={`${agendaIndex}-learning-${lpIdx}`}
                 type="learningPoints"
-                item={point}
+                item={lp}
                 agendaIndex={agendaIndex}
-                itemIndex={pointIndex}
-                onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('learningPoints', agendaIdx, itemIdx, updatedItem)}
+                itemIndex={lpIdx}
+                onUpdate={(aIdx, iIdx, updated) =>
+                  handleItemUpdate("learningPoints", aIdx, iIdx, updated)
+                }
                 onRemove={removeItem}
               />
             ))}
           </div>
-          <button className={styles['add-button']} type="button" onClick={() => addItem('learningPoints', agendaIndex)}>Add Learning Point</button>
+          <button
+            className={styles['add-button']}
+            type="button"
+            onClick={() => addItem('learningPoints', agendaIndex)}
+          >
+            Add Learning Point
+          </button>
         </>
       )
     },
     {
       type: "issues",
-      isEnabled: (template: any) => template?.issues === 1,
-      render: (item: any, agendaIndex: any) => (
+      isEnabled: (t: any) => t?.issues === 1,
+      render: (item: any, agendaIndex: number) => (
         <>
-          <h3>{getHeading("issues", myVariable.workgroup?.preferred_template?.workgroup)}</h3>
+          <h3>Issues</h3>
           <div className={styles['action-item']}>
-            {item?.issues?.map((issue: any, issueIndex: any) => (
+            {item.issues?.map((issue: any, issueIdx: number) => (
               <Item
-                key={`${agendaIndex}-issue-${issueIndex}`}
+                key={`${agendaIndex}-issue-${issueIdx}`}
                 type="issues"
                 item={issue}
                 agendaIndex={agendaIndex}
-                itemIndex={issueIndex}
-                onUpdate={(agendaIdx: any, itemIdx: any, updatedItem: any) => handleItemUpdate('issues', agendaIdx, itemIdx, updatedItem)}
+                itemIndex={issueIdx}
+                onUpdate={(aIdx, iIdx, updated) =>
+                  handleItemUpdate("issues", aIdx, iIdx, updated)
+                }
                 onRemove={removeItem}
               />
             ))}
-            <button className={styles['add-button']} type="button" onClick={() => addItem('issues', agendaIndex)}>Add Item</button>
+            <button
+              className={styles['add-button']}
+              type="button"
+              onClick={() => addItem('issues', agendaIndex)}
+            >
+              Add Item
+            </button>
           </div>
         </>
       )
     },
-    /*{
-      type: "issues",
-      isEnabled: (template: any) => template.issues === 1,
-      render: (item: any, agendaIndex: any) => (
-        // ... rendering logic for issues ...
-      )
-    },*/
   ];
 
+  // If the user’s workgroup is in `agendaItemOrder`, reorder itemTypes accordingly
+  const orderMapping = myVariable?.agendaItemOrder;
   type WorkgroupKey = keyof typeof orderMapping;
-
-  const orderMapping = myVariable?.agendaItemOrder; 
-
-  const reorderItemTypesConfig = (orderKey: WorkgroupKey) => {
+  if (
+    typeof myVariable.workgroup?.workgroup === 'string' &&
+    myVariable.workgroup?.workgroup in orderMapping
+  ) {
+    const orderKey = myVariable.workgroup.workgroup as WorkgroupKey;
     const order = orderMapping[orderKey];
-    if (!order) {
-      console.warn("Order key not found in mapping");
-      return;
+    if (order) {
+      itemTypesConfig.sort((a, b) => {
+        const indexA = order.indexOf(a.type);
+        const indexB = order.indexOf(b.type);
+        if (indexA === -1 && indexB === -1) return 0;
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+      });
     }
-
-    itemTypesConfig.sort((a, b) => {
-      const indexA = order.indexOf(a.type);
-      const indexB = order.indexOf(b.type);
-
-      if (indexA === -1 && indexB === -1) return 0; // Both types are not in the order list, keep their relative order
-      if (indexA === -1) return 1; // Type A is not in the list, move it towards the end
-      if (indexB === -1) return -1; // Type B is not in the list, move it towards the end
-
-      return indexA - indexB;
-    });
-
-  };
-
-  if (typeof myVariable.workgroup?.workgroup === 'string' && myVariable.workgroup?.workgroup in orderMapping) {
-    reorderItemTypesConfig(myVariable.workgroup?.workgroup as WorkgroupKey);
   } else {
-    console.warn("Invalid workgroup key");
+    console.warn("Invalid or unmapped workgroup key - using default item order.");
   }
 
   return (
     <div>
-      {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1 && (<h1>Agenda Items</h1>)}
-      {agendaItems.map((item: any, agendaIndex: any) => (
+      {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda === 1 && (
+        <h1>Agenda Items</h1>
+      )}
+
+      {agendaItems.map((item: any, agendaIndex: number) => (
         <div key={agendaIndex} className={styles['agenda-item']}>
-          {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1 && (
+
+          {/* If your template says "agenda=1", show agenda title + status */}
+          {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda === 1 && (
             <>
               <h2>Agenda item {agendaIndex + 1}</h2>
               <div className={styles['row-flex-start']}>
                 <div className={styles['agenda-title']}>
-                  <label className={styles['form-label']}>
-                    Agenda Title
-                  </label>
+                  <label className={styles['form-label']}>Agenda Title</label>
                   <input
                     className={styles['form-select']}
                     type="text"
@@ -418,23 +499,21 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
                     value={item.agenda}
                     autoComplete="off"
                     onChange={(e) => {
-                      const newAgenda = [...agendaItems];
-                      newAgenda[agendaIndex].agenda = e.target.value;
-                      setAgendaItems(newAgenda);
+                      const updated = [...agendaItems];
+                      updated[agendaIndex].agenda = e.target.value;
+                      setAgendaItems(updated);
                     }}
                   />
                 </div>
                 <div className={styles['column-flex']}>
-                  <label className={styles['form-label']}>
-                    Status
-                  </label>
+                  <label className={styles['form-label']}>Status</label>
                   <select
                     className={styles['form-select']}
                     value={item.status}
                     onChange={(e) => {
-                      const newAgenda = [...agendaItems];
-                      newAgenda[agendaIndex].status = e.target.value;
-                      setAgendaItems(newAgenda);
+                      const updated = [...agendaItems];
+                      updated[agendaIndex].status = e.target.value;
+                      setAgendaItems(updated);
                     }}
                   >
                     <option value="carry over">Carry Over</option>
@@ -445,20 +524,47 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
             </>
           )}
 
+          {/* Render sub‐sections based on the template flags */}
           {itemTypesConfig.map(({ type, isEnabled, render }) => {
             if (isEnabled(myVariable.workgroup?.preferred_template?.agendaItems[0])) {
-              // Add a unique key prop to each rendered element
-              return <div key={`${type}-${agendaIndex}`}>{render(item, agendaIndex)}</div>;
+              return (
+                <div key={`${type}-${agendaIndex}`}>
+                  {render(item, agendaIndex)}
+                </div>
+              );
             }
             return null;
           })}
 
-          {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1 && item.agenda == '' && (<button className={styles['remove-button']} type="button" onClick={() => removeAgendaItem(agendaIndex)}>Remove Agenda</button>)}
+          {/* If agenda=1 is enabled, let them remove this agenda if empty */}
+          {myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda === 1 &&
+            item.agenda === '' && (
+              <button
+                className={styles['remove-button']}
+                type="button"
+                onClick={() => removeAgendaItem(agendaIndex)}
+              >
+                Remove Agenda
+              </button>
+          )}
         </div>
       ))}
-      {((myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 0 && agendaItems.length == 0) ||
-      (myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda == 1))
-      && (<button className={styles['add-button']} type="button" onClick={addAgendaItem}>Add Agenda Item</button>)}
+
+      {(
+        // Show "Add Agenda Item" if the template says agenda=1,
+        // or if there are no agenda items yet
+        (myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda === 0 &&
+          agendaItems.length === 0) ||
+        (myVariable.workgroup?.preferred_template?.agendaItems[0]?.agenda === 1)
+      ) && (
+        <button
+          className={styles['add-button']}
+          type="button"
+          onClick={addAgendaItem}
+        >
+          Add Agenda Item
+        </button>
+      )}
     </div>
   );
 };

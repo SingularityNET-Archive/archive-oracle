@@ -1,15 +1,17 @@
+// pages/submit-meeting-summary/index.tsx
 import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import { useRouter } from 'next/router';
+import Modal from 'react-modal'; 
 import styles from '../../styles/meetingsummary.module.css';
 import SummaryTemplate from '../../components/SummaryTemplate';
-import ArchiveSummaries from '../../components/ArchiveSummaries'
+import ArchiveSummaries from '../../components/ArchiveSummaries';
 import { useMyVariable } from '../../context/MyVariableContext';
-import { getWorkgroups } from '../../utils/getWorkgroups'
-import { updateWorkgroups } from '../../utils/updateWorkgroups'
+import { getWorkgroups } from '../../utils/getWorkgroups';
+import { updateWorkgroups } from '../../utils/updateWorkgroups';
 import { getSummaries } from '../../utils/getsummaries';
-import { getNames } from '../../utils/getNames'
-import { getTags } from '../../utils/getTags'
+import { getNames } from '../../utils/getNames';
+import { getTags } from '../../utils/getTags';
 
 type Workgroup = {
   workgroup_id: string;
@@ -23,59 +25,41 @@ type Names = {
   label: any;
 };
 
+// Configure ReactModal
+Modal.setAppElement('#__next'); 
+
+// Include new summary states in union
+type SelectionMode = 
+  | "edit"
+  | "cleanNew"
+  | "prefilledNew"
+  | "noSummaryGiven"
+  | "canceledSummary"
+  | "";
+
 const SubmitMeetingSummary: NextPage = () => {
   const router = useRouter();
-  const [activeComponent, setActiveComponent] = useState('two');
+  const { myVariable, setMyVariable } = useMyVariable();
+
+  // Local state
+  const [activeComponent, setActiveComponent] = useState('');
   const [workgroups, setWorkgroups] = useState<Workgroup[]>([]);
-  const [meetings, setMeetings] = useState([]);
+  const [meetings, setMeetings] = useState<any[]>([]);
   const [showNewWorkgroupInput, setShowNewWorkgroupInput] = useState(false);
   const [newWorkgroup, setNewWorkgroup] = useState('');
-  const { myVariable, setMyVariable } = useMyVariable();
   const [selectedWorkgroupId, setSelectedWorkgroupId] = useState('');
   const [selectedMeetingId, setSelectedMeetingId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [names, setNames] = useState<Names[]>([])
-  const [tags, setTags] = useState({})
-  const [summaryStatus, setSummaryStatus] = useState('populatedSummary');
+  const [names, setNames] = useState<Names[]>([]);
+  const [tags, setTags] = useState({});
 
-  async function getWorkgroupList() {
-    setIsLoading(true);
-    const workgroupList: any = await getWorkgroups();
-    const names1 = await getNames();
-    const tags1 = await getTags();
+  // Modal-related state
+  const [showModal, setShowModal] = useState(false);
+  const [selectionMode, setSelectionMode] = useState<SelectionMode>("");
+  const [selectedSummaryForEdit, setSelectedSummaryForEdit] = useState("");
+  const [newSummaryDate, setNewSummaryDate] = useState("");
 
-    // Sort workgroups alphabetically by workgroup name
-    const sortedWorkgroups = workgroupList.sort((a: Workgroup, b: Workgroup) => 
-      a.workgroup.localeCompare(b.workgroup)
-    );
-
-    let newNames = names1.map((value) => ({ value: value.name, label: value.name }));
-
-    let otherTags = tags1
-      .filter(tag => tag.type === 'other')
-      .map(tag => ({ value: tag.tag, label: tag.tag }));
-
-    let emotionTags = tags1
-      .filter(tag => tag.type === 'emotions')
-      .map(tag => ({ value: tag.tag, label: tag.tag }));
-
-    let topicTags = tags1
-      .filter(tag => tag.type === 'topicsCovered')
-      .map(tag => ({ value: tag.tag, label: tag.tag }));
-
-    let referenceTags = tags1
-      .filter(tag => tag.type === 'references')
-      .map(tag => ({ value: tag.tag, label: tag.tag }));
-
-    let gamesPlayedTags = tags1
-      .filter(tag => tag.type === 'gamesPlayed')
-      .map(tag => ({ value: tag.tag, label: tag.tag }));
-
-    setWorkgroups(sortedWorkgroups);
-    setNames(newNames);
-    setTags({ other: otherTags, emotions: emotionTags, topicsCovered: topicTags, references: referenceTags, gamesPlayed: gamesPlayedTags });
-    setIsLoading(false);
-  }
+  // Agenda item order mapping
   const orderMapping = {
     "Gamers Guild": ["narrative", "discussionPoints", "decisionItems", "actionItems", "gameRules", "leaderboard"],
     "Writers Workgroup": ["narrative", "decisionItems", "actionItems", "learningPoints"],
@@ -101,85 +85,123 @@ const SubmitMeetingSummary: NextPage = () => {
     "WG Sync Call": ["meetingTopics", "discussion", "decisionItems", "actionItems", "issues"],
     "AI Sandbox/Think-tank": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
     "GitHub PBL WG": ["discussionPoints", "decisionItems", "actionItems"]
-  }; 
-  // When you add a new Workgroup you need to update this ordermapping and the Discord API with the new workgroup
-  // Also check generateMarkdown and SummaryAgendaItems for potential updates
-  // If you add a new AgendaItem type, you need to update the following components: Item.tsx, SummaryTemplate.tsx and AgendaItem.tsx and 
-  // the database template. You also need to update the generateMarkdown.js and getDefaultAgendaItem.js util functions 
+  };
 
-  useEffect(() => {
-    async function fetchInitialData(workgroupId: string) {
-      setIsLoading(true);
-      const summaries: any = await getSummaries(workgroupId);
-      setMeetings(summaries)
-      if (summaries && summaries[0]?.type) {
-        setActiveComponent('two');
-      }
-      setShowNewWorkgroupInput(false);
-      setSelectedWorkgroupId(workgroupId);
-      const selectedWorkgroup = workgroups.find(workgroup => workgroup.workgroup_id === workgroupId);
-      if (selectedWorkgroup) {
-        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summaries, summary: summaries[0], names, tags, agendaItemOrder: orderMapping });
-      }
-      setIsLoading(false);
-    }
-    setSummaryStatus('populatedSummary');
-    if (router.query.workgroup && workgroups.length > 0) {
-      fetchInitialData(router.query.workgroup as string);
-    }
-  }, [router.query, workgroups]);
-
+  // -----------------------------------------
+  // Fetch the list of Workgroups on mount
+  // -----------------------------------------
   useEffect(() => {
     getWorkgroupList();
   }, []);
 
-  async function handleSelectChange(e: any) {
-    const selectedWorkgroupId = e.target.value;
-    const summaries: any = selectedWorkgroupId != 'add_new' ? await getSummaries(selectedWorkgroupId) : null;
-    setMeetings(summaries)
-    if (summaries && summaries[0]?.type) {
-      setActiveComponent('two');
-    }
+  async function getWorkgroupList() {
+    setIsLoading(true);
+    const workgroupList: any = await getWorkgroups();
+    const names1 = await getNames();
+    const tags1 = await getTags();
 
-    if (selectedWorkgroupId === 'add_new') {
+    // Sort alphabetically
+    const sortedWorkgroups = workgroupList.sort((a: Workgroup, b: Workgroup) =>
+      a.workgroup.localeCompare(b.workgroup)
+    );
+
+    let newNames = names1.map((value: any) => ({ value: value.name, label: value.name }));
+
+    let otherTags = tags1
+      .filter((tag: any) => tag.type === 'other')
+      .map((tag: any) => ({ value: tag.tag, label: tag.tag }));
+
+    let emotionTags = tags1
+      .filter((tag: any) => tag.type === 'emotions')
+      .map((tag: any) => ({ value: tag.tag, label: tag.tag }));
+
+    let topicTags = tags1
+      .filter((tag: any) => tag.type === 'topicsCovered')
+      .map((tag: any) => ({ value: tag.tag, label: tag.tag }));
+
+    let referenceTags = tags1
+      .filter((tag: any) => tag.type === 'references')
+      .map((tag: any) => ({ value: tag.tag, label: tag.tag }));
+
+    let gamesPlayedTags = tags1
+      .filter((tag: any) => tag.type === 'gamesPlayed')
+      .map((tag: any) => ({ value: tag.tag, label: tag.tag }));
+
+    setWorkgroups(sortedWorkgroups);
+    setNames(newNames);
+    setTags({
+      other: otherTags,
+      emotions: emotionTags,
+      topicsCovered: topicTags,
+      references: referenceTags,
+      gamesPlayed: gamesPlayedTags
+    });
+    setIsLoading(false);
+  }
+
+  // -----------------------------------------
+  // Handle Workgroup selection -> open modal
+  // -----------------------------------------
+  async function handleSelectChange(e: any) {
+    const selectedId = e.target.value;
+
+    if (selectedId === 'add_new') {
+      // Show new WG input
       setNewWorkgroup('');
       setShowNewWorkgroupInput(true);
-    } else {
-      setShowNewWorkgroupInput(false);
-      setSelectedWorkgroupId(selectedWorkgroupId);
-      const selectedWorkgroup = workgroups.find(workgroup => workgroup.workgroup_id === selectedWorkgroupId);
-      if (selectedWorkgroup) {
-        setMyVariable({ ...myVariable, workgroup: selectedWorkgroup, summaries, summary: summaries[0], names, tags });
-      }
+      setSelectedWorkgroupId('');
+      setActiveComponent('');
+      router.push(`/submit-meeting-summary?workgroup=add_new`, undefined, { shallow: true });
+      return;
     }
-    if (selectedWorkgroupId !== 'add_new') {
-      router.push(`/submit-meeting-summary?workgroup=${selectedWorkgroupId}`, undefined, { shallow: true });
-    }
-    //console.log("myVariable", myVariable );
+
+    setSelectedWorkgroupId(selectedId);
+    setShowNewWorkgroupInput(false);
+    setIsLoading(true);
+
+    // fetch existing summaries for that WG
+    const existingSummaries = await getSummaries(selectedId);
+    setMeetings(existingSummaries);
+    setIsLoading(false);
+
+    // push route to reflect selected workgroup
+    router.push(`/submit-meeting-summary?workgroup=${selectedId}`, undefined, { shallow: true });
+
+    // Open modal
+    setShowModal(true);
+    setSelectionMode("");
+    setSelectedSummaryForEdit("");
+    setNewSummaryDate("");
   }
+
+  // -----------------------------------------
+  // (If used) for existing Meeting in UI
+  // -----------------------------------------
   async function handleSelectChange2(e: any) {
     const newSelectedMeetingId = e.target.value;
-    setSelectedMeetingId(newSelectedMeetingId); // Correctly set the selectedMeetingId
+    setSelectedMeetingId(newSelectedMeetingId);
 
-    // Find the selected summary using the new selectedMeetingId
-    const selectedSummary = meetings.find((meeting: any) => meeting.meeting_id === newSelectedMeetingId);
-
-    // If there's a selected summary, update the myVariable state with that summary
+    const selectedSummary = meetings.find((m: any) => m.meeting_id === newSelectedMeetingId);
     if (selectedSummary) {
-      setMyVariable(prevMyVariable => ({
-        ...prevMyVariable,
-        summary: selectedSummary // Set the selected summary here
+      setMyVariable((prev) => ({
+        ...prev,
+        summary: selectedSummary
       }));
     }
   }
 
+  // -----------------------------------------
+  // Add New Workgroup logic
+  // -----------------------------------------
   const handleNewWorkgroupChange = (e: any) => {
     setNewWorkgroup(e.target.value);
-  }
+  };
 
   const handleRegisterNewWorkgroup = async () => {
     setIsLoading(true);
-    const existingWorkgroup = workgroups.find(workgroup => workgroup.workgroup.toLowerCase() === newWorkgroup.toLowerCase());
+    const existingWorkgroup = workgroups.find(
+      (w) => w.workgroup.toLowerCase() === newWorkgroup.toLowerCase()
+    );
     if (existingWorkgroup) {
       setSelectedWorkgroupId(existingWorkgroup.workgroup_id);
       setShowNewWorkgroupInput(false);
@@ -187,67 +209,64 @@ const SubmitMeetingSummary: NextPage = () => {
       await updateWorkgroups({ workgroup: newWorkgroup });
       const updatedWorkgroupList: any = await getWorkgroups();
       setWorkgroups(updatedWorkgroupList);
-      const newWorkgroupEntry = updatedWorkgroupList.find((workgroup: any) => workgroup.workgroup.toLowerCase() === newWorkgroup.toLowerCase());
+      const newWorkgroupEntry = updatedWorkgroupList.find(
+        (w: any) => w.workgroup.toLowerCase() === newWorkgroup.toLowerCase()
+      );
       if (newWorkgroupEntry) {
         setSelectedWorkgroupId(newWorkgroupEntry.workgroup_id);
-        setMyVariable(prev => ({ ...prev, workgroup: newWorkgroupEntry, names, tags })); // updating myVariable with new workgroup
+        setMyVariable((prev) => ({
+          ...prev,
+          workgroup: newWorkgroupEntry,
+          names,
+          tags
+        }));
       }
       setShowNewWorkgroupInput(false);
     }
     setIsLoading(false);
   };
 
-  const getComponent = () => {
-    switch (activeComponent) {
-      case 'two': return <SummaryTemplate key={selectedWorkgroupId} updateMeetings={updateMeetings} />;
-      case 'four': return <ArchiveSummaries key={selectedWorkgroupId} />;
-      default: return <div>Select a component</div>;
-    }
-  }
-
+  // -----------------------------------------
+  // Utility functions
+  // -----------------------------------------
   function formatDate(isoString: any) {
     const months = [
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
-
     const date = new Date(isoString);
     const day = date.getDate();
     const monthIndex = date.getMonth();
     const year = date.getFullYear();
-
     return `${day} ${months[monthIndex]} ${year}`;
   }
 
   const updateMeetings = (newMeetingSummary: any) => {
-    //console.log("Before update, meetings:", meetings, newMeetingSummary); // Log the current state before update
-
-    setMeetings(prevMeetings => {
-      let updatedMeetings: any = [...prevMeetings];
-      const meetingIndex: any = updatedMeetings.findIndex((meeting: any) => meeting.meeting_id === newMeetingSummary.meeting_id);
+    setMeetings((prevMeetings) => {
+      let updated = [...prevMeetings];
+      const meetingIndex = updated.findIndex((m: any) => m.meeting_id === newMeetingSummary.meeting_id);
 
       if (meetingIndex !== -1) {
-        // Replace existing summary
-        updatedMeetings[meetingIndex] = newMeetingSummary;
+        updated[meetingIndex] = newMeetingSummary;
       } else {
-        // Add new summary
-        updatedMeetings.unshift(newMeetingSummary);
+        updated.unshift(newMeetingSummary);
       }
-      updatedMeetings = updatedMeetings.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      updated = updated.sort(
+        (a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
       setSelectedMeetingId(newMeetingSummary.meeting_id);
-      //console.log("After update, meetings:", updatedMeetings); // Log the new state
-      return updatedMeetings;
+      return updated;
     });
   };
 
   const resetSummary = () => {
-    setMyVariable(prevMyVariable => ({
-      ...prevMyVariable,
+    setMyVariable((prev) => ({
+      ...prev,
       summary: {
-        ...prevMyVariable.summary,
+        ...prev.summary,
         meetingInfo: {
-          ...prevMyVariable.summary.meetingInfo,
-          date: "",
+          ...prev.summary?.meetingInfo,
+          date: ""
         },
         agendaItems: [],
         tags: {}
@@ -255,140 +274,476 @@ const SubmitMeetingSummary: NextPage = () => {
     }));
   };
 
-  const noSummaryGiven = () => {
-    setMyVariable(prevMyVariable => ({
-      ...prevMyVariable,
-      summary: {
-        ...prevMyVariable.summary,
-        meetingInfo: { 
-          name:"Weekly",
-          date: prevMyVariable.summary.meetingInfo.date
+  // Decides which component to show in main content
+  function getComponent() {
+    switch (activeComponent) {
+      case 'two':
+        return <SummaryTemplate key={selectedWorkgroupId} updateMeetings={updateMeetings} />;
+      case 'four':
+        return <ArchiveSummaries key={selectedWorkgroupId} />;
+      default:
+        return <div>Select a component</div>;
+    }
+  }
+
+  // -----------------------------------------
+  // Confirm selection from Modal
+  // -----------------------------------------
+  const confirmModalSelection = () => {
+    setShowModal(false);
+    if (!selectedWorkgroupId) return;
+
+    const chosenWorkgroup = workgroups.find((wg) => wg.workgroup_id === selectedWorkgroupId);
+
+    if (selectionMode === "edit") {
+      // Edit existing
+      const existing = meetings.find((m) => m.meeting_id === selectedSummaryForEdit);
+      if (existing) {
+        setMyVariable((prev) => ({
+          ...prev,
+          workgroup: chosenWorkgroup,
+          summary: existing,
+          summaries: meetings,
+          names,
+          tags,
+          agendaItemOrder: orderMapping
+        }));
+        setSelectedMeetingId(existing.meeting_id);
+      }
+      setActiveComponent('two');
+    }
+    else if (selectionMode === "cleanNew") {
+      // New clean summary
+      const newClean = {
+        workgroup: chosenWorkgroup?.workgroup || "",
+        workgroup_id: selectedWorkgroupId,
+        meetingInfo: {
+          name: "Weekly",
+          date: newSummaryDate,
+          host: "",
+          documenter: "",
+          translator: "",
+          peoplePresent: "",
+          purpose: "",
+          townHallNumber: "",
+          googleSlides: "",
+          meetingVideoLink: "",
+          miroBoardLink: "",
+          otherMediaLink: "",
+          transcriptLink: "",
+          mediaLink: "",
+          workingDocs: [{ title: "", link: "" }],
+          timestampedVideo: { url: "", intro: "", timestamps: "" }
+        },
+        agendaItems: [],
+        tags: {},
+        type: "Custom",
+        noSummaryGiven: false,
+        canceledSummary: false,
+        updated_at: new Date()
+      };
+
+      setMyVariable((prev) => ({
+        ...prev,
+        workgroup: chosenWorkgroup,
+        summary: newClean,
+        summaries: meetings,
+        names,
+        tags,
+        agendaItemOrder: orderMapping
+      }));
+      setActiveComponent('two');
+    }
+    else if (selectionMode === "prefilledNew") {
+      // New prefilled summary from last
+      if (meetings.length > 0) {
+        const lastSummary = meetings[0];
+        const newPrefilled = {
+          ...lastSummary,
+          meeting_id: undefined,
+          workgroup_id: selectedWorkgroupId,
+          workgroup: chosenWorkgroup?.workgroup || "",
+          meetingInfo: {
+            ...lastSummary.meetingInfo,
+            date: newSummaryDate
+          },
+          updated_at: new Date(),
+          confirmed: false,
+          noSummaryGiven: false,
+          canceledSummary: false
+        };
+        setMyVariable((prev) => ({
+          ...prev,
+          workgroup: chosenWorkgroup,
+          summary: newPrefilled,
+          summaries: meetings,
+          names,
+          tags,
+          agendaItemOrder: orderMapping
+        }));
+      } else {
+        // If no prior summaries, treat it like a clean summary
+        const newClean = {
+          workgroup: chosenWorkgroup?.workgroup || "",
+          workgroup_id: selectedWorkgroupId,
+          meetingInfo: {
+            name: "Weekly",
+            date: newSummaryDate,
+            host: "",
+            documenter: "",
+            translator: "",
+            peoplePresent: "",
+            purpose: "",
+            townHallNumber: "",
+            googleSlides: "",
+            meetingVideoLink: "",
+            miroBoardLink: "",
+            otherMediaLink: "",
+            transcriptLink: "",
+            mediaLink: "",
+            workingDocs: [{ title: "", link: "" }],
+            timestampedVideo: { url: "", intro: "", timestamps: "" }
+          },
+          agendaItems: [],
+          tags: {},
+          type: "Custom",
+          noSummaryGiven: false,
+          canceledSummary: false,
+          updated_at: new Date()
+        };
+        setMyVariable((prev) => ({
+          ...prev,
+          workgroup: chosenWorkgroup,
+          summary: newClean,
+          summaries: meetings,
+          names,
+          tags,
+          agendaItemOrder: orderMapping
+        }));
+      }
+      setActiveComponent('two');
+    }
+    else if (selectionMode === "noSummaryGiven") {
+      // Mark as noSummaryGiven
+      const newNoSummary = {
+        workgroup: chosenWorkgroup?.workgroup || "",
+        workgroup_id: selectedWorkgroupId,
+        meetingInfo: {
+          name: "Weekly",
+          date: newSummaryDate
         },
         agendaItems: [],
         tags: {},
         noSummaryGiven: true,
-        canceledSummary: false
-      }
-    }));
-  };
-
-  const handleSummaryStatusChange = (e: any) => {
-    const newStatus = e.target.value;
-    setSummaryStatus(newStatus);
-
-    // Update myVariable state based on the selection
-    if (newStatus === 'noSummaryGiven') {
-      noSummaryGiven(); // Your existing function to handle no summary
-    } else if (newStatus === 'canceledSummary') {
-      // Implement logic for canceled summary
-      //console.log("Canceled Summary", myVariable);
-      setMyVariable(prevMyVariable => ({
-        ...prevMyVariable,
-        summary: {
-          ...prevMyVariable.summary,
-          meetingInfo: { 
-            name:"Weekly",
-            date: prevMyVariable.summary.meetingInfo.date
-          },
-          agendaItems: [],
-          tags: {},
-          noSummaryGiven: false,
-          canceledSummary: true
-        }
+        canceledSummary: false,
+        updated_at: new Date()
+      };
+      setMyVariable((prev) => ({
+        ...prev,
+        workgroup: chosenWorkgroup,
+        summary: newNoSummary,
+        summaries: meetings,
+        names,
+        tags,
+        agendaItemOrder: orderMapping
       }));
-    } else {
-      // Reset to populated summary (default state or any specific logic)
-      console.log("Populated Summary");
+      setActiveComponent('four');
+    }
+    else if (selectionMode === "canceledSummary") {
+      // Mark as canceled
+      const newCanceledSummary = {
+        workgroup: chosenWorkgroup?.workgroup || "",
+        workgroup_id: selectedWorkgroupId,
+        meetingInfo: {
+          name: "Weekly",
+          date: newSummaryDate
+        },
+        agendaItems: [],
+        tags: {},
+        noSummaryGiven: false,
+        canceledSummary: true,
+        updated_at: new Date()
+      };
+      setMyVariable((prev) => ({
+        ...prev,
+        workgroup: chosenWorkgroup,
+        summary: newCanceledSummary,
+        summaries: meetings,
+        names,
+        tags,
+        agendaItemOrder: orderMapping
+      }));
+      setActiveComponent('four');
     }
   };
 
-
   return (
     <div className={styles.container}>
+      {/* ---------- MODAL ---------- */}
+      <Modal
+        isOpen={showModal}
+        onRequestClose={() => setShowModal(false)}
+        contentLabel="Select Summary Option"
+        style={{
+          overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          },
+          content: {
+            position: 'relative',
+            inset: 'unset',
+            maxWidth: '500px',
+            margin: 'auto',
+            borderRadius: '8px',
+            padding: '1rem',
+            backgroundColor: '#fff'
+          }
+        }}
+      >
+        <h2>Select how you want to proceed</h2>
+        <div style={{ marginTop: '1rem' }}>
+          {/* 1. Edit existing summary */}
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+            <input
+              type="radio"
+              value="edit"
+              checked={selectionMode === 'edit'}
+              onChange={() => setSelectionMode('edit')}
+            />
+            Edit an existing summary
+          </label>
+          {selectionMode === 'edit' && (
+            <select
+              style={{ display: 'block', marginBottom: '1rem' }}
+              onChange={(e) => setSelectedSummaryForEdit(e.target.value)}
+              value={selectedSummaryForEdit}
+            >
+              <option value="">Choose existing summary</option>
+              {meetings.map((meeting) => (
+                <option key={meeting.meeting_id} value={meeting.meeting_id}>
+                  {formatDate(meeting.date)} - {meeting.username}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {/* 2. Clean new summary */}
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+            <input
+              type="radio"
+              value="cleanNew"
+              checked={selectionMode === 'cleanNew'}
+              onChange={() => setSelectionMode('cleanNew')}
+            />
+            Create a new **clean** summary
+          </label>
+          {selectionMode === 'cleanNew' && (
+            <div style={{ marginLeft: '1.5rem', marginBottom: '1rem' }}>
+              <label>
+                Select meeting date:{" "}
+                <input
+                  type="date"
+                  value={newSummaryDate}
+                  onChange={(e) => setNewSummaryDate(e.target.value)}
+                />
+              </label>
+            </div>
+          )}
+
+          {/* 3. Prefilled new summary */}
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+            <input
+              type="radio"
+              value="prefilledNew"
+              checked={selectionMode === 'prefilledNew'}
+              onChange={() => setSelectionMode('prefilledNew')}
+            />
+            Create a new **prefilled** summary (from the last one)
+          </label>
+          {selectionMode === 'prefilledNew' && (
+            <div style={{ marginLeft: '1.5rem', marginBottom: '1rem' }}>
+              <label>
+                Select meeting date:{" "}
+                <input
+                  type="date"
+                  value={newSummaryDate}
+                  onChange={(e) => setNewSummaryDate(e.target.value)}
+                />
+              </label>
+            </div>
+          )}
+
+          {/* Only show these if admin */}
+          {myVariable.roles?.isAdmin && (
+            <>
+              {/* 4. No Summary Given */}
+              <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+                <input
+                  type="radio"
+                  value="noSummaryGiven"
+                  checked={selectionMode === 'noSummaryGiven'}
+                  onChange={() => setSelectionMode('noSummaryGiven')}
+                />
+                No summary was given (set “noSummaryGiven” flag)
+              </label>
+              {selectionMode === 'noSummaryGiven' && (
+                <div style={{ marginLeft: '1.5rem', marginBottom: '1rem' }}>
+                  <label>
+                    Select meeting date:{" "}
+                    <input
+                      type="date"
+                      value={newSummaryDate}
+                      onChange={(e) => setNewSummaryDate(e.target.value)}
+                    />
+                  </label>
+                </div>
+              )}
+
+              {/* 5. Canceled Summary */}
+              <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+                <input
+                  type="radio"
+                  value="canceledSummary"
+                  checked={selectionMode === 'canceledSummary'}
+                  onChange={() => setSelectionMode('canceledSummary')}
+                />
+                Meeting was canceled (set “canceledSummary” flag)
+              </label>
+              {selectionMode === 'canceledSummary' && (
+                <div style={{ marginLeft: '1.5rem', marginBottom: '1rem' }}>
+                  <label>
+                    Select meeting date:{" "}
+                    <input
+                      type="date"
+                      value={newSummaryDate}
+                      onChange={(e) => setNewSummaryDate(e.target.value)}
+                    />
+                  </label>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
+        <button
+          style={{ marginTop: '1rem' }}
+          onClick={confirmModalSelection}
+          disabled={
+            (!selectionMode) ||
+            (selectionMode === 'edit' && !selectedSummaryForEdit) ||
+            (
+              (
+                selectionMode === 'cleanNew' ||
+                selectionMode === 'prefilledNew' ||
+                selectionMode === 'noSummaryGiven' ||
+                selectionMode === 'canceledSummary'
+              ) &&
+              !newSummaryDate
+            )
+          }
+        >
+          Confirm
+        </button>
+      </Modal>
+      {/* ---------- /MODAL ---------- */}
+
       <div className={styles.navbar}>
         {isLoading ? (
           <p>Loading...</p>
         ) : (
           <>
             {workgroups.length > 0 && (
-              <>
-                <div className={styles['column-flex']}>
-                  <label className={styles['form-label']} htmlFor="">Select Workgroup</label>
-                  <select
-                    name="" id=""
-                    className={`${styles.select} ${selectedWorkgroupId === '' ? styles.selectGreen : ''}`}
-                    value={selectedWorkgroupId} onChange={handleSelectChange}
-                    title="Select a workgroup">
-                    <option value="" disabled>Please select Workgroup</option>
-                    {workgroups.map((workgroup: any) => (
-                      <option key={workgroup.workgroup_id} value={workgroup.workgroup_id}>{workgroup.workgroup}</option>
-                    ))}
-                    {myVariable.roles?.isAdmin && (<option value="add_new">Add new WG</option>)}
-                  </select>
-                </div>
-              </>
+              <div className={styles['column-flex']}>
+                <label className={styles['form-label']} htmlFor="">
+                  Select Workgroup
+                </label>
+                <select
+                  className={`${styles.select} ${selectedWorkgroupId === '' ? styles.selectGreen : ''}`}
+                  value={selectedWorkgroupId}
+                  onChange={handleSelectChange}
+                  title="Select a workgroup"
+                >
+                  <option value="" disabled>Please select Workgroup</option>
+                  {workgroups.map((workgroup: any) => (
+                    <option key={workgroup.workgroup_id} value={workgroup.workgroup_id}>
+                      {workgroup.workgroup}
+                    </option>
+                  ))}
+                  {myVariable.roles?.isAdmin && (
+                    <option value="add_new">Add new WG</option>
+                  )}
+                </select>
+              </div>
             )}
-            {workgroups.length > 0 && meetings?.length > 0 && (
-              <>
-                <div className={styles['column-flex']}>
-                  <label className={styles['form-label']} htmlFor="">Select previous meeting data</label>
-                  <select
-                    name="" id=""
-                    className={styles.select}
-                    value={selectedMeetingId} onChange={handleSelectChange2}
-                    title="Defaults to latest meeting, only change this when you want to use a previous meeting as template">
-                    {meetings.map((meeting: any) => (
-                      <option
-                        style={{ color: meeting.confirmed ? 'lightgreen' : 'white' }}
-                        key={`${meeting.meeting_id}-${meeting.updated_at}`}
-                        value={meeting.meeting_id}>
-                        {formatDate(meeting.date)} {meeting.username} {meeting.confirmed ? 'Archived' : ''}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </>
-            )}
+
             {showNewWorkgroupInput && (
               <>
-                <input className={styles.register} type="text" value={newWorkgroup} autoComplete="off" onChange={handleNewWorkgroupChange} />
-                <button className={styles.registerbutton} onClick={handleRegisterNewWorkgroup}>Register New Workgroup</button>
+                <input
+                  className={styles.register}
+                  type="text"
+                  value={newWorkgroup}
+                  autoComplete="off"
+                  onChange={handleNewWorkgroupChange}
+                />
+                <button
+                  className={styles.registerbutton}
+                  onClick={handleRegisterNewWorkgroup}
+                >
+                  Register New Workgroup
+                </button>
               </>
             )}
           </>
         )}
-        {selectedWorkgroupId && (<>
-          {myVariable.roles?.isAdmin && (<button className={styles.navButton} onClick={() => setActiveComponent('two')}>Summary</button>)}
-          {myVariable.roles?.isAdmin && <button className={styles.navButton} onClick={() => setActiveComponent('four')}>Archive Summaries</button>}
-          <button
-            className={styles.resetButton}
-            onClick={resetSummary}
-            title="All values will be cleared, so please make sure to select all dropdowns and fill in all fields"
-          >Clear Summary
-          </button>
-          {myVariable.roles?.isAdmin && (
-            <select
-              className={styles.select}
-              value={summaryStatus}
-              onChange={handleSummaryStatusChange}>
-              <option value="populatedSummary">Populated Summary</option>
-              <option value="noSummaryGiven">No Summary Given</option>
-              <option value="canceledSummary">Cancelled Summary</option>
-            </select>
-          )}
-        </>)}
+
+        {/* Buttons for navigation if a WG is selected */}
+        {selectedWorkgroupId && (
+          <>
+            {myVariable.roles?.isAdmin && (
+              <button
+                className={styles.navButton}
+                onClick={() => setActiveComponent('two')}
+              >
+                Summary
+              </button>
+            )}
+            {myVariable.roles?.isAdmin && (
+              <button
+                className={styles.navButton}
+                onClick={() => setActiveComponent('four')}
+              >
+                Archive Summaries
+              </button>
+            )}
+            <button
+              className={styles.resetButton}
+              onClick={resetSummary}
+              title="All values will be cleared. Make sure to re-select items."
+            >
+              Clear Summary
+            </button>
+          </>
+        )}
       </div>
-      {myVariable.isLoggedIn && selectedWorkgroupId && (<div className={styles.mainContent}>
-        {getComponent()}
-      </div>)}
-      {myVariable.isLoggedIn && !selectedWorkgroupId && !isLoading && (<div className={styles.nomainContent}>
-        <h2>Please select workgroup</h2>
-      </div>)}
-      {!myVariable.isLoggedIn && (<div className={styles.pleaseSignIn}>
-        <div>
-          <h3>Please sign in with Discord</h3>
+
+      {/* Main content logic */}
+      {myVariable.isLoggedIn && selectedWorkgroupId && (
+        <div className={styles.mainContent}>{getComponent()}</div>
+      )}
+      {myVariable.isLoggedIn && !selectedWorkgroupId && !isLoading && (
+        <div className={styles.nomainContent}>
+          <h2>Please select workgroup</h2>
         </div>
-      </div>)}
+      )}
+      {!myVariable.isLoggedIn && (
+        <div className={styles.pleaseSignIn}>
+          <div>
+            <h3>Please sign in with Discord</h3>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
