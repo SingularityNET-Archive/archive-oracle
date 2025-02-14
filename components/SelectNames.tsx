@@ -1,6 +1,5 @@
 import React from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
-import styles from '../styles/typea.module.css';
 import CreatableSelect from 'react-select/creatable';
 import { saveNewNames } from '../utils/saveNewNames'
 
