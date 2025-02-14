@@ -4,32 +4,29 @@ export async function saveNewNames(inputNames) {
   async function updateNames(inputNames) {
     let status = 'started';
     
-    // Fetch all existing SubGroups from the database
+    // Fetch all existing names from the database
     const { data: existingNames, error: fetchError } = await supabase
       .from("names")
       .select("name");
       
     if (fetchError) throw fetchError;
 
-    // Convert the existing Namess to a Set for faster lookup
+    // Convert the existing names to a Set for faster lookup
     const existingNamesSet = new Set(existingNames.map(item => item.name));
 
-    // Filter out the Namess that already exist
+    // Filter out the names that already exist
     const newNames = inputNames.filter(name => !existingNamesSet.has(name));
 
-    // Insert new labels
+    // Insert new names
     for (const name of newNames) {
-      const updates = {
-        name,
-      };
+      const updates = { name };
 
       const { data, error } = await supabase
         .from("names")
-        .upsert(updates)
+        .upsert(updates, { onConflict: ['name'] })  // Specify conflict target
         .select('*');
 
       if (error) throw error;
-
       if (!data) {
         throw new Error("Failed to update the name");
       }
