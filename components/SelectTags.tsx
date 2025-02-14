@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
-import styles from '../styles/typea.module.css';
+import debounce from 'lodash/debounce';
 import CreatableSelect from 'react-select/creatable';
 import { saveNewTags } from '../utils/saveNewTags'
 
@@ -19,18 +19,21 @@ const SelectTags: React.FC<SelectTagsProps> = ({ onSelect, initialValue, type })
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' }
   ];
-  //console.log("options", options)
-  async function handleInputChange(selected: any) {
-    setSelectedLabels(selected);  // Update local state
-    let labs: string[] = selected.map((item: any) => item.label);
-    const status = await saveNewTags(labs, type);
-    onSelect(labs.join(", ")); // Update parent component's state
-  }
   
   React.useEffect(() => {
     let initialOptions = initialValue ? initialValue.split(", ").map((val) => ({ label: val, value: val })) : [];
     setSelectedLabels(initialOptions);
   }, [initialValue]);
+
+  const debouncedHandleInputChange = useMemo(
+    () => debounce(async (selected) => {
+      setSelectedLabels(selected);  // Update local state
+      const labs: string[] = selected.map((item: any) => item.label);
+      const status = await saveNewTags(labs, type);
+      onSelect(labs.join(", ")); // Update parent component's state
+    }, 1000),
+    [onSelect, type]
+  );
   
   return (
     <div title="When you type, hit enter to add item and start typing again to add another or select from the dropdown">
@@ -39,7 +42,7 @@ const SelectTags: React.FC<SelectTagsProps> = ({ onSelect, initialValue, type })
         options={options}
         value={selectedLabels}
         onChange={(selected) => {
-          handleInputChange(selected || []);
+          debouncedHandleInputChange(selected || []);
         }}
         styles={{
           control: (baseStyles, state) => ({
