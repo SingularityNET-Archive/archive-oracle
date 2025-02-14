@@ -259,21 +259,6 @@ const SubmitMeetingSummary: NextPage = () => {
     });
   };
 
-  const resetSummary = () => {
-    setMyVariable((prev) => ({
-      ...prev,
-      summary: {
-        ...prev.summary,
-        meetingInfo: {
-          ...prev.summary?.meetingInfo,
-          date: ""
-        },
-        agendaItems: [],
-        tags: {}
-      }
-    }));
-  };
-
   // Decides which component to show in main content
   function getComponent() {
     switch (activeComponent) {
@@ -717,13 +702,6 @@ const SubmitMeetingSummary: NextPage = () => {
                 Archive Summaries
               </button>
             )}
-            <button
-              className={styles.resetButton}
-              onClick={resetSummary}
-              title="All values will be cleared. Make sure to re-select items."
-            >
-              Clear Summary
-            </button>
           </>
         )}
       </div>

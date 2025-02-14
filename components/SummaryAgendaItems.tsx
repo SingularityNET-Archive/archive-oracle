@@ -72,6 +72,12 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
   const addItem = (type: string, agendaIndex: number) => {
     setAgendaItems((prev) => {
       const updated = [...prev];
+  
+      // Ensure the target array exists; if not, initialize it.
+      if (!Array.isArray(updated[agendaIndex][type])) {
+        updated[agendaIndex][type] = [];
+      }
+  
       if (type === 'actionItems') {
         updated[agendaIndex][type].push({
           text: "",
@@ -87,12 +93,13 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
           effect: ""
         });
       } else {
-        // e.g. discussionPoints, issues, meetingTopics, leaderboard
+        // For discussionPoints, issues, meetingTopics, leaderboard, etc.
         updated[agendaIndex][type].push("");
       }
       return updated;
     });
   };
+  
 
   // Remove a sub‐item
   const removeItem = (type: string, agendaIndex: number, itemIndex: number) => {
@@ -496,7 +503,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
                     className={styles['form-select']}
                     type="text"
                     placeholder="Agenda Item"
-                    value={item.agenda}
+                    value={item.agenda ?? ""}
                     autoComplete="off"
                     onChange={(e) => {
                       const updated = [...agendaItems];
