@@ -27,7 +27,7 @@ export async function saveNewTags(inputTags, type) {
 
       const { data, error } = await supabase
         .from("tags")
-        .upsert(updates)
+        .upsert(updates, { onConflict: ['tag', 'type'] })
         .select('*');
 
       if (error) throw error;
