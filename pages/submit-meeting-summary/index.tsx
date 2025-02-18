@@ -94,6 +94,38 @@ const SubmitMeetingSummary: NextPage = () => {
     getWorkgroupList();
   }, []);
 
+  // useEffect to check URL for a workgroup_id and load the modal
+  useEffect(() => {
+    if (!router.isReady) return; // wait until router is ready
+    const workgroupFromUrl = router.query.workgroup;
+    if (workgroupFromUrl) {
+      if (workgroupFromUrl === "add_new") {
+        // Handle "add new" workgroup logic if needed
+        setNewWorkgroup('');
+        setShowNewWorkgroupInput(true);
+        setSelectedWorkgroupId('');
+        setActiveComponent('');
+      } else {
+        // Set the selected workgroup id from URL
+        setSelectedWorkgroupId(workgroupFromUrl as string);
+        setShowNewWorkgroupInput(false);
+        setIsLoading(true);
+
+        // Fetch existing summaries for the workgroup from URL
+        getSummaries(workgroupFromUrl as string)
+          .then((existingSummaries) => {
+            setMeetings(existingSummaries);
+            // Open the modal after fetching summaries
+            setShowModal(true);
+            setSelectionMode("");
+            setSelectedSummaryForEdit("");
+            setNewSummaryDate("");
+          })
+          .finally(() => setIsLoading(false));
+      }
+    }
+  }, [router.isReady, router.query.workgroup]);
+
   async function getWorkgroupList() {
     setIsLoading(true);
     const workgroupList: any = await getWorkgroups();
@@ -144,6 +176,11 @@ const SubmitMeetingSummary: NextPage = () => {
   // -----------------------------------------
   async function handleSelectChange(e: any) {
     const selectedId = e.target.value;
+
+    // If the modal is open, close it first
+    if (showModal) {
+      setShowModal(false);
+    }
 
     if (selectedId === 'add_new') {
       // Show new WG input
@@ -263,13 +300,24 @@ const SubmitMeetingSummary: NextPage = () => {
   function getComponent() {
     switch (activeComponent) {
       case 'two':
-        return <SummaryTemplate key={selectedWorkgroupId} updateMeetings={updateMeetings} />;
+        // Replace this condition with your actual condition
+        if (myVariable.summary?.noSummaryGiven || myVariable.summary?.canceledSummary) {
+          window.location.reload();
+          return null;
+        }
+        return (
+          <SummaryTemplate
+            key={selectedWorkgroupId}
+            updateMeetings={updateMeetings}
+          />
+        );
       case 'four':
         return <ArchiveSummaries key={selectedWorkgroupId} />;
       default:
-        return <div>Select a component</div>;
+        return <div></div>;
     }
   }
+  
 
   // -----------------------------------------
   // Confirm selection from Modal
@@ -462,6 +510,8 @@ const SubmitMeetingSummary: NextPage = () => {
     }
   };
 
+  const currentWorkgroup = workgroups.find((wg) => wg.workgroup_id === selectedWorkgroupId);
+
   return (
     <div className={styles.container}>
       {/* ---------- MODAL ---------- */}
@@ -488,6 +538,11 @@ const SubmitMeetingSummary: NextPage = () => {
         }}
       >
         <h2>Select how you want to proceed</h2>
+        {currentWorkgroup && (
+          <p>
+            <strong>Workgroup:</strong> {currentWorkgroup.workgroup}
+          </p>
+        )}
         <div style={{ marginTop: '1rem' }}>
           {/* 1. Edit existing summary */}
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>

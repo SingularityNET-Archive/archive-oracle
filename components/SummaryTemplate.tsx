@@ -116,7 +116,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
 
   // Keep formData.tags in sync with local tags:
   useEffect(() => {
-    setFormData(prev => {
+    setFormData((prev: any) => {
       if (isEqual(prev.tags, tags)) {
         return prev;
       }
@@ -143,12 +143,10 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     };
   }, [formData, debouncedAutoSave]);
 
-  // 1) The autoSave function
+  // The autoSave function
   const autoSave = async (latestData: any) => {
     try {
-      const cleanedData = prepareFormDataForSave(latestData);
-      const result = await saveCustomAgenda(cleanedData);
-
+      const result = await saveCustomAgenda(latestData);
       if (result !== false) {
         const dbRecord = result[0];
         // Merge new fields (IDs, timestamps) but DO NOT overwrite typed text
@@ -156,15 +154,13 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
           ...latestData, 
           meeting_id: dbRecord.meeting_id,
           updated_at: dbRecord.updated_at,
-          date: dbRecord.date
+          date: dbRecord.date,
         };
-
-        // We update context so the rest of the app knows about the new ID, date, etc.
+        // Update context so the rest of the app knows about the new ID, date, etc.
         setMyVariable((prev) => ({
           ...prev,
-          summary: updatedSummary
+          summary: updatedSummary,
         }));
-
         // Keep the parent's "meetings" list updated:
         updateMeetings(updatedSummary);
       }
@@ -173,51 +169,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     }
   };
 
-  // 2) Helper: remove empty strings, etc.
-  const prepareFormDataForSave = (rawData: any) => {
-    const filteredWorkingDocs = rawData.meetingInfo.workingDocs.filter(
-      (doc: any) => doc.title || doc.link
-    );
-    const newData = {
-      ...rawData,
-      meetingInfo: {
-        ...rawData.meetingInfo,
-        workingDocs: filteredWorkingDocs
-      },
-      noSummaryGiven: false,
-      canceledSummary: false
-    };
-    return removeEmptyValues(newData);
-  };
-
-  const removeEmptyValues = (obj: any) => {
-    if (typeof obj !== 'object' || !obj) return obj;
-    Object.keys(obj).forEach(key => {
-      if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
-        obj[key] = removeEmptyValues(obj[key]);
-        if (Object.keys(obj[key]).length === 0) {
-          delete obj[key];
-        }
-      } else if (Array.isArray(obj[key])) {
-        obj[key] = obj[key]
-          .map((item: any) => removeEmptyValues(item))
-          .filter((item: any) => item !== '' &&
-            !(Array.isArray(item) && item.length === 0) &&
-            !(typeof item === 'object' && Object.keys(item).length === 0)
-          );
-        if (obj[key].length === 0) {
-          delete obj[key];
-        }
-      } else {
-        if (obj[key] === '') {
-          delete obj[key];
-        }
-      }
-    });
-    return obj;
-  };
-
-  // 3) Manual "Save"
+  //  Manual "Save"
   const handleSubmit = async () => {
     if (!formData.meetingInfo.date) {
       alert("Please select the meeting date before saving.");
@@ -225,8 +177,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     }
     setLoading(true);
     try {
-      const cleanedFormData = prepareFormDataForSave(formData);
-      const data = await saveCustomAgenda(cleanedFormData);
+      const data = await saveCustomAgenda(formData);
       if (data !== false) {
         const [latest] = data;
         // Merge only ID, date, updated_at:
@@ -235,12 +186,12 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
           date: latest.date,
           meeting_id: latest.meeting_id,
           updated_at: latest.updated_at,
-          confirmed: false
+          confirmed: false,
         };
         updateMeetings(summary);
-        setMyVariable(prev => ({
+        setMyVariable((prev) => ({
           ...prev,
-          summary
+          summary,
         }));
       }
     } catch (error) {
@@ -251,7 +202,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     }
   };
 
-  // 4) Create Google Docs
+  // Create Google Docs
   const handleCreateGoogleDoc = async () => {
     setCreatingDoc(true);
     try {
@@ -277,7 +228,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
     }
   };
 
-  // 5) Create Quarterly Doc
+  // Create Quarterly Doc
   const handleCreateQuarterlyDoc = async () => {
     setCreatingDoc(true);
     try {
@@ -323,7 +274,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
               <SummaryMeetingInfo
               workgroup={formData.workgroup}
               onUpdate={(info) => {
-                setFormData((prev) => {
+                setFormData((prev: any) => {
                   // Compare old meetingInfo vs new
                   if (isEqual(prev.meetingInfo, info)) {
                     // If they are the same, do nothing -> no re-render
