@@ -1,3 +1,4 @@
+// ../utils/getDefaultAgendaItem.js
 export const getDefaultAgendaItem = () => ({
     agenda: "",
     status: "carry over",

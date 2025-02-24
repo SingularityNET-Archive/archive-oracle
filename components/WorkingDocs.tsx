@@ -1,33 +1,91 @@
 import styles from '../styles/workingDocsTable.module.css'; 
 
-const WorkingDocs = ({ handleChange, addNewDoc, docs, removeDoc, originalDocsCount, updateMyVariable }: any) => {
+type Doc = {
+  title?: string;
+  link?: string;
+};
+
+type WorkingDocsProps = {
+  /** The complete array of docs, both old + newly added. */
+  docs: Doc[];
+  /**
+   * Number of docs that existed in the DB before.
+   * If `index < originalDocsCount`, we treat it as an “existing doc”.
+   * Otherwise, it's a newly added doc.
+   */
+  originalDocsCount: number;
+
+  /** Called when a NEW doc changes (indexes >= originalDocsCount). */
+  handleChange: (e: any, newDocIndex: number) => void;
+
+  /** Called when the user clicks “Add New Working Document”. */
+  addNewDoc: () => void;
+
+  /** Called to remove a NEW doc from the parent's state. */
+  removeDoc: (newDocIndex: number) => void;
+
+  /**
+   * Called to update an OLD doc (i.e. in DB).
+   * If `e === null`, it means remove. Otherwise it’s a change event.
+   */
+  updateMyVariable: (e: any | null, oldDocIndex: number) => void;
+};
+
+const WorkingDocs = ({
+  docs,
+  originalDocsCount,
+  handleChange,
+  addNewDoc,
+  removeDoc,
+  updateMyVariable
+}: WorkingDocsProps) => {
+
+  /**
+   * Called whenever an input changes in the table row.
+   * If it's an existing doc (index < originalDocsCount),
+   * we call `updateMyVariable`. Otherwise, we call `handleChange`.
+   */
   const handleDocChange = (e: any, index: number) => {
     if (index < originalDocsCount) {
+      // This is an existing doc from the DB
       updateMyVariable(e, index);
     } else {
+      // This is a newly added doc
       handleChange(e, index - originalDocsCount);
     }
   };
 
+  /**
+   * Called when the user clicks the “X” to remove a doc row.
+   * If it’s an existing doc, call `updateMyVariable(null, index)`.
+   * If it’s a new doc, call `removeDoc(...)`.
+   */
   const handleDocRemove = (index: number) => {
     if (index < originalDocsCount) {
+      // Remove an existing doc from DB or mark it removed
       updateMyVariable(null, index);
     } else {
+      // Remove a new doc from local state
       removeDoc(index - originalDocsCount);
     }
   };
 
+  /**
+   * Called when the user clicks “Add New Working Document”.
+   * If we currently have 0 docs, we initialize the first doc as empty.
+   * Otherwise, we call `addNewDoc()` to push another blank doc to local.
+   */
   const handleAddNewDoc = () => {
     if (docs.length === 0) {
-      // Add the first document
+      // Force-initialize the very first doc
       handleChange({ target: { name: 'title', value: '' } }, 0);
       handleChange({ target: { name: 'link', value: '' } }, 0);
     } else {
-      // Add a new document
       addNewDoc();
     }
   };
 
+  /** Utility function to ensure links have a protocol. */
   const formatUrl = (url: string) => {
     if (!url?.startsWith('http://') && !url?.startsWith('https://')) {
       return `http://${url}`;
@@ -47,8 +105,9 @@ const WorkingDocs = ({ handleChange, addNewDoc, docs, removeDoc, originalDocsCou
           </tr>
         </thead>
         <tbody>
-          {docs.map((doc: any, index: number) => (
+          {docs.map((doc: Doc, index: number) => (
             <tr className={styles.tr} key={index}>
+              {/* TITLE */}
               <td className={styles.td}>
                 <input
                   className={styles.input}
@@ -59,8 +118,10 @@ const WorkingDocs = ({ handleChange, addNewDoc, docs, removeDoc, originalDocsCou
                   onChange={(e) => handleDocChange(e, index)}
                 />
               </td>
+
+              {/* LINK */}
               <td className={`${styles.td} ${styles.centerAligned} ${styles.linkCell}`}>
-                {/* Change here: Always show input fields if there's only one row */}
+                {/* If there's only 1 row total, or if it's a newly added doc, show the text input. */}
                 {(docs.length === 1 || index >= originalDocsCount) ? (
                   <input
                     className={styles.input}
@@ -71,17 +132,31 @@ const WorkingDocs = ({ handleChange, addNewDoc, docs, removeDoc, originalDocsCou
                     onChange={(e) => handleDocChange(e, index)}
                   />
                 ) : (
-                  <a href={formatUrl(doc.link)} target="_blank" rel="noopener noreferrer">Link</a>
+                  // Otherwise, for older docs, show a clickable link
+                  <a href={formatUrl(doc.link || '')} target="_blank" rel="noopener noreferrer">
+                    Link
+                  </a>
                 )}
               </td>
+
+              {/* REMOVE BUTTON */}
               <td className={`${styles.td} ${styles.centerAligned} ${styles.removeButtonColumn}`}>
-                <button className={styles.removeButton} type="button" onClick={() => handleDocRemove(index)}>X</button>
+                <button
+                  className={styles.removeButton}
+                  type="button"
+                  onClick={() => handleDocRemove(index)}
+                >
+                  X
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button className={styles.button} type="button" onClick={handleAddNewDoc}>Add New Working Document</button>
+
+      <button className={styles.button} type="button" onClick={handleAddNewDoc}>
+        Add New Working Document
+      </button>
     </>
   );
 };

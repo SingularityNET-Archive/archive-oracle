@@ -42,10 +42,10 @@ const Home: NextPage = () => {
           <div>
             <ul>
               <li className={styles.listItem}>When you hover over input fields it will give you a tip on what is needed or how it works</li>
-              <li className={styles.listItem}>When you select your workgroup to submit a meeting summary, it will load all the data from the previous meeting</li>
-              <li className={styles.listItem}>{`Please select the date the meeting happened in the "Meeting Date:" dropdown`}</li>
-              <li className={styles.listItem}>{`Any changes you save will be saved to the date you selected in the "Meeting Date:" dropdown`}</li>
-              <li className={styles.listItem}>Please remember to click the save button when you are done</li>
+              <li className={styles.listItem}>When you select your workgroup it will ask how you want to proceed in creating the meeting summary</li>
+              <li className={styles.listItem}>It will give you the following options - Edit existing summary, New clean summary or New prefilled Summary</li>
+              <li className={styles.listItem}>For each of these options you need to select a date</li>
+              <li className={styles.listItem}>The tool now autosaves</li>
               <li className={styles.listItem}>Bottom left of the save button you will find the date and time the summary was last saved</li>
               <li className={styles.listItem}>Meeting summaries will be reviewed by an Archive member</li>
               <li className={styles.listItem}>When the Archive member approves the data, the GitBook and database will be updated</li>
