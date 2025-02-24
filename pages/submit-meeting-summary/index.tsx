@@ -512,6 +512,16 @@ const SubmitMeetingSummary: NextPage = () => {
 
   const currentWorkgroup = workgroups.find((wg) => wg.workgroup_id === selectedWorkgroupId);
 
+  const hasDateConflict =
+  selectionMode === "cleanNew" &&
+  newSummaryDate &&
+  meetings.some((m: any) => {
+    // Use meetingInfo.date if available to avoid timezone conversion issues.
+    const meetingDate = m.meetingInfo?.date || m.date.split("T")[0];
+    return meetingDate === newSummaryDate && m.username === myVariable.currentUser;
+  });
+
+ console.log(myVariable, meetings, newSummaryDate)
   return (
     <div className={styles.container}>
       {/* ---------- MODAL ---------- */}
@@ -523,20 +533,20 @@ const SubmitMeetingSummary: NextPage = () => {
         contentLabel="Select Summary Option"
         style={{
           overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           },
           content: {
-            position: 'relative',
-            inset: 'unset',
-            maxWidth: '500px',
-            margin: 'auto',
-            borderRadius: '8px',
-            padding: '1rem',
-            backgroundColor: '#fff'
-          }
+            position: "relative",
+            inset: "unset",
+            maxWidth: "500px",
+            margin: "auto",
+            borderRadius: "8px",
+            padding: "1rem",
+            backgroundColor: "#fff",
+          },
         }}
       >
         <h2>Select how you want to proceed</h2>
@@ -545,7 +555,7 @@ const SubmitMeetingSummary: NextPage = () => {
             <strong>Workgroup:</strong> {currentWorkgroup.workgroup}
           </p>
         )}
-        <div style={{ marginTop: '1rem' }}>
+        <div style={{ marginTop: "1rem" }}>
           {/* 1. Edit existing summary */}
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
             <input
@@ -572,17 +582,17 @@ const SubmitMeetingSummary: NextPage = () => {
           )}
 
           {/* 2. Clean new summary */}
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+          <label style={{ display: "block", marginBottom: "0.5rem" }}>
             <input
               type="radio"
               value="cleanNew"
-              checked={selectionMode === 'cleanNew'}
-              onChange={() => setSelectionMode('cleanNew')}
+              checked={selectionMode === "cleanNew"}
+              onChange={() => setSelectionMode("cleanNew")}
             />
-            Create a new **clean** summary
+            Create a new <strong>clean</strong> summary
           </label>
-          {selectionMode === 'cleanNew' && (
-            <div style={{ marginLeft: '1.5rem', marginBottom: '1rem' }}>
+          {selectionMode === "cleanNew" && (
+            <div style={{ marginLeft: "1.5rem", marginBottom: "1rem" }}>
               <label>
                 Select meeting date:{" "}
                 <input
@@ -591,29 +601,12 @@ const SubmitMeetingSummary: NextPage = () => {
                   onChange={(e) => setNewSummaryDate(e.target.value)}
                 />
               </label>
-            </div>
-          )}
-
-          {/* 3. Prefilled new summary */}
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            <input
-              type="radio"
-              value="prefilledNew"
-              checked={selectionMode === 'prefilledNew'}
-              onChange={() => setSelectionMode('prefilledNew')}
-            />
-            Create a new **prefilled** summary (from the last one)
-          </label>
-          {selectionMode === 'prefilledNew' && (
-            <div style={{ marginLeft: '1.5rem', marginBottom: '1rem' }}>
-              <label>
-                Select meeting date:{" "}
-                <input
-                  type="date"
-                  value={newSummaryDate}
-                  onChange={(e) => setNewSummaryDate(e.target.value)}
-                />
-              </label>
+              {hasDateConflict && (
+                <p style={{ color: "red", fontWeight: "bold" }}>
+                  You already have a summary for this date. Please choose a
+                  different date or choose to edit the existing summary above
+                </p>
+              )}
             </div>
           )}
 
@@ -673,21 +666,17 @@ const SubmitMeetingSummary: NextPage = () => {
           style={{ marginTop: '1rem' }}
           onClick={confirmModalSelection}
           disabled={
-            (!selectionMode) ||
+            !selectionMode ||
             (selectionMode === 'edit' && !selectedSummaryForEdit) ||
             (
-              (
-                selectionMode === 'cleanNew' ||
-                selectionMode === 'prefilledNew' ||
-                selectionMode === 'noSummaryGiven' ||
-                selectionMode === 'canceledSummary'
-              ) &&
-              !newSummaryDate
+              (selectionMode === 'cleanNew' && (!newSummaryDate || hasDateConflict)) ||
+              ((selectionMode === 'noSummaryGiven' || selectionMode === 'canceledSummary') && !newSummaryDate)
             )
           }
         >
           Confirm
         </button>
+
       </Modal>
       {/* ---------- /MODAL ---------- */}
 
