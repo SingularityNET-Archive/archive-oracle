@@ -32,6 +32,6 @@
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.9.4",
-    "@types/lodash": "^4.17.14"
+    "@types/lodash": "^4.17.15"
   }
 }
