@@ -43,7 +43,7 @@ const Home: NextPage = () => {
             <ul>
               <li className={styles.listItem}>When you hover over input fields it will give you a tip on what is needed or how it works</li>
               <li className={styles.listItem}>When you select your workgroup it will ask how you want to proceed in creating the meeting summary</li>
-              <li className={styles.listItem}>It will give you the following options - Edit existing summary, New clean summary or New prefilled Summary</li>
+              <li className={styles.listItem}>It will give you the following options - Edit existing summary or New clean summary</li>
               <li className={styles.listItem}>For each of these options you need to select a date</li>
               <li className={styles.listItem}>The tool now autosaves</li>
               <li className={styles.listItem}>Bottom left of the save button you will find the date and time the summary was last saved</li>
