@@ -1,6 +1,6 @@
 // ../components/SummaryTemplate.tsx
 import { useState, useEffect, useMemo, useRef } from "react";
-import debounce from "lodash/debounce";
+import { debounce } from 'lodash';
 import isEqual from "lodash/isEqual"; 
 import styles from '../styles/summarytemplate.module.css'; 
 import { useMyVariable } from '../context/MyVariableContext';

@@ -53,7 +53,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
 
   // Utility to add an entire new "agenda item" section
   const addAgendaItem = () => {
-    setAgendaItems((prev) => [
+    setAgendaItems((prev: any) => [
       ...prev,
       { ...getDefaultAgendaItem() }
     ]);
@@ -61,7 +61,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
 
   // Remove one entire "agenda item" section
   const removeAgendaItem = (index: number) => {
-    setAgendaItems((prev) => {
+    setAgendaItems((prev: any) => {
       const updated = [...prev];
       updated.splice(index, 1);
       return updated;
@@ -70,7 +70,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
 
   // Add a sub‐item (actionItems, discussionPoints, etc.)
   const addItem = (type: string, agendaIndex: number) => {
-    setAgendaItems((prev) => {
+    setAgendaItems((prev: any) => {
       const updated = [...prev];
   
       // Ensure the target array exists; if not, initialize it.
@@ -103,7 +103,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
 
   // Remove a sub‐item
   const removeItem = (type: string, agendaIndex: number, itemIndex: number) => {
-    setAgendaItems((prev) => {
+    setAgendaItems((prev: any) => {
       const updated = [...prev];
       updated[agendaIndex][type].splice(itemIndex, 1);
       return updated;
@@ -117,7 +117,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
     itemIdx: number,
     updatedItem: any
   ) => {
-    setAgendaItems((prev) => {
+    setAgendaItems((prev: any) => {
       const cloned = JSON.parse(JSON.stringify(prev));
 
       // Some fields (narrative, discussion, etc.) are single text fields
@@ -152,7 +152,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={item.townHallUpdates}
               agendaIndex={agendaIndex}
               itemIndex={0}
-              onUpdate={(aIdx, iIdx, updated) =>
+              onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                 handleItemUpdate("townHallUpdates", aIdx, iIdx, updated)
               }
               onRemove={removeItem}
@@ -173,7 +173,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={item.narrative}
               agendaIndex={agendaIndex}
               itemIndex={0}
-              onUpdate={(aIdx, iIdx, updated) =>
+              onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                 handleItemUpdate("narrative", aIdx, iIdx, updated)
               }
               onRemove={removeItem}
@@ -194,7 +194,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={item.discussion}
               agendaIndex={agendaIndex}
               itemIndex={0}
-              onUpdate={(aIdx, iIdx, updated) =>
+              onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                 handleItemUpdate("discussion", aIdx, iIdx, updated)
               }
               onRemove={removeItem}
@@ -217,7 +217,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
                 item={topic}
                 agendaIndex={agendaIndex}
                 itemIndex={idx}
-                onUpdate={(aIdx, iIdx, updated) =>
+                onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                   handleItemUpdate("meetingTopics", aIdx, iIdx, updated)
                 }
                 onRemove={removeItem}
@@ -248,7 +248,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
                 item={pt}
                 agendaIndex={agendaIndex}
                 itemIndex={idx}
-                onUpdate={(aIdx, iIdx, updated) =>
+                onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                   handleItemUpdate("discussionPoints", aIdx, iIdx, updated)
                 }
                 onRemove={removeItem}
@@ -278,7 +278,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={action}
               agendaIndex={agendaIndex}
               itemIndex={actionIdx}
-              onUpdate={(aIdx, iIdx, updated) =>
+              onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                 handleItemUpdate("actionItems", aIdx, iIdx, updated)
               }
               onRemove={removeItem}
@@ -307,7 +307,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={dec}
               agendaIndex={agendaIndex}
               itemIndex={decIdx}
-              onUpdate={(aIdx, iIdx, updated) =>
+              onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                 handleItemUpdate("decisionItems", aIdx, iIdx, updated)
               }
               onRemove={removeItem}
@@ -335,7 +335,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={item.gameRules}
               agendaIndex={agendaIndex}
               itemIndex={0}
-              onUpdate={(aIdx, iIdx, updated) =>
+              onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                 handleItemUpdate("gameRules", aIdx, iIdx, updated)
               }
               onRemove={removeItem}
@@ -356,7 +356,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
               item={item.townHallSummary}
               agendaIndex={agendaIndex}
               itemIndex={0}
-              onUpdate={(aIdx, iIdx, updated) =>
+              onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                 handleItemUpdate("townHallSummary", aIdx, iIdx, updated)
               }
               onRemove={removeItem}
@@ -379,7 +379,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
                 item={lb}
                 agendaIndex={agendaIndex}
                 itemIndex={lbIdx}
-                onUpdate={(aIdx, iIdx, updated) =>
+                onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                   handleItemUpdate("leaderboard", aIdx, iIdx, updated)
                 }
                 onRemove={removeItem}
@@ -410,7 +410,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
                 item={lp}
                 agendaIndex={agendaIndex}
                 itemIndex={lpIdx}
-                onUpdate={(aIdx, iIdx, updated) =>
+                onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                   handleItemUpdate("learningPoints", aIdx, iIdx, updated)
                 }
                 onRemove={removeItem}
@@ -441,7 +441,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
                 item={issue}
                 agendaIndex={agendaIndex}
                 itemIndex={issueIdx}
-                onUpdate={(aIdx, iIdx, updated) =>
+                onUpdate={(aIdx: any, iIdx: any, updated: any) =>
                   handleItemUpdate("issues", aIdx, iIdx, updated)
                 }
                 onRemove={removeItem}
