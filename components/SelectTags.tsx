@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useMyVariable } from '../context/MyVariableContext';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
 import CreatableSelect from 'react-select/creatable';
 import { saveNewTags } from '../utils/saveNewTags'
 
@@ -11,7 +11,7 @@ interface SelectTagsProps {
 }
 
 const SelectTags: React.FC<SelectTagsProps> = ({ onSelect, initialValue, type }) => {
-  let initialOptions = initialValue ? initialValue.split(", ").map((val: any) => ({ label: val, value: val })) : [];
+  let initialOptions = initialValue ? initialValue.split(", ").map((val) => ({ label: val, value: val })) : [];
   const [selectedLabels, setSelectedLabels] = React.useState(initialOptions);
   const { myVariable } = useMyVariable();
   const options = myVariable.tags[`${type}`] ||  [

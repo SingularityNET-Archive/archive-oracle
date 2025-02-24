@@ -96,13 +96,15 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
   }, [meetingInfo.purpose]);
 
   // Generic handler for top-level text fields
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setMeetingInfo((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
+  };  
   
   useEffect(() => {
     onUpdate(meetingInfo);
