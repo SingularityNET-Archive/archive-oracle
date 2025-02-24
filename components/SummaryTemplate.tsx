@@ -1,7 +1,7 @@
 // ../components/SummaryTemplate.tsx
 import { useState, useEffect, useMemo, useRef } from "react";
 import { debounce } from 'lodash';
-import isEqual from "lodash/isEqual"; 
+import { isEqual } from "lodash"; 
 import styles from '../styles/summarytemplate.module.css'; 
 import { useMyVariable } from '../context/MyVariableContext';
 import SummaryMeetingInfo from './SummaryMeetingInfo'
