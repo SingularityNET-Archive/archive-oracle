@@ -518,6 +518,8 @@ const SubmitMeetingSummary: NextPage = () => {
       <Modal
         isOpen={showModal}
         onRequestClose={() => setShowModal(false)}
+        shouldCloseOnOverlayClick={false}
+        shouldCloseOnEsc={false}
         contentLabel="Select Summary Option"
         style={{
           overlay: {
