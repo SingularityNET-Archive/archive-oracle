@@ -26,7 +26,7 @@ const SelectTags: React.FC<SelectTagsProps> = ({ onSelect, initialValue, type })
   }, [initialValue]);
 
   const debouncedHandleInputChange = useMemo(
-    () => debounce(async (selected) => {
+    () => debounce(async (selected: any) => {
       setSelectedLabels(selected);  // Update local state
       const labs: string[] = selected.map((item: any) => item.label);
       const status = await saveNewTags(labs, type);

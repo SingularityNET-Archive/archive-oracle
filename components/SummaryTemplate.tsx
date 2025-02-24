@@ -126,7 +126,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
 
   // Debounced auto-save logic
   const debouncedAutoSave = useMemo(
-    () => debounce(async (latestData) => {
+    () => debounce(async (latestData: any) => {
       await autoSave(latestData);
     }, 1000),
     []
