@@ -17,13 +17,22 @@ const ArchiveSummaries = () => {
     workgroup: myVariable.summary?.workgroup || "",
     meetingSummary: generateMarkdown(myVariable.summary),
     meeting_id: myVariable.summary?.meeting_id || "",
-    confirmed: myVariable.summary?.confirmed || false
+    confirmed: myVariable.summary?.confirmed || false,
+    noSummaryGivenText: myVariable.summary?.noSummaryGivenText || "",
+    canceledSummaryText: myVariable.summary?.canceledSummaryText || ""
   });
   const [commitToGitBook, setCommitToGitBook] = useState(true);
   const [sendToDiscord, setSendToDiscord] = useState(true);
   const [renderedMarkdown, setRenderedMarkdown] = useState("");
   const formattedDate = new Date(formData.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       
+  // Determine which text value to use based on summary type:
+  const summaryText = myVariable.summary.noSummaryGiven
+    ? formData.noSummaryGivenText
+    : myVariable.summary.canceledSummary
+      ? formData.canceledSummaryText
+      : formData.meetingSummary;
+
   useEffect(() => {
     setRenderedMarkdown(formData.meetingSummary);
     console.log(formData.meetingSummary, myVariable.summary)
@@ -38,7 +47,9 @@ const ArchiveSummaries = () => {
         workgroup: myVariable.summary?.workgroup || "",
         meetingSummary: generateMarkdown(myVariable.summary, currentOrder),
         meeting_id: myVariable.summary?.meeting_id || "",
-        confirmed: myVariable.summary?.confirmed || false
+        confirmed: myVariable.summary?.confirmed || false,
+        noSummaryGivenText: myVariable.summary?.noSummaryGivenText || "",
+        canceledSummaryText: myVariable.summary?.canceledSummaryText || ""
       });
       setRenderedMarkdown(generateMarkdown(myVariable.summary, currentOrder));
     }
@@ -57,12 +68,26 @@ const ArchiveSummaries = () => {
     if (type === "checkbox") {
       const checked = (e.target as HTMLInputElement).checked;
       name === "commitToGitBook" ? setCommitToGitBook(checked) : setSendToDiscord(checked);
-    } else if (name == 'date' && (myVariable.summary?.noSummaryGiven == true || myVariable.summary?.canceledSummary == true)) {
-      console.log(myVariable, formData, value)
-      setFormData({ ...formData, [name]: value, confirmed: false });
+    } else if (myVariable.summary.noSummaryGiven) {
+      // Update the noSummaryGiven text field when in that mode
+      setFormData((prev) => ({
+        ...prev,
+        noSummaryGivenText: value,
+      }));
+      setSendToDiscord(false);
+    } else if (myVariable.summary.canceledSummary) {
+      // Update the canceledSummary text field when in that mode
+      setFormData((prev) => ({
+        ...prev,
+        canceledSummaryText: value,
+      }));
       setSendToDiscord(false);
     } else {
-      setFormData({ ...formData, [name]: value });
+      // Regular meeting summary update
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
     if (name === 'meetingSummary') {
       adjustTextareaHeight();
@@ -73,10 +98,37 @@ const ArchiveSummaries = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    if (myVariable.summary?.noSummaryGiven == true || myVariable.summary?.canceledSummary == true) {
-      const data: any = await saveCustomAgenda(myVariable.summary);
-      console.log(data);
-    }
+
+    let currentMeetingId = formData.meeting_id;
+  
+    // If this is a noSummary or canceled summary and meeting_id is missing, save first
+    if ((myVariable.summary?.noSummaryGiven || myVariable.summary?.canceledSummary) && !currentMeetingId) {
+      // Merge the updated text fields from formData into the summary object
+      const updatedSummary = {
+        ...myVariable.summary,
+        noSummaryGivenText: formData.noSummaryGivenText,
+        canceledSummaryText: formData.canceledSummaryText,
+      };
+      const data: any = await saveCustomAgenda(updatedSummary);
+      if (data && data[0]?.meeting_id) {
+        currentMeetingId = data[0].meeting_id;
+        // Update context and state with the new meeting_id
+        setMyVariable(prev => ({
+          ...prev,
+          summary: {
+            ...prev.summary,
+            meeting_id: currentMeetingId,
+            noSummaryGivenText: formData.noSummaryGivenText,
+            canceledSummaryText: formData.canceledSummaryText,
+          }
+        }));        
+        setFormData(prev => ({
+          ...prev,
+          meeting_id: currentMeetingId
+        }));
+      }
+    }    
+
     // Check if there are any confirmed summaries with the same date
     const isDuplicateConfirmedSummary = myVariable.summaries.some((summary: any) => {
       // Convert both dates to Date objects to strip off the time part
@@ -94,41 +146,36 @@ const ArchiveSummaries = () => {
     }
   
      if (!formData.confirmed) {
+      const payload = { ...formData, meeting_id: currentMeetingId };
       if (commitToGitBook) {
-        const data = await updateGitbook(formData);
+        const data = await updateGitbook(payload);
         if (data) {
           setMyVariable(prevState => ({
             ...prevState,
-            summary: {
-              ...prevState.summary,
-              confirmed: true,
-            },
+            summary: { ...prevState.summary, confirmed: true },
           }));
         }
       } else {
-        await confirmedStatusUpdate(formData);
+        await confirmedStatusUpdate(payload);
         setMyVariable(prevState => ({
           ...prevState,
-          summary: {
-            ...prevState.summary,
-            confirmed: true,
-          },
+          summary: { ...prevState.summary, confirmed: true },
         }));
       }
-
+    
       if (sendToDiscord) {
         await sendDiscordMessage(myVariable, renderedMarkdown);
       }
     } else {
-      if (myVariable.summary.noSummaryGiven == true || myVariable.summary.canceledSummary == true) {
-        alert('Select a date')
+      if (myVariable.summary.noSummaryGiven || myVariable.summary.canceledSummary) {
+        alert('Select a date');
       } else {
         alert('Summary already archived');
       }
     }
     
     setLoading(false);
-  }  
+  }
   
   return (
     <div className={styles['main-container']}>
@@ -155,6 +202,7 @@ const ArchiveSummaries = () => {
                   onChange={handleChange}
                   className={styles['form-input']}
                 />
+
                 <label className={styles['form-label']}>
                   Workgroup:
                 </label>
@@ -166,40 +214,45 @@ const ArchiveSummaries = () => {
                   className={styles['form-input']}
                   autoComplete="off"
                 />
+
                 <label className={styles['form-label']}>
                   Meeting Summary Markdown:
                 </label>
                 <textarea
                   ref={textareaRef}
-                  name="meetingSummary"
-                  value={formData.meetingSummary}
+                  name="meetingSummary" 
+                  value={summaryText}
                   onChange={handleChange}
                   className={styles['meeting-summary-textarea']}
                   autoComplete="off"
                 />
+
                 <button type="submit" disabled={loading} className={styles['submit-button']}>
                   {loading ? "Loading..." : "Submit"}
                 </button>
+
                 <div className={styles['form-checkbox']}>
-                <input
-                  type="checkbox"
-                  id="commitToGitBook"
-                  name="commitToGitBook"
-                  checked={commitToGitBook}
-                  onChange={handleChange}
-                />
-                <label htmlFor="commitToGitBook">Commit to GitBook</label>
-              </div>
-              <div className={styles['form-checkbox']}>
-                <input
-                  type="checkbox"
-                  id="sendToDiscord"
-                  name="sendToDiscord"
-                  checked={sendToDiscord}
-                  onChange={handleChange}
-                />
-                <label htmlFor="sendToDiscord">Send Discord Message</label>
-              </div>
+                  <input
+                    type="checkbox"
+                    id="commitToGitBook"
+                    name="commitToGitBook"
+                    checked={commitToGitBook}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="commitToGitBook">Commit to GitBook</label>
+                </div>
+
+                <div className={styles['form-checkbox']}>
+                  <input
+                    type="checkbox"
+                    id="sendToDiscord"
+                    name="sendToDiscord"
+                    checked={sendToDiscord}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="sendToDiscord">Send Discord Message</label>
+                </div>
+
               </form>
             </div>
             <div className={styles['markdown-rendered']}>

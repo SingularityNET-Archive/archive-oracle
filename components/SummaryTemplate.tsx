@@ -60,7 +60,9 @@ const defaultFormData = {
   tags: { topicsCovered: "", emotions: "", other: "", gamesPlayed: "" },
   type: "Custom",
   noSummaryGiven: false,
-  canceledSummary: false
+  canceledSummary: false,
+  noSummaryGivenText: "No Summary Given",
+  canceledSummaryText: "Meeting was cancelled"
 };
 
 function formatTimestampForPdf(timestamp: any) {
