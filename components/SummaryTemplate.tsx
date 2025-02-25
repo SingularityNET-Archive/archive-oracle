@@ -106,15 +106,13 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
   // Only set local formData from context once:
   // ------------------------------------------
   useEffect(() => {
-    if (!initializedRef.current && myVariable.summary) {
-      initializedRef.current = true;
+    // Only update if the workgroup name has actually changed
+    if (myVariable.summary && myVariable.summary.workgroup !== formData.workgroup) {
       const filtered = filterFormData(myVariable.summary);
       setFormData(filtered);
-      if (filtered.tags) {
-        setTags(filtered.tags);
-      }
+      setTags(filtered.tags || {});
     }
-  }, [myVariable.summary]);
+  }, [myVariable.summary]);  
 
   // Keep formData.tags in sync with local tags:
   useEffect(() => {
@@ -269,7 +267,7 @@ const SummaryTemplate = ({ updateMeetings }: SummaryTemplateProps) => {
       )}
       {!loading && (
         <div className={styles['form-container']}>
-          <h2>{formData.workgroup} {formData.meetingInfo.date}</h2>
+          <h2>{myVariable.summary?.workgroup} {formData.meetingInfo.date}</h2>
           <div className={styles['gitbook-form']}>
             {/* Meeting Info */}
             {formData.meetingInfo.name && (
