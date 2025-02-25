@@ -242,12 +242,11 @@ export function generateMarkdown(summary, order) {
     if (gamesPlayed) markdown += `- **games played:** ${gamesPlayed}\n`;
   }
 
-  if (summary.noSummaryGiven == true) {
-    markdown += `No Summary Given \n`;
+  if (summary.noSummaryGiven === true) {
+    markdown += `${summary.noSummaryGivenText || "No Summary Given"}\n`;
   }
-  //canceledSummary
-  if (summary.canceledSummary == true) {
-    markdown += `Meeting was cancelled \n`;
+  if (summary.canceledSummary === true) {
+    markdown += `${summary.canceledSummaryText || "Meeting was cancelled"}\n`;
   }
   return markdown;
 };

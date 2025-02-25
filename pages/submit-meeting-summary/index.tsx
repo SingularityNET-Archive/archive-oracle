@@ -373,6 +373,8 @@ const SubmitMeetingSummary: NextPage = () => {
         type: "Custom",
         noSummaryGiven: false,
         canceledSummary: false,
+        noSummaryGivenText: "No Summary Given",
+        canceledSummaryText: "Meeting was cancelled",
         updated_at: new Date()
       };
 
@@ -403,7 +405,9 @@ const SubmitMeetingSummary: NextPage = () => {
           updated_at: new Date(),
           confirmed: false,
           noSummaryGiven: false,
-          canceledSummary: false
+          canceledSummary: false,
+          noSummaryGivenText: "No Summary Given",
+          canceledSummaryText: "Meeting was cancelled"
         };
         setMyVariable((prev) => ({
           ...prev,
@@ -442,6 +446,8 @@ const SubmitMeetingSummary: NextPage = () => {
           type: "Custom",
           noSummaryGiven: false,
           canceledSummary: false,
+          noSummaryGivenText: "No Summary Given",
+          canceledSummaryText: "Meeting was cancelled",
           updated_at: new Date()
         };
         setMyVariable((prev) => ({
@@ -469,6 +475,7 @@ const SubmitMeetingSummary: NextPage = () => {
         tags: {},
         noSummaryGiven: true,
         canceledSummary: false,
+        noSummaryGivenText: "No Summary Given",
         updated_at: new Date()
       };
       setMyVariable((prev) => ({
@@ -495,6 +502,7 @@ const SubmitMeetingSummary: NextPage = () => {
         tags: {},
         noSummaryGiven: false,
         canceledSummary: true,
+        canceledSummaryText: "Meeting was cancelled",
         updated_at: new Date()
       };
       setMyVariable((prev) => ({

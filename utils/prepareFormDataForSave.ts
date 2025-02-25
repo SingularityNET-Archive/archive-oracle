@@ -1,7 +1,7 @@
 // ../utils/prepareFormDataForSave.ts
 
 export function prepareFormDataForSave(rawData: any) {
-    const filteredWorkingDocs = rawData.meetingInfo.workingDocs.filter(
+    const filteredWorkingDocs = rawData.meetingInfo?.workingDocs?.filter(
       (doc: any) => doc.title || doc.link
     );
     let newData = {
@@ -10,8 +10,11 @@ export function prepareFormDataForSave(rawData: any) {
         ...rawData.meetingInfo,
         workingDocs: filteredWorkingDocs,
       },
-      noSummaryGiven: false,
-      canceledSummary: false,
+      noSummaryGiven: rawData.noSummaryGiven || false,
+      canceledSummary: rawData.canceledSummary || false,
+      noSummaryGivenText: rawData.noSummaryGivenText || "",
+      canceledSummaryText: rawData.canceledSummaryText || "",
+      type: 'custom'
     };
   
     // Specify the root-level keys you want to remove
