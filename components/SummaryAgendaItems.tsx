@@ -210,7 +210,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
         <>
           <h3>Meeting Topics</h3>
           <div className={styles['discussion-points']}>
-            {item.meetingTopics.map((topic: any, idx: number) => (
+            {item.meetingTopics?.map((topic: any, idx: number) => (
               <Item
                 key={`${agendaIndex}-meetingtopic-${idx}`}
                 type="meetingTopics"
@@ -372,7 +372,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
         <>
           <h3>Leaderboard</h3>
           <div className={styles['discussion-points']}>
-            {item.leaderboard.map((lb: any, lbIdx: number) => (
+            {item.leaderboard?.map((lb: any, lbIdx: number) => (
               <Item
                 key={`${agendaIndex}-leaderboard-${lbIdx}`}
                 type="leaderboard"
@@ -403,7 +403,7 @@ const SummaryAgendaItems = ({ onUpdate }: any) => {
         <>
           <h3>Learning Points</h3>
           <div className={styles['discussion-points']}>
-            {item.learningPoints.map((lp: any, lpIdx: number) => (
+            {item.learningPoints?.map((lp: any, lpIdx: number) => (
               <Item
                 key={`${agendaIndex}-learning-${lpIdx}`}
                 type="learningPoints"
