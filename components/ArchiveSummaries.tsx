@@ -146,7 +146,19 @@ const ArchiveSummaries = () => {
     }
   
      if (!formData.confirmed) {
-      const payload = { ...formData, meeting_id: currentMeetingId };
+
+      const finalMeetingSummary = myVariable.summary.noSummaryGiven
+        ? formData.noSummaryGivenText
+        : myVariable.summary.canceledSummary
+          ? formData.canceledSummaryText
+          : formData.meetingSummary;
+      
+      const payload = { 
+        ...formData, 
+        meeting_id: currentMeetingId, 
+        meetingSummary: finalMeetingSummary 
+      };
+      
       if (commitToGitBook) {
         const data = await updateGitbook(payload);
         if (data) {
