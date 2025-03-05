@@ -581,8 +581,8 @@ const SubmitMeetingSummary: NextPage = () => {
             >
               <option value="">Choose existing summary</option>
               {meetings.map((meeting) => (
-                <option key={meeting.meeting_id} value={meeting.meeting_id}>
-                  {formatDate(meeting.date)} - {meeting.username}
+                <option key={meeting.meeting_id} value={meeting.meeting_id} style={{ color: meeting.confirmed ? 'lightgreen' : 'black' }}>
+                  {formatDate(meeting.date)} - {meeting.username} {meeting.confirmed ? 'Archived' : ''}
                 </option>
               ))}
             </select>
