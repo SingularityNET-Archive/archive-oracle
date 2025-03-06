@@ -19,7 +19,9 @@ const ArchiveSummaries = () => {
     meeting_id: myVariable.summary?.meeting_id || "",
     confirmed: myVariable.summary?.confirmed || false,
     noSummaryGivenText: myVariable.summary?.noSummaryGivenText || "",
-    canceledSummaryText: myVariable.summary?.canceledSummaryText || ""
+    canceledSummaryText: myVariable.summary?.canceledSummaryText || "",
+    canceledSummary: myVariable.summary?.canceledSummary || false,
+    noSummaryGiven: myVariable.summary?.noSummaryGiven || false,
   });
   const [commitToGitBook, setCommitToGitBook] = useState(true);
   const [sendToDiscord, setSendToDiscord] = useState(true);
@@ -35,7 +37,7 @@ const ArchiveSummaries = () => {
 
   useEffect(() => {
     setRenderedMarkdown(formData.meetingSummary);
-    console.log(formData.meetingSummary, myVariable.summary)
+    console.log("useEffect", formData, myVariable.summary)
   }, [formData.meetingSummary]);
 
   useEffect(() => {
@@ -49,7 +51,9 @@ const ArchiveSummaries = () => {
         meeting_id: myVariable.summary?.meeting_id || "",
         confirmed: myVariable.summary?.confirmed || false,
         noSummaryGivenText: myVariable.summary?.noSummaryGivenText || "",
-        canceledSummaryText: myVariable.summary?.canceledSummaryText || ""
+        canceledSummaryText: myVariable.summary?.canceledSummaryText || "",
+        canceledSummary: myVariable.summary?.canceledSummary || false,
+        noSummaryGiven: myVariable.summary?.noSummaryGiven || false,
       });
       setRenderedMarkdown(generateMarkdown(myVariable.summary, currentOrder));
     }
@@ -107,7 +111,7 @@ const ArchiveSummaries = () => {
       const updatedSummary = {
         ...myVariable.summary,
         noSummaryGivenText: formData.noSummaryGivenText,
-        canceledSummaryText: formData.canceledSummaryText,
+        canceledSummaryText: formData.canceledSummaryText
       };
       const data: any = await saveCustomAgenda(updatedSummary);
       if (data && data[0]?.meeting_id) {
