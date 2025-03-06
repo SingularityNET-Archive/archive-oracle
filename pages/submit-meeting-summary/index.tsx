@@ -217,15 +217,18 @@ const SubmitMeetingSummary: NextPage = () => {
   async function handleSelectChange2(e: any) {
     const newSelectedMeetingId = e.target.value;
     setSelectedMeetingId(newSelectedMeetingId);
-
+  
     const selectedSummary = meetings.find((m: any) => m.meeting_id === newSelectedMeetingId);
     if (selectedSummary) {
       setMyVariable((prev) => ({
         ...prev,
-        summary: selectedSummary
+        summary: {
+          ...selectedSummary,
+          username: prev.currentUser, 
+        }
       }));
     }
-  }
+  }  
 
   // -----------------------------------------
   // Add New Workgroup logic
@@ -714,6 +717,27 @@ const SubmitMeetingSummary: NextPage = () => {
                   )}
                 </select>
               </div>
+            )}
+            {false && workgroups.length > 0 && meetings?.length > 0 && myVariable.roles?.isAdmin && (
+              <>
+                <div className={styles['column-flex']}>
+                  <label className={styles['form-label']} htmlFor="">Select previous meeting data</label>
+                  <select
+                    name="" id=""
+                    className={styles.select}
+                    value={selectedMeetingId} onChange={handleSelectChange2}
+                    title="Defaults to latest meeting, only change this when you want to use a previous meeting as template">
+                    {meetings.map((meeting: any) => (
+                      <option
+                        style={{ color: meeting.confirmed ? 'lightgreen' : 'black' }}
+                        key={`${meeting.meeting_id}-${meeting.updated_at}`}
+                        value={meeting.meeting_id}>
+                        {formatDate(meeting.date)} {meeting.username} {meeting.confirmed ? 'Archived' : ''}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </>
             )}
 
             {showNewWorkgroupInput && (
