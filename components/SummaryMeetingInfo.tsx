@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import styles from '../styles/meetinginfo.module.css'; 
+import styles from '../styles/meetinginfo.module.css';
 import { useMyVariable } from '../context/MyVariableContext';
 import SelectNames from './SelectNames';
 import WorkingDocs from './WorkingDocs';
-import TimestampedVideo from './TimestampedVideo'; 
+import TimestampedVideo from './TimestampedVideo';
 import { MeetingTypeSelect } from './meeting/MeetingTypeSelect';
 
 type SummaryMeetingInfoProps = {
@@ -14,7 +14,7 @@ type SummaryMeetingInfoProps = {
 const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUpdate }) => {
   const { myVariable } = useMyVariable();
 
-  // Track which meeting_id we have “locally”
+  // Track which meeting_id we have "locally"
   const [localMeetingId, setLocalMeetingId] = useState(myVariable.summary?.meeting_id || null);
 
   // Pull initial meeting info:
@@ -42,7 +42,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
     otherMediaLink: initialInfo.otherMediaLink || "",
     transcriptLink: initialInfo.transcriptLink || "",
     mediaLink: initialInfo.mediaLink || "",
-    workingDocs: initialDocs,
+    workingDocs: initialDocs.length === 0 ? [{ title: "", link: "" }] : initialDocs,
     timestampedVideo: initialInfo.timestampedVideo || { url: "", intro: "", timestamps: "" }
   });
 
@@ -78,7 +78,7 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       setLocalMeetingId(currentId);
       // If you want to reset originalDocsCount whenever you load a new summary,
       // you could do that here, but that implies re-setting state, etc.
-      // For now, we’ll just leave it as is.
+      // For now, we'll just leave it as is.
     }
   }, [myVariable.summary?.meeting_id, localMeetingId]);
 
@@ -104,8 +104,8 @@ const SummaryMeetingInfo: React.FC<SummaryMeetingInfoProps> = ({ workgroup, onUp
       ...prev,
       [name]: value,
     }));
-  };  
-  
+  };
+
   useEffect(() => {
     onUpdate(meetingInfo);
   }, [meetingInfo, onUpdate]);

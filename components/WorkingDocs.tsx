@@ -1,4 +1,4 @@
-import styles from '../styles/workingDocsTable.module.css'; 
+import styles from '../styles/workingDocsTable.module.css';
 
 type Doc = {
   title?: string;
@@ -10,7 +10,7 @@ type WorkingDocsProps = {
   docs: Doc[];
   /**
    * Number of docs that existed in the DB before.
-   * If `index < originalDocsCount`, we treat it as an “existing doc”.
+   * If `index < originalDocsCount`, we treat it as an "existing doc".
    * Otherwise, it's a newly added doc.
    */
   originalDocsCount: number;
@@ -18,7 +18,7 @@ type WorkingDocsProps = {
   /** Called when a NEW doc changes (indexes >= originalDocsCount). */
   handleChange: (e: any, newDocIndex: number) => void;
 
-  /** Called when the user clicks “Add New Working Document”. */
+  /** Called when the user clicks "Add New Working Document". */
   addNewDoc: () => void;
 
   /** Called to remove a NEW doc from the parent's state. */
@@ -26,7 +26,7 @@ type WorkingDocsProps = {
 
   /**
    * Called to update an OLD doc (i.e. in DB).
-   * If `e === null`, it means remove. Otherwise it’s a change event.
+   * If `e === null`, it means remove. Otherwise it's a change event.
    */
   updateMyVariable: (e: any | null, oldDocIndex: number) => void;
 };
@@ -56,9 +56,9 @@ const WorkingDocs = ({
   };
 
   /**
-   * Called when the user clicks the “X” to remove a doc row.
-   * If it’s an existing doc, call `updateMyVariable(null, index)`.
-   * If it’s a new doc, call `removeDoc(...)`.
+   * Called when the user clicks the "X" to remove a doc row.
+   * If it's an existing doc, call `updateMyVariable(null, index)`.
+   * If it's a new doc, call `removeDoc(...)`.
    */
   const handleDocRemove = (index: number) => {
     if (index < originalDocsCount) {
@@ -71,15 +71,14 @@ const WorkingDocs = ({
   };
 
   /**
-   * Called when the user clicks “Add New Working Document”.
+   * Called when the user clicks "Add New Working Document".
    * If we currently have 0 docs, we initialize the first doc as empty.
    * Otherwise, we call `addNewDoc()` to push another blank doc to local.
    */
   const handleAddNewDoc = () => {
     if (docs.length === 0) {
-      // Force-initialize the very first doc
-      handleChange({ target: { name: 'title', value: '' } }, 0);
-      handleChange({ target: { name: 'link', value: '' } }, 0);
+      // For the first doc, we want it to be treated as a new doc
+      addNewDoc();
     } else {
       addNewDoc();
     }
@@ -121,8 +120,7 @@ const WorkingDocs = ({
 
               {/* LINK */}
               <td className={`${styles.td} ${styles.centerAligned} ${styles.linkCell}`}>
-                {/* If there's only 1 row total, or if it's a newly added doc, show the text input. */}
-                {(docs.length === 1 || index >= originalDocsCount) ? (
+                {index >= originalDocsCount || docs.length === 1 ? (
                   <input
                     className={styles.input}
                     type="text"
@@ -132,7 +130,7 @@ const WorkingDocs = ({
                     onChange={(e) => handleDocChange(e, index)}
                   />
                 ) : (
-                  // Otherwise, for older docs, show a clickable link
+                  // For existing docs, show a clickable link
                   <a href={formatUrl(doc.link || '')} target="_blank" rel="noopener noreferrer">
                     Link
                   </a>
