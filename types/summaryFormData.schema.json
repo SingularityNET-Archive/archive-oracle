@@ -1,0 +1,405 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/SingularityNET-Archive/archive-oracle/refs/heads/main/types/summaryFormData.schema.json",
+    "title": "Meeting Summary Form Data",
+    "description": "Schema for the default meeting summary form data used in SummaryTemplate.",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "workgroup": {
+            "type": "string",
+            "description": "Human-readable workgroup name"
+        },
+        "workgroup_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Workgroup UUID"
+        },
+        "meetingInfo": {
+            "$ref": "#/definitions/MeetingInfo"
+        },
+        "agendaItems": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/AgendaItem"
+            },
+            "description": "List of agenda items for the meeting"
+        },
+        "tags": {
+            "$ref": "#/definitions/Tags"
+        },
+        "type": {
+            "type": "string",
+            "description": "Template type",
+            "enum": [
+                "custom",
+                "Custom"
+            ]
+        },
+        "noSummaryGiven": {
+            "type": "boolean",
+            "default": false
+        },
+        "canceledSummary": {
+            "type": "boolean",
+            "default": false
+        },
+        "noSummaryGivenText": {
+            "type": "string",
+            "default": "No Summary Given"
+        },
+        "canceledSummaryText": {
+            "type": "string",
+            "default": "Meeting was cancelled"
+        }
+    },
+    "required": [
+        "workgroup",
+        "workgroup_id",
+        "meetingInfo",
+        "agendaItems"
+    ],
+    "definitions": {
+        "WorkingDoc": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "link": {
+                    "type": "string"
+                }
+            }
+        },
+        "TimestampedVideo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "intro": {
+                    "type": "string"
+                },
+                "timestamps": {
+                    "type": "string"
+                }
+            }
+        },
+        "MeetingInfo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string",
+                    "description": "Date picked from a date input (YYYY-MM-DD). Allow empty before selection.",
+                    "pattern": "^$|^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "documenter": {
+                    "type": "string"
+                },
+                "translator": {
+                    "type": "string"
+                },
+                "peoplePresent": {
+                    "type": "string"
+                },
+                "purpose": {
+                    "type": "string"
+                },
+                "townHallNumber": {
+                    "type": "string"
+                },
+                "googleSlides": {
+                    "type": "string"
+                },
+                "meetingVideoLink": {
+                    "type": "string"
+                },
+                "miroBoardLink": {
+                    "type": "string"
+                },
+                "otherMediaLink": {
+                    "type": "string"
+                },
+                "transcriptLink": {
+                    "type": "string"
+                },
+                "mediaLink": {
+                    "type": "string"
+                },
+                "workingDocs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/WorkingDoc"
+                    }
+                },
+                "timestampedVideo": {
+                    "$ref": "#/definitions/TimestampedVideo"
+                }
+            },
+            "required": [
+                "name",
+                "date"
+            ]
+        },
+        "ActionItem": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "text": {
+                    "type": "string"
+                },
+                "assignee": {
+                    "type": "string"
+                },
+                "dueDate": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "todo",
+                        "in progress",
+                        "done",
+                        "cancelled"
+                    ]
+                }
+            },
+            "required": [
+                "status"
+            ]
+        },
+        "DecisionItem": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "decision": {
+                    "type": "string"
+                },
+                "rationale": {
+                    "type": "string"
+                },
+                "opposing": {
+                    "type": "string"
+                },
+                "effect": {
+                    "type": "string",
+                    "enum": [
+                        "",
+                        "affectsOnlyThisWorkgroup",
+                        "mayAffectOtherPeople"
+                    ]
+                }
+            }
+        },
+        "AgendaItem": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "agenda": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "carry over",
+                        "resolved"
+                    ]
+                },
+                "townHallUpdates": {
+                    "type": "string"
+                },
+                "townHallSummary": {
+                    "type": "string"
+                },
+                "narrative": {
+                    "type": "string"
+                },
+                "discussion": {
+                    "type": "string"
+                },
+                "gameRules": {
+                    "type": "string"
+                },
+                "leaderboard": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "meetingTopics": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "issues": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "actionItems": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ActionItem"
+                    }
+                },
+                "decisionItems": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DecisionItem"
+                    }
+                },
+                "discussionPoints": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "learningPoints": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "status"
+            ]
+        },
+        "Tags": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "topicsCovered": {
+                    "type": "string"
+                },
+                "emotions": {
+                    "type": "string"
+                },
+                "other": {
+                    "type": "string"
+                },
+                "gamesPlayed": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "examples": [
+        {
+            "workgroup": "Ambassador Town Hall",
+            "workgroup_id": "72ce0bc0-276e-4cde-bfb9-cdabc5ed953e",
+            "meetingInfo": {
+                "name": "Weekly",
+                "date": "2025-09-10",
+                "host": "Alice",
+                "documenter": "Bob",
+                "translator": "Carol",
+                "peoplePresent": "Alice, Bob, Carol",
+                "purpose": "Weekly update and planning",
+                "townHallNumber": "42",
+                "googleSlides": "https://slides.example.com/presentation",
+                "meetingVideoLink": "https://video.example.com/watch?v=123",
+                "miroBoardLink": "https://miro.com/app/board/xyz",
+                "otherMediaLink": "https://example.com/media",
+                "transcriptLink": "https://example.com/transcript",
+                "mediaLink": "https://example.com/media/extra",
+                "workingDocs": [
+                    {
+                        "title": "Agenda Doc",
+                        "link": "https://docs.example.com/agenda"
+                    },
+                    {
+                        "title": "Notes Doc",
+                        "link": "https://docs.example.com/notes"
+                    }
+                ],
+                "timestampedVideo": {
+                    "url": "https://youtube.com/abc",
+                    "intro": "Welcome and agenda",
+                    "timestamps": "00:00 Intro\n02:15 Topic A\n10:45 Decisions"
+                }
+            },
+            "agendaItems": [
+                {
+                    "agenda": "Review last week and plan",
+                    "status": "carry over",
+                    "townHallUpdates": "Updates from last Town Hall.",
+                    "townHallSummary": "Summary of the Town Hall decisions.",
+                    "narrative": "We discussed project milestones and blockers.",
+                    "discussion": "Key discussions around budget and timelines.",
+                    "gameRules": "Be respectful, timebox items, parking lot for off-topic.",
+                    "leaderboard": [
+                        "Alice 10pts",
+                        "Bob 7pts"
+                    ],
+                    "meetingTopics": [
+                        "Budget",
+                        "Hiring"
+                    ],
+                    "issues": [
+                        "Blocked on API access",
+                        "Need design review"
+                    ],
+                    "actionItems": [
+                        {
+                            "text": "Draft budget proposal",
+                            "assignee": "Alice",
+                            "dueDate": "2025-09-20",
+                            "status": "in progress"
+                        },
+                        {
+                            "text": "Schedule design review",
+                            "assignee": "Bob",
+                            "dueDate": "2025-09-18",
+                            "status": "todo"
+                        }
+                    ],
+                    "decisionItems": [
+                        {
+                            "decision": "Adopt weekly standups",
+                            "rationale": "Improve coordination",
+                            "opposing": "May increase meeting load",
+                            "effect": "affectsOnlyThisWorkgroup"
+                        },
+                        {
+                            "decision": "Switch to tool X",
+                            "rationale": "Better analytics",
+                            "opposing": "Learning curve",
+                            "effect": "mayAffectOtherPeople"
+                        }
+                    ],
+                    "discussionPoints": [
+                        "Integration approach",
+                        "Risk mitigation"
+                    ],
+                    "learningPoints": [
+                        "Tool X setup",
+                        "Retrospective insights"
+                    ]
+                }
+            ],
+            "tags": {
+                "topicsCovered": "inclusivity, transparency",
+                "emotions": "cheerful",
+                "other": "",
+                "gamesPlayed": "Chess"
+            },
+            "type": "custom",
+            "noSummaryGiven": false,
+            "canceledSummary": false,
+            "noSummaryGivenText": "No Summary Given",
+            "canceledSummaryText": "Meeting was cancelled"
+        }
+    ]
+}
