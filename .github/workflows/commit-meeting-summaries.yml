@@ -3,7 +3,9 @@ name: Commit Meeting Summaries
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *' # Run daily at midnight
+    - cron: "0 0 * * *" # Run daily at midnight
+permissions:
+  contents: write
 jobs:
   commit-meeting-summaries:
     runs-on: ubuntu-latest
@@ -34,3 +36,31 @@ jobs:
             echo "Error updating meeting summaries by ID"
             exit 1
           fi
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Update README timestamp
+        run: |
+          set -e
+          TS=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          if grep -q '^Archive data last updated at - ' README.md; then
+            sed -i "s/^Archive data last updated at - .*/Archive data last updated at - ${TS}/" README.md
+          else
+            echo "" >> README.md
+            echo "Archive data last updated at - ${TS}" >> README.md
+          fi
+      - name: Commit and push changes
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          if git diff --staged --quiet; then
+            echo "No README changes to commit."
+            exit 0
+          fi
+          git commit -m "docs: update README with latest archive data timestamp [skip ci]"
+          git push origin HEAD:${GITHUB_REF_NAME}
