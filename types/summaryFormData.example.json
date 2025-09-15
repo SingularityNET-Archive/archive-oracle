@@ -1,0 +1,154 @@
+{
+    "workgroup": "Ambassador Town Hall",
+    "workgroup_id": "72ce0bc0-276e-4cde-bfb9-cdabc5ed953e",
+    "meetingInfo": {
+        "name": "Weekly",
+        "date": "2025-09-10",
+        "host": "Alice",
+        "documenter": "Bob",
+        "translator": "Carol",
+        "peoplePresent": "Alice, Bob, Carol, Dave",
+        "purpose": "Weekly update, planning, and retrospective",
+        "townHallNumber": "TH-042",
+        "googleSlides": "https://slides.example.com/pres/abc",
+        "meetingVideoLink": "https://video.example.com/watch?v=123",
+        "miroBoardLink": "https://miro.com/app/board/xyz",
+        "otherMediaLink": "https://example.com/other-media",
+        "transcriptLink": "https://example.com/transcript",
+        "mediaLink": "https://example.com/media",
+        "workingDocs": [
+            {
+                "title": "Agenda",
+                "link": "https://docs.example.com/agenda"
+            },
+            {
+                "title": "Notes",
+                "link": "https://docs.example.com/notes"
+            }
+        ],
+        "timestampedVideo": {
+            "url": "https://youtube.com/watch?v=abcd",
+            "intro": "Welcome, agenda overview",
+            "timestamps": "00:00 Intro\n02:15 Topic A\n10:45 Decisions\n21:30 Q&A"
+        }
+    },
+    "agendaItems": [
+        {
+            "agenda": "Review last week and plan",
+            "status": "carry over",
+            "townHallUpdates": "Updates from last Town Hall including announcements.",
+            "townHallSummary": "Summary: budget approved; new roles announced.",
+            "narrative": "We reviewed milestones, discussed blockers, and planned next steps.",
+            "discussion": "Focused on budget allocations and hiring timelines.",
+            "gameRules": "Be respectful; timebox to 5 minutes per item; parking lot diversions.",
+            "leaderboard": [
+                "Alice 10pts",
+                "Bob 7pts"
+            ],
+            "meetingTopics": [
+                "Budget",
+                "Hiring"
+            ],
+            "issues": [
+                "Blocked by API access",
+                "Need design review"
+            ],
+            "actionItems": [
+                {
+                    "text": "Draft budget proposal",
+                    "assignee": "Alice",
+                    "dueDate": "20 September 2025",
+                    "status": "in progress"
+                },
+                {
+                    "text": "Schedule design review",
+                    "assignee": "Bob",
+                    "dueDate": "18 September 2025",
+                    "status": "todo"
+                }
+            ],
+            "decisionItems": [
+                {
+                    "decision": "Adopt weekly standups",
+                    "rationale": "Improve coordination",
+                    "opposing": "Increases meeting load",
+                    "effect": "affectsOnlyThisWorkgroup"
+                },
+                {
+                    "decision": "Switch to tool X",
+                    "rationale": "Better analytics",
+                    "opposing": "Learning curve",
+                    "effect": "mayAffectOtherPeople"
+                }
+            ],
+            "discussionPoints": [
+                "Integration approach",
+                "Risk mitigation"
+            ],
+            "learningPoints": [
+                "Tool X setup",
+                "Retrospective insights"
+            ]
+        },
+        {
+            "agenda": "Finalize Q4 roadmap",
+            "status": "resolved",
+            "townHallUpdates": "N/A",
+            "townHallSummary": "N/A",
+            "narrative": "Roadmap finalized after aligning with stakeholders.",
+            "discussion": "Trade-offs between features A and B; capacity planning.",
+            "gameRules": "Same as above.",
+            "leaderboard": [
+                "Carol 12pts",
+                "Dave 9pts"
+            ],
+            "meetingTopics": [
+                "Roadmap",
+                "Capacity"
+            ],
+            "issues": [
+                "Dependency on external vendor"
+            ],
+            "actionItems": [
+                {
+                    "text": "Publish finalized roadmap",
+                    "assignee": "Carol",
+                    "dueDate": "22 September 2025",
+                    "status": "done"
+                },
+                {
+                    "text": "Notify stakeholders",
+                    "assignee": "Dave",
+                    "dueDate": "23 September 2025",
+                    "status": "cancelled"
+                }
+            ],
+            "decisionItems": [
+                {
+                    "decision": "Feature A before B",
+                    "rationale": "Higher impact",
+                    "opposing": "Delays B",
+                    "effect": "affectsOnlyThisWorkgroup"
+                }
+            ],
+            "discussionPoints": [
+                "Release timing",
+                "Marketing sync"
+            ],
+            "learningPoints": [
+                "Stakeholder alignment process"
+            ]
+        }
+    ],
+    "tags": {
+        "topicsCovered": "inclusivity, transparency, budgeting",
+        "emotions": "productive, cheerful",
+        "other": "guest speaker present",
+        "gamesPlayed": "Chess"
+    },
+    "type": "custom",
+    "noSummaryGiven": false,
+    "canceledSummary": false,
+    "noSummaryGivenText": "No Summary Given",
+    "canceledSummaryText": "Meeting was cancelled"
+}
