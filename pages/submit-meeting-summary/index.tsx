@@ -658,7 +658,7 @@ const SubmitMeetingSummary: NextPage = () => {
     const meetingDate = m.meetingInfo?.date || m.date.split("T")[0];
     return meetingDate === newSummaryDate && m.username === myVariable.currentUser;
   });
-  console.log("meetings", meetings)
+
   return (
     <div className={styles.container}>
       {/* ---------- MODAL ---------- */}
