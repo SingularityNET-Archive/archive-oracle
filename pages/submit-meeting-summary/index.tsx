@@ -281,6 +281,133 @@ const SubmitMeetingSummary: NextPage = () => {
     return `${day} ${months[monthIndex]} ${year}`;
   }
 
+  // Calculate character count of a meeting summary
+  function getSummaryCharacterCount(summary: any): number {
+    if (!summary) return 0;
+    
+    let totalCount = 0;
+    
+    // Count characters in meetingInfo
+    if (summary.meetingInfo) {
+      Object.values(summary.meetingInfo).forEach((value: any) => {
+        if (typeof value === 'string') {
+          totalCount += value.length;
+        } else if (Array.isArray(value)) {
+          value.forEach((item: any) => {
+            if (typeof item === 'string') {
+              totalCount += item.length;
+            } else if (typeof item === 'object' && item !== null) {
+              Object.values(item).forEach((subValue: any) => {
+                if (typeof subValue === 'string') {
+                  totalCount += subValue.length;
+                }
+              });
+            }
+          });
+        } else if (typeof value === 'object' && value !== null) {
+          Object.values(value).forEach((subValue: any) => {
+            if (typeof subValue === 'string') {
+              totalCount += subValue.length;
+            }
+          });
+        }
+      });
+    }
+    
+    // Count characters in agendaItems
+    if (summary.agendaItems && Array.isArray(summary.agendaItems)) {
+      summary.agendaItems.forEach((item: any) => {
+        Object.values(item).forEach((value: any) => {
+          if (typeof value === 'string') {
+            totalCount += value.length;
+          } else if (Array.isArray(value)) {
+            value.forEach((subItem: any) => {
+              if (typeof subItem === 'string') {
+                totalCount += subItem.length;
+              } else if (typeof subItem === 'object' && subItem !== null) {
+                Object.values(subItem).forEach((subValue: any) => {
+                  if (typeof subValue === 'string') {
+                    totalCount += subValue.length;
+                  }
+                });
+              }
+            });
+          }
+        });
+      });
+    }
+    
+    // Count characters in tags
+    if (summary.tags && typeof summary.tags === 'object') {
+      Object.values(summary.tags).forEach((value: any) => {
+        if (typeof value === 'string') {
+          totalCount += value.length;
+        } else if (Array.isArray(value)) {
+          value.forEach((item: any) => {
+            if (typeof item === 'string') {
+              totalCount += item.length;
+            }
+          });
+        }
+      });
+    }
+    
+    return totalCount;
+  }
+
+  // Get character count change information for meetings grouped by date
+  function getCharacterCountInfo(meetings: any[]): Map<string, { meeting: any, changeInfo: string, changeCount: number, isFirst: boolean }> {
+    const meetingsByDate = new Map<string, any[]>();
+    
+    // Group meetings by date
+    meetings.forEach(meeting => {
+      const dateKey = meeting.meetingInfo?.date || meeting.date.split('T')[0];
+      if (!meetingsByDate.has(dateKey)) {
+        meetingsByDate.set(dateKey, []);
+      }
+      meetingsByDate.get(dateKey)!.push(meeting);
+    });
+    
+    const result = new Map<string, { meeting: any, changeInfo: string, changeCount: number, isFirst: boolean }>();
+    
+    meetingsByDate.forEach((dateMeetings, dateKey) => {
+      // Sort by updated_at ascending to get earliest first
+      const sortedMeetings = dateMeetings.sort((a, b) => 
+        new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime()
+      );
+      
+      // Process each meeting in chronological order
+      sortedMeetings.forEach((meeting, index) => {
+        const currentCount = getSummaryCharacterCount(meeting);
+        const isFirst = index === 0; // First meeting by updated_at is the "first"
+        
+        if (isFirst) {
+          // First summary for this date (earliest updated_at)
+          result.set(meeting.meeting_id, {
+            meeting: meeting,
+            changeInfo: `${currentCount} chars (first)`,
+            changeCount: currentCount,
+            isFirst: true
+          });
+        } else {
+          // Calculate difference from previous summary (previous updated_at)
+          const previousMeeting = sortedMeetings[index - 1];
+          const previousCount = getSummaryCharacterCount(previousMeeting);
+          const difference = currentCount - previousCount;
+          
+          result.set(meeting.meeting_id, {
+            meeting: meeting,
+            changeInfo: `${difference >= 0 ? '+' : ''}${difference} chars`,
+            changeCount: difference,
+            isFirst: false
+          });
+        }
+      });
+    });
+    
+    return result;
+  }
+
   const updateMeetings = (newMeetingSummary: any) => {
     setMeetings((prevMeetings) => {
       let updated = [...prevMeetings];
@@ -531,7 +658,7 @@ const SubmitMeetingSummary: NextPage = () => {
     const meetingDate = m.meetingInfo?.date || m.date.split("T")[0];
     return meetingDate === newSummaryDate && m.username === myVariable.currentUser;
   });
-  
+
   return (
     <div className={styles.container}>
       {/* ---------- MODAL ---------- */}
@@ -583,11 +710,31 @@ const SubmitMeetingSummary: NextPage = () => {
               value={selectedSummaryForEdit}
             >
               <option value="">Choose existing summary</option>
-              {meetings.map((meeting) => (
-                <option key={meeting.meeting_id} value={meeting.meeting_id} style={{ color: meeting.confirmed ? 'lightgreen' : 'black' }}>
-                  {formatDate(meeting.date)} - {meeting.username} {meeting.confirmed ? 'Archived' : ''}
-                </option>
-              ))}
+              {(() => {
+                const characterCountInfo = getCharacterCountInfo(meetings);
+                return meetings.map((meeting) => {
+                  const changeInfo = characterCountInfo.get(meeting.meeting_id);
+                  
+                  return (
+                    <option 
+                      key={meeting.meeting_id} 
+                      value={meeting.meeting_id} 
+                      style={{ color: meeting.confirmed ? 'lightgreen' : 'black' }}
+                    >
+                      {formatDate(meeting.date)} - {meeting.username} {meeting.confirmed ? 'Archived' : ''}
+                      {myVariable.roles?.isAdmin && changeInfo && (
+                        <span style={{ 
+                          color: changeInfo.isFirst ? 'black' : 
+                                 changeInfo.changeCount > 0 ? 'green' : 'red',
+                          fontWeight: 'bold'
+                        }}>
+                          {' '}({changeInfo.changeInfo})
+                        </span>
+                      )}
+                    </option>
+                  );
+                });
+              })()}
             </select>
           )}
 
