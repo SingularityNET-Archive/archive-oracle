@@ -137,6 +137,9 @@ const Nav = () => {
           <Link href='/admin-tools' className={styles.navitems}>
             Admin Tools
           </Link>
+          <Link href='/admin-unconfirmed-summaries' className={styles.navitems}>
+            Manage Summaries
+          </Link>
         </>
         )}
       </div>
