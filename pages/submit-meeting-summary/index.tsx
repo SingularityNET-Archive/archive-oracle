@@ -84,7 +84,8 @@ const SubmitMeetingSummary: NextPage = () => {
     "LatAm Guild": ["narrative", "decisionItems", "actionItems"],
     "WG Sync Call": ["meetingTopics", "discussion", "decisionItems", "actionItems", "issues"],
     "AI Sandbox/Think-tank": ["townHallUpdates", "discussionPoints", "decisionItems", "actionItems", "learningPoints", "issues"],
-    "GitHub PBL WG": ["discussionPoints", "decisionItems", "actionItems"]
+    "GitHub PBL WG": ["discussionPoints", "decisionItems", "actionItems"],
+    "ASI Project": ["discussionPoints", "decisionItems", "actionItems"]
   };
 
   // -----------------------------------------
