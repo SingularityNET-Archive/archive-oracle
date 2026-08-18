@@ -35,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     'WG Sync Call': process.env.SNET_DISCORD_WEBHOOK_URL,
     'AI Sandbox/Think-tank': process.env.SNET_DISCORD_WEBHOOK_URL,
     'GitHub PBL WG': process.env.SNET_DISCORD_WEBHOOK_URL,
+    'ASI Project': process.env.SNET_DISCORD_WEBHOOK_URL,
   };
     
   
